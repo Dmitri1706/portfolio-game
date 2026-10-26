@@ -1,18 +1,24 @@
 import Phaser from 'phaser';
 import { createAnims, loadSprites } from '../assets/manifest';
+import { finishLoading, setLoadProgress } from '../ui/loader';
+import { createHud } from '../ui/hud';
+import type { RoomData } from './RoomScene';
 
-/** Загрузка ресурсов. На Этапе 2 здесь появится экран «Считаю конверсию вашего визита… N%». */
+/** Загрузка ресурсов игры; прогресс показывается на экране «Считаю конверсию вашего визита… N%». */
 export class BootScene extends Phaser.Scene {
   constructor() {
     super('Boot');
   }
 
   preload(): void {
+    this.load.on(Phaser.Loader.Events.PROGRESS, (v: number) => setLoadProgress(v));
     loadSprites(this.load);
   }
 
-  create(): void {
+  async create(): Promise<void> {
     createAnims(this.anims);
-    this.scene.start('Lobby');
+    await finishLoading();
+    createHud();
+    this.scene.start('Lobby', { intro: true } satisfies RoomData);
   }
 }

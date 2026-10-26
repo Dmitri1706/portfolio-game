@@ -1,0 +1,236 @@
+/* Пиксельный интерфейс поверх игры */
+:root {
+  --ink: #231d33;
+  --paper: #fffaf0;
+  --paper-dark: #e8dcc4;
+  --paper-light: #ffffff;
+  --accent: #ffc94a;
+  --accent-dark: #f08a24;
+  --accent-light: #ffe7a3;
+  --pixel: 4px;
+  --font-pixel: 'Press Start 2P', monospace;
+  --font-text: 'PT Sans', 'Segoe UI', Arial, sans-serif;
+}
+
+#ui > * {
+  pointer-events: auto;
+}
+
+/* ---------- Рамка-«пиксельная коробка» ---------- */
+.pixel-box {
+  background: var(--paper);
+  border: var(--pixel) solid var(--ink);
+  box-shadow:
+    inset calc(-1 * var(--pixel)) calc(-1 * var(--pixel)) 0 var(--paper-dark),
+    inset var(--pixel) var(--pixel) 0 var(--paper-light),
+    6px 6px 0 rgba(35, 29, 51, 0.45);
+  color: var(--ink);
+}
+
+/* ---------- Кнопки ---------- */
+.btn {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink);
+  background: var(--accent);
+  border: var(--pixel) solid var(--ink);
+  box-shadow:
+    inset calc(-1 * var(--pixel)) calc(-1 * var(--pixel)) 0 var(--accent-dark),
+    inset var(--pixel) var(--pixel) 0 var(--accent-light);
+  padding: 12px 18px 10px;
+  cursor: pointer;
+  text-transform: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.btn:hover {
+  filter: brightness(1.06);
+}
+.btn:active {
+  box-shadow: inset var(--pixel) var(--pixel) 0 var(--accent-dark);
+  transform: translateY(2px);
+}
+.btn:focus-visible {
+  outline: var(--pixel) solid #3de0e8;
+  outline-offset: 2px;
+}
+.btn--ghost {
+  background: var(--paper);
+  box-shadow:
+    inset calc(-1 * var(--pixel)) calc(-1 * var(--pixel)) 0 var(--paper-dark),
+    inset var(--pixel) var(--pixel) 0 var(--paper-light);
+}
+
+/* ---------- Модальные окна ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(35, 29, 51, 0.55);
+  z-index: 50;
+}
+.modal__panel {
+  position: relative;
+  max-width: min(560px, 100%);
+  max-height: calc(100% - 8px);
+  overflow: auto;
+  padding: 24px 24px 20px;
+  box-sizing: border-box;
+  animation: pixel-pop 0.24s steps(4) both;
+}
+.modal.is-closing {
+  animation: fade-out 0.18s steps(3) both;
+}
+.modal.is-closing .modal__panel {
+  animation: pixel-pop-out 0.18s steps(3) both;
+}
+.modal__title {
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0 0 16px;
+}
+.modal__body {
+  font-family: var(--font-text);
+  font-size: 17px;
+  line-height: 1.45;
+}
+.modal__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+@keyframes pixel-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes pixel-pop-out {
+  to {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ---------- Правила ---------- */
+.rules {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+.rules li {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.rules__icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  background: var(--accent-light);
+  border: 2px solid var(--ink);
+  box-sizing: border-box;
+}
+
+/* ---------- HUD ---------- */
+.hud {
+  position: fixed;
+  display: flex;
+  gap: 8px;
+  z-index: 20;
+}
+.hud--top-right {
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+}
+.hud .btn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+@media (max-width: 600px), (max-height: 420px) {
+  .modal__panel {
+    padding: 18px 16px 16px;
+  }
+  .modal__title {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .modal__body {
+    font-size: 16px;
+  }
+  .btn {
+    font-size: 10px;
+    padding: 10px 14px 8px;
+  }
+  .hud .btn {
+    width: 40px;
+    height: 40px;
+    font-size: 12px;
+  }
+}
+
+@media (max-height: 420px) {
+  .modal {
+    padding: 8px;
+  }
+  .modal__body {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  .modal__title {
+    margin-bottom: 10px;
+  }
+  .modal__buttons {
+    margin-top: 12px;
+  }
+  .rules {
+    gap: 6px;
+  }
+  .rules li {
+    grid-template-columns: 24px 1fr;
+    gap: 10px;
+  }
+  .rules__icon {
+    width: 24px;
+    height: 24px;
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal__panel,
+  .modal.is-closing,
+  .modal.is-closing .modal__panel {
+    animation: none;
+  }
+}

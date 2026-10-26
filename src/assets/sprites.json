@@ -1,67 +1,64 @@
 {
-  "floor_lobby": {
-    "file": "floor_lobby.png",
-    "width": 32,
-    "height": 16,
-    "about": "Плитка пола лобби, ромб 2:1"
-  },
-  "floor_edge_left": {
-    "file": "floor_edge_left.png",
-    "width": 16,
-    "height": 22,
-    "about": "Торец пола (толщина) под левой нижней гранью крайних плиток"
-  },
-  "floor_edge_right": {
-    "file": "floor_edge_right.png",
-    "width": 16,
-    "height": 22,
-    "about": "Торец пола (толщина) под правой нижней гранью крайних плиток"
-  },
-  "wall_lobby_left": {
-    "file": "wall_lobby_left.png",
-    "width": 16,
-    "height": 80,
-    "about": "Кусок левой стены лобби шириной в одну плитку"
-  },
-  "wall_lobby_right": {
-    "file": "wall_lobby_right.png",
-    "width": 16,
-    "height": 80,
-    "about": "Кусок правой стены лобби шириной в одну плитку"
-  },
+  "floor_lobby": { "file": "floor_lobby.png", "width": 32, "height": 16, "about": "Плитка пола лобби, ромб 2:1" },
+  "floor_vhod": { "file": "floor_vhod.png", "width": 32, "height": 16, "about": "Плитка пола комнаты «В ХОД»" },
+  "floor_sport": { "file": "floor_sport.png", "width": 32, "height": 16, "about": "Плитка пола «Спортмастер» (паркет)" },
+  "floor_edge_left": { "file": "floor_edge_left.png", "width": 16, "height": 22, "about": "Толщина пола под левой нижней гранью крайних плиток" },
+  "floor_edge_right": { "file": "floor_edge_right.png", "width": 16, "height": 22, "about": "Толщина пола под правой нижней гранью крайних плиток" },
+
+  "wall_lobby_left": { "file": "wall_lobby_left.png", "width": 16, "height": 80, "about": "Кусок левой стены лобби (1 плитка)" },
+  "wall_lobby_right": { "file": "wall_lobby_right.png", "width": 16, "height": 80, "about": "Кусок правой стены лобби (1 плитка)" },
+  "wall_vhod_left": { "file": "wall_vhod_left.png", "width": 16, "height": 80, "about": "Кусок левой стены «В ХОД»" },
+  "wall_vhod_right": { "file": "wall_vhod_right.png", "width": 16, "height": 80, "about": "Кусок правой стены «В ХОД»" },
+  "wall_sport_left": { "file": "wall_sport_left.png", "width": 16, "height": 80, "about": "Кусок левой стены «Спортмастер»" },
+  "wall_sport_right": { "file": "wall_sport_right.png", "width": 16, "height": 80, "about": "Кусок правой стены «Спортмастер»" },
+
+  "door_vhod": { "file": "door_vhod.png", "width": 16, "height": 80, "frames": 2, "wall": "left", "tiles": 1, "about": "Дверь «В ХОД» на левой стене: кадр 0 — закрыта, 1 — открыта" },
+  "door_sport": { "file": "door_sport.png", "width": 16, "height": 80, "frames": 2, "wall": "right", "tiles": 1, "about": "Дверь магазина на правой стене: кадр 0 — закрыта, 1 — открыта" },
+  "door_boarded": { "file": "door_boarded.png", "width": 16, "height": 80, "wall": "right", "tiles": 1, "about": "Заколоченная дверь на правой стене" },
+  "door_exit": { "file": "door_exit.png", "width": 16, "height": 80, "frames": 2, "wall": "left", "tiles": 1, "about": "Дверь выхода в комнатах (левая стена): закрыта / открыта" },
+
+  "sign_vhod": { "file": "sign_vhod.png", "width": 48, "height": 96, "wall": "left", "tiles": 3, "about": "Вывеска с логотипом «В ХОД» над дверью" },
+  "sign_sport": { "file": "sign_sport.png", "width": 80, "height": 112, "wall": "right", "tiles": 5, "about": "Вывеска «Спортмастер» над дверью" },
+  "plaque_next": { "file": "plaque_next.png", "width": 80, "height": 112, "wall": "right", "tiles": 5, "about": "Табличка «Какая компания следующая?»" },
+  "sign_hello": { "file": "sign_hello.png", "width": 96, "height": 120, "wall": "left", "tiles": 6, "about": "Табличка «Привет! Я Дмитрий, выбери дверь»" },
+  "sign_exit": { "file": "sign_exit.png", "width": 48, "height": 96, "wall": "left", "tiles": 3, "about": "Табличка «Выход» над дверью" },
+
   "door_free_boarded": {
     "file": "door_free_boarded.png",
-    "width": 36,
-    "height": 67,
-    "anchorX": 17,
-    "anchorY": 56,
-    "about": "Отдельно стоящая заколоченная дверь «Проекты», стоит на 2 клетках. anchor — пиксель середины нижнего края"
+    "width": 39,
+    "height": 80,
+    "anchorX": 19,
+    "anchorY": 71,
+    "about": "Отдельно стоящая заколоченная дверь «Проекты» на 2 клетках. anchor — середина нижнего края"
   },
-  "shadow": {
-    "file": "shadow.png",
-    "width": 16,
-    "height": 6,
-    "about": "Тень под персонажем"
-  },
-  "marker": {
-    "file": "marker.png",
-    "width": 16,
-    "height": 8,
-    "frames": 4,
-    "about": "Маркер точки назначения, 4 кадра в ряд (лист 64×8)"
-  },
+
+  "shadow": { "file": "shadow.png", "width": 16, "height": 6, "about": "Тень под персонажем" },
+  "marker": { "file": "marker.png", "width": 16, "height": 8, "frames": 4, "about": "Маркер точки назначения, 4 кадра в ряд" },
+  "dust": { "file": "dust.png", "width": 32, "height": 12, "frames": 4, "fps": 12, "repeat": 0, "about": "Облачко пыли при приземлении, 4 кадра" },
+  "sparkle": { "file": "sparkle.png", "width": 7, "height": 7, "frames": 4, "fps": 8, "repeat": 0, "about": "Искорка у интерактивных предметов (телефон), 4 кадра" },
+
   "player": {
     "file": "player.png",
     "width": 24,
     "height": 40,
-    "columns": 4,
+    "columns": 5,
     "anchorY": 38,
     "about": "Персонаж игрока. Каждая строка листа — одна анимация, кадры слева направо",
     "anims": {
       "idle_front": { "row": 0, "frames": 2, "fps": 2 },
       "idle_back": { "row": 1, "frames": 2, "fps": 2 },
       "walk_front": { "row": 2, "frames": 4, "fps": 8 },
-      "walk_back": { "row": 3, "frames": 4, "fps": 8 }
+      "walk_back": { "row": 3, "frames": 4, "fps": 8 },
+      "sit_front": { "row": 4, "frames": 1, "fps": 1 },
+      "sit_back": { "row": 5, "frames": 1, "fps": 1 },
+      "hold_front": { "row": 6, "frames": 2, "fps": 2 },
+      "hold_back": { "row": 7, "frames": 2, "fps": 2 },
+      "carry_front": { "row": 8, "frames": 4, "fps": 8 },
+      "carry_back": { "row": 9, "frames": 4, "fps": 8 },
+      "stumble_front": { "row": 10, "frames": 5, "fps": 9, "repeat": 0 },
+      "stumble_back": { "row": 11, "frames": 5, "fps": 9, "repeat": 0 },
+      "fall": { "row": 12, "frames": 2, "fps": 8 },
+      "land": { "row": 13, "frames": 3, "fps": 8, "repeat": 0 }
     }
   }
 }

@@ -3,11 +3,63 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#2b2640" />
     <title>Дмитрий Мельшин — Портфолио</title>
+    <style>
+      /* Экран загрузки: стили здесь, чтобы он появился сразу, до загрузки игры */
+      html, body { margin: 0; height: 100%; background: #2b2640; }
+      #loader {
+        position: fixed; inset: 0; z-index: 100;
+        display: flex; align-items: center; justify-content: center;
+        background: #2b2640; color: #fffaf0; text-align: center;
+        font-family: 'Press Start 2P', monospace;
+        transition: opacity 0.4s steps(4);
+      }
+      #loader.is-hidden { opacity: 0; pointer-events: none; }
+      .loader__inner { width: min(640px, calc(100% - 32px)); }
+      .loader__phrase { font-size: 16px; line-height: 24px; margin: 0 0 112px; color: #ffe7a3; }
+      .loader__bar {
+        position: relative; height: 24px; margin: 0 0 48px;
+        border: 4px solid #fffaf0; box-sizing: border-box; background: #1d1828;
+      }
+      .loader__fill {
+        position: absolute; left: 0; top: 0; bottom: 0; width: 0;
+        background: repeating-linear-gradient(90deg, #ffc94a 0 12px, #f08a24 12px 16px);
+      }
+      .loader__runner {
+        position: absolute; bottom: 20px; left: 0; width: 72px; height: 120px;
+        margin-left: -36px; background-repeat: no-repeat; image-rendering: pixelated;
+        background-size: 360px 1680px; background-position: 0 -240px;
+        animation: loader-run 0.5s steps(4) infinite;
+      }
+      @keyframes loader-run { from { background-position-x: 0; } to { background-position-x: -288px; } }
+      .loader__name { font-size: 32px; line-height: 40px; margin: 0 0 16px; font-weight: normal; }
+      .loader__role { font-size: 16px; line-height: 24px; margin: 0; color: #c8e7ff; }
+      @media (max-width: 700px), (max-height: 480px) {
+        .loader__phrase { font-size: 8px; line-height: 16px; margin-bottom: 80px; }
+        .loader__bar { height: 20px; margin-bottom: 24px; }
+        .loader__runner { width: 48px; height: 80px; margin-left: -24px; bottom: 16px;
+          background-size: 240px 1120px; background-position: 0 -160px; animation-name: loader-run-s; }
+        .loader__name { font-size: 16px; line-height: 24px; margin-bottom: 8px; }
+        .loader__role { font-size: 8px; line-height: 16px; }
+      }
+      @keyframes loader-run-s { from { background-position-x: 0; } to { background-position-x: -192px; } }
+    </style>
   </head>
   <body>
+    <div id="loader" role="status" aria-live="polite">
+      <div class="loader__inner">
+        <p class="loader__phrase">Считаю конверсию вашего визита… <span id="loader-pct">0</span>%</p>
+        <div class="loader__bar">
+          <div class="loader__fill" id="loader-fill"></div>
+          <div class="loader__runner" id="loader-runner"></div>
+        </div>
+        <h1 class="loader__name">Дмитрий Мельшин</h1>
+        <p class="loader__role">Product / Маркетолог</p>
+      </div>
+    </div>
     <div id="game"></div>
-    <!-- HTML-слой поверх игры: окна, диалоги, HUD (появятся на следующих этапах) -->
+    <!-- HTML-слой поверх игры: окна, диалоги, кнопки -->
     <div id="ui"></div>
     <script type="module" src="./src/main.ts"></script>
   </body>

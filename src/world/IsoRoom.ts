@@ -71,6 +71,28 @@ export class IsoRoom {
     return spr;
   }
 
+  /**
+   * Вешает предмет на стену (дверь, вывеска, табличка). Он занимает n плиток стены, начиная с first.
+   * Левая стена: плитки (0, first)…(0, first+n-1). Правая: (first, 0)…(first+n-1, 0).
+   */
+  placeOnWall(key: SpriteKey, side: 'left' | 'right', first: number, n = 1, layer = 0): Phaser.GameObjects.Sprite {
+    let x: number;
+    let y: number;
+    if (side === 'left') {
+      const p = gridToScreen(0, first + n - 1);
+      x = p.x - TILE_W / 2;
+      y = p.y - WALL_H - (TILE_H / 2) * n;
+    } else {
+      const p = gridToScreen(first, 0);
+      x = p.x;
+      y = p.y - TILE_H / 2 - WALL_H;
+    }
+    return this.scene.add
+      .sprite(x, y, key)
+      .setOrigin(0, 0)
+      .setDepth(DEPTH.wall + 50 + layer);
+  }
+
   inBounds(c: Cell): boolean {
     return c.x >= 0 && c.y >= 0 && c.x < this.cfg.cols && c.y < this.cfg.rows;
   }

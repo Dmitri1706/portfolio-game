@@ -50,5 +50,44 @@ export const P = {
   accent: hex('#ffc94a'),
   accentDark: hex('#f08a24'),
 
+  // Проём открытой двери
+  doorway: hex('#1d1828'),
+  doorwayLight: hex('#38304f'),
+
+  // «В ХОД»: технологичные неоновые акценты (поменяйте здесь на фирменные цвета)
+  vhodNavy: hex('#1f2240'),
+  vhodNavyDark: hex('#15172e'),
+  vhodNeon: hex('#3de0e8'),
+  vhodNeon2: hex('#ff4fd8'),
+
+  // «Спортмастер»
+  sportBlue: hex('#1d4fa0'),
+  sportBlueLight: hex('#3a72c8'),
+  sportBlueDark: hex('#133a7a'),
+  sportRed: hex('#e0383e'),
+  sportRedDark: hex('#a5262c'),
+
+  // Стекло
+  glass: hex('#bfe9f2'),
+  glassLight: hex('#eafcff'),
+  glassDark: hex('#8cc7d6'),
+
+  // Полы комнат
+  tile: hex('#e8ebf3'),
+  tileLight: hex('#f6f7fb'),
+  tileDark: hex('#d0d6e4'),
+  parquet: hex('#d9a066'),
+  parquetLight: hex('#e8b77f'),
+  parquetDark: hex('#b47b45'),
+
+  // Табличка «Выход»
+  green: hex('#3fbf6a'),
+  greenDark: hex('#25844a'),
+
+  paper: hex('#fffaf0'),
+  paperDark: hex('#e8dcc4'),
+
   shadow: hex('#231d33', 70),
+  dust: hex('#e9e6f0'),
+  dustDark: hex('#bdb7cc'),
 };

@@ -14,6 +14,19 @@ export class Canvas {
     this.w = w;
     this.h = h;
     this.data = new Uint8ClampedArray(w * h * 4);
+    /**
+     * «Неразрывные» группы пикселей (буквы, значки): { cx, pixels: [[x, y], …] }.
+     * При переносе на изометрическую стену группа сдвигается целиком (по своему центру cx),
+     * чтобы буквы не ломались лесенкой.
+     */
+    this.spans = [];
+  }
+
+  /** Отметить прямоугольник как неразрывную группу (все непрозрачные пиксели в нём). */
+  keepTogether(x, y, w, h) {
+    const pixels = [];
+    for (let j = y; j < y + h; j++) for (let i = x; i < x + w; i++) if (this.get(i, j)) pixels.push([i, j]);
+    this.spans.push({ cx: x + Math.floor(w / 2), pixels });
   }
 
   inside(x, y) {
@@ -73,6 +86,9 @@ export class Canvas {
         const c = src.get(flipX ? src.w - 1 - x : x, y);
         if (c) this.set(dx + x, dy + y, c);
       }
+    }
+    if (!flipX) {
+      for (const s of src.spans) this.spans.push({ cx: s.cx + dx, pixels: s.pixels.map(([x, y]) => [x + dx, y + dy]) });
     }
   }
 

@@ -10,7 +10,11 @@ interface SpriteSpec {
   width: number;
   height: number;
   frames?: number;
+  fps?: number;
+  repeat?: number;
   columns?: number;
+  wall?: 'left' | 'right';
+  tiles?: number;
   anchorX?: number;
   anchorY?: number;
   anims?: Record<string, { row: number; frames: number; fps: number; repeat?: number }>;
@@ -40,8 +44,8 @@ export function createAnims(anims: Phaser.Animations.AnimationManager): void {
         anims.create({
           key: name,
           frames: anims.generateFrameNumbers(key, { start: 0, end: s.frames - 1 }),
-          frameRate: 8,
-          repeat: -1,
+          frameRate: s.fps ?? 8,
+          repeat: s.repeat ?? -1,
         });
       }
     }
