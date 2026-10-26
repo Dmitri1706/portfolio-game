@@ -1,7 +1,7 @@
 // Персонаж игрока: парень в очках, футболка, джинсы, белые кроссовки.
 // Кадр 24×40, ноги стоят на строке 38. Нарисован смотрящим вправо — влево игра его отражает.
 import { Canvas } from '../lib/canvas.mjs';
-import { P } from '../lib/palette.mjs';
+import { P as BASE } from '../lib/palette.mjs';
 
 /**
  * Рисует один кадр.
@@ -22,7 +22,10 @@ export function person({
   arm = 0,
   blink = false,
   mouth = false,
+  pal,
 }) {
+  // pal — замена цветов (волосы, футболка…) для других персонажей
+  const P = pal ? { ...BASE, ...pal } : BASE;
   const c = new Canvas(24, 40);
   const y0 = 3 + bob;
   const ux = lean;

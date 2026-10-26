@@ -8,16 +8,20 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "sprites": "node scripts/generate-sprites.mjs"
+    "sprites": "node scripts/generate-sprites.mjs",
+    "placeholders": "node scripts/make-placeholders.mjs"
   },
   "dependencies": {
     "easystarjs": "^0.4.4",
+    "marked": "^18.1.2",
+    "pdfjs-dist": "^6.4.299",
     "phaser": "^3.90.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
     "@types/pngjs": "^6.0.5",
     "opentype.js": "^2.0.0",
+    "pdf-lib": "^1.17.1",
     "pngjs": "^7.0.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.5"

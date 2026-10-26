@@ -72,6 +72,29 @@ export class IsoRoom {
   }
 
   /**
+   * Ставит мебель/предмет с футпринтом (см. "footprint" в sprites.json) так, что его дальний угол
+   * совпадает с дальним углом клетки (x0, y0). Занятые клетки становятся непроходимыми.
+   */
+  placeObject(
+    key: SpriteKey,
+    x0: number,
+    y0: number,
+    opts: { walkable?: boolean; flip?: boolean; depthBias?: number } = {},
+  ): Phaser.GameObjects.Sprite {
+    const s = SPRITES[key];
+    const [a, b] = s.footprint ?? [1, 1];
+    const p = gridToScreen(x0 - 0.5, y0 - 0.5);
+    const spr = this.scene.add.sprite(p.x, p.y, key);
+    spr.setDisplayOrigin(s.anchorX ?? s.width / 2, s.anchorY ?? s.height);
+    spr.setFlipX(!!opts.flip);
+    spr.setDepth(DEPTH.objects + depthAt(x0, y0) + TILE_H / 4 + (opts.depthBias ?? 0));
+    if (!opts.walkable) {
+      for (let y = y0; y < y0 + b; y++) for (let x = x0; x < x0 + a; x++) this.setBlocked({ x, y }, true);
+    }
+    return spr;
+  }
+
+  /**
    * Вешает предмет на стену (дверь, вывеска, табличка). Он занимает n плиток стены, начиная с first.
    * Левая стена: плитки (0, first)…(0, first+n-1). Правая: (first, 0)…(first+n-1, 0).
    */

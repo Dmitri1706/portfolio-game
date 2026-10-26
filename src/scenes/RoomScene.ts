@@ -8,6 +8,12 @@ import { Bubble } from '../world/Bubble';
 import { isUiOpen } from '../ui/modal';
 import { sfx } from '../audio';
 import { track } from '../analytics';
+import { setProgressLabel } from '../ui/hud';
+
+/** На сколько пикселей приподнять сидящего персонажа (высота сиденья) */
+const SEAT_LIFT = 5;
+/** Где в руках держится предмет: пикселей над точкой, где стоят ноги */
+const HELD_Y = 20;
 
 export type RoomId = 'lobby' | 'vhod' | 'sport';
 
@@ -42,6 +48,8 @@ export abstract class RoomScene extends Phaser.Scene {
     this.busy = true;
     this.interactables = [];
     this.bubble = undefined;
+    this.held = undefined;
+    this.seatReturn = undefined;
     this.build(data);
 
     this.player = new Player(this, this.spawnCell(data));
@@ -61,6 +69,7 @@ export abstract class RoomScene extends Phaser.Scene {
       this.input.removeAllListeners();
     });
 
+    this.refreshHud();
     this.onEnter(data);
   }
 
@@ -129,6 +138,70 @@ export abstract class RoomScene extends Phaser.Scene {
     this.bubble?.destroy();
     const h = this.player.headPoint;
     this.bubble = new Bubble(this, h.x, h.y, text, duration);
+  }
+
+  // ---------- Сесть / взять предмет ----------
+
+  private seatReturn?: Cell;
+  private held?: Phaser.GameObjects.Image;
+
+  /** Сесть на стул в клетке seat, лицом в сторону dir (персонаж уже подошёл к стулу). */
+  protected async sitOn(seat: Cell, dir: Dir): Promise<void> {
+    this.busy = true;
+    const p = this.player;
+    this.seatReturn = p.cell;
+    await p.slideTo(seat.x, seat.y, 220);
+    p.dir = dir;
+    p.play(p.facingFront ? 'sit_front' : 'sit_back');
+    p.setLift(SEAT_LIFT);
+    p.setShadowVisible(false);
+  }
+
+  /** Встать со стула и вернуться туда, откуда садились. */
+  protected async standUp(): Promise<void> {
+    const p = this.player;
+    p.setLift(0);
+    p.setShadowVisible(true);
+    p.idle();
+    if (this.seatReturn) await p.slideTo(this.seatReturn.x, this.seatReturn.y, 220);
+    this.seatReturn = undefined;
+    p.idle();
+    this.busy = false;
+  }
+
+  /** Взять предмет: он исчезает со стола и появляется в руках, персонаж поворачивается к нам. */
+  protected pickUp(item: Phaser.GameObjects.Sprite, heldKey: string): void {
+    this.busy = true;
+    sfx('pickup');
+    item.setVisible(false);
+    const p = this.player;
+    p.face(p.dir === 'nw' || p.dir === 'sw' ? 'sw' : 'se');
+    p.play('hold_front');
+    this.held?.destroy();
+    this.held = this.add
+      .image(p.sprite.x, p.sprite.y - HELD_Y, heldKey)
+      .setDepth(p.sprite.depth + 0.5)
+      .setFlipX(p.sprite.flipX);
+  }
+
+  /** Положить предмет обратно. */
+  protected putDown(item: Phaser.GameObjects.Sprite, face: Dir): void {
+    this.held?.destroy();
+    this.held = undefined;
+    item.setVisible(true);
+    this.player.face(face);
+    this.busy = false;
+  }
+
+  // ---------- Счётчик прогресса ----------
+
+  /** Текст счётчика комнаты (например «Изучено: 2/5»), null — без счётчика. */
+  protected progressText(): string | null {
+    return null;
+  }
+
+  protected refreshHud(): void {
+    setProgressLabel(this.progressText());
   }
 
   // ---------- Сценки ----------

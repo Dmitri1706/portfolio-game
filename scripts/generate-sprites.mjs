@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { P } from './lib/palette.mjs';
 import { playerSheet } from './sprites/character.mjs';
 import * as W from './sprites/world.mjs';
+import * as V from './sprites/vhod.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const spec = JSON.parse(fs.readFileSync(path.join(root, 'src/assets/sprites.json'), 'utf8'));
@@ -49,6 +50,28 @@ const drawers = {
   sign_exit: () => W.signExit(side('sign_exit')),
 
   door_free_boarded: W.doorFreeBoarded,
+
+  plant: V.plant,
+  server_rack: V.serverRack,
+  desk_pc: V.deskPc,
+  chair_office: V.chairOffice,
+  chair_audience: V.chairAudience,
+  spectators: V.spectators,
+  stage: V.stage,
+  coffee_table: V.coffeeTable,
+  bar_table: V.barTable,
+  cabinet: V.cabinet,
+  item_newspaper: V.itemNewspaper,
+  item_phone: V.itemPhone,
+  item_folder: V.itemFolder,
+  held_newspaper: V.heldNewspaper,
+  held_phone: V.heldPhone,
+  held_folder: V.heldFolder,
+  stage_screen: () => V.stageScreen(side('stage_screen')),
+  chart_growth: () => V.chartGrowth(side('chart_growth')),
+  chart_line: () => V.chartLine(side('chart_line')),
+  sticky_board: () => V.stickyBoard(side('sticky_board')),
+
   shadow: W.shadow,
   marker: W.marker,
   dust: W.dust,
@@ -69,7 +92,8 @@ for (const [key, s] of Object.entries(spec)) {
   }
   const c = draw();
   const expectW = s.columns ? s.width * s.columns : s.frames ? s.width * s.frames : s.width;
-  if (c.w !== expectW || (!s.anims && c.h !== s.height)) {
+  const rows = s.columns && !s.anims ? Math.ceil(c.h / s.height) : 1;
+  if (c.w !== expectW || (!s.anims && c.h !== s.height * rows)) {
     console.warn(`⚠ ${s.file}: размер ${c.w}×${c.h} не совпадает с sprites.json`);
   }
   c.save(path.join(outDir, s.file));

@@ -4,6 +4,9 @@ export interface ModalButton {
   label: string;
   ghost?: boolean;
   onClick?: (close: () => void) => void;
+  /** Кнопка-ссылка: открывается в новой вкладке (или скачивается, если download) */
+  href?: string;
+  download?: boolean;
 }
 
 export interface ModalOptions {
@@ -43,6 +46,23 @@ export function el<K extends keyof HTMLElementTagNameMap>(
   return e;
 }
 
+export function makeButton(b: ModalButton, close?: () => void): HTMLElement {
+  const cls = b.ghost ? 'btn btn--ghost' : 'btn';
+  if (b.href) {
+    const a = el('a', cls, b.label);
+    a.href = b.href;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    if (b.download) a.setAttribute('download', '');
+    if (b.onClick) a.addEventListener('click', () => b.onClick?.(close ?? (() => {})));
+    return a;
+  }
+  const btn = el('button', cls, b.label);
+  btn.type = 'button';
+  btn.addEventListener('click', () => (b.onClick ? b.onClick(close ?? (() => {})) : close?.()));
+  return btn;
+}
+
 export function openModal(opts: ModalOptions): ModalHandle {
   const wrap = el('div', 'modal');
   const panel = el('div', `modal__panel pixel-box ${opts.className ?? ''}`.trim());
@@ -80,10 +100,7 @@ export function openModal(opts: ModalOptions): ModalHandle {
     buttons.appendChild(back);
   }
   for (const b of opts.buttons ?? []) {
-    const btn = el('button', b.ghost ? 'btn btn--ghost' : 'btn', b.label);
-    btn.type = 'button';
-    btn.addEventListener('click', () => (b.onClick ? b.onClick(close) : close()));
-    buttons.appendChild(btn);
+    buttons.appendChild(makeButton(b, close));
   }
   if (buttons.children.length) panel.appendChild(buttons);
 

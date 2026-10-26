@@ -14,6 +14,7 @@ interface SpriteSpec {
   repeat?: number;
   columns?: number;
   wall?: 'left' | 'right';
+  footprint?: number[];
   tiles?: number;
   anchorX?: number;
   anchorY?: number;

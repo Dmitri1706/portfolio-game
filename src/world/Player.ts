@@ -113,6 +113,10 @@ export class Player {
     });
   }
 
+  setShadowVisible(v: boolean): void {
+    this.shadow.setVisible(v);
+  }
+
   setAlpha(a: number): void {
     this.sprite.setAlpha(a);
     this.shadow.setAlpha(a);

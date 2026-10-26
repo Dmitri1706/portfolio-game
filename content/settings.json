@@ -1,0 +1,24 @@
+{
+  "site": {
+    "url": "https://example.com",
+    "embed": true,
+    "screenshot": "materials/site-screenshot.png"
+  },
+  "presentation": {
+    "pdf": "materials/presentation.pdf"
+  },
+  "mediakit": {
+    "pdf": "materials/mediakit.pdf"
+  },
+  "webinar": {
+    "url": ""
+  },
+  "resume": {
+    "pdf": "materials/resume.pdf"
+  },
+  "contacts": {
+    "telegram": "username",
+    "email": "mail@example.com",
+    "phone": "+7 900 000-00-00"
+  }
+}

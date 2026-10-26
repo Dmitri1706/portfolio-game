@@ -44,6 +44,11 @@
   -webkit-appearance: none;
   appearance: none;
 }
+a.btn {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+}
 .btn:hover {
   filter: brightness(1.06);
 }

@@ -92,10 +92,25 @@ export class Canvas {
     }
   }
 
-  save(file) {
+  /** Увеличенная копия (каждый пиксель → k×k). */
+  scaled(k) {
+    const c = new Canvas(this.w * k, this.h * k);
+    for (let y = 0; y < c.h; y++)
+      for (let x = 0; x < c.w; x++) {
+        const col = this.get(Math.floor(x / k), Math.floor(y / k));
+        if (col) c.set(x, y, col);
+      }
+    return c;
+  }
+
+  png() {
     const png = new PNG({ width: this.w, height: this.h });
     png.data = Buffer.from(this.data);
+    return PNG.sync.write(png);
+  }
+
+  save(file) {
     fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, PNG.sync.write(png));
+    fs.writeFileSync(file, this.png());
   }
 }
