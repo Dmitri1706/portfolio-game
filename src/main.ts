@@ -10,6 +10,9 @@ import { LobbyScene } from './scenes/LobbyScene';
 import { VhodScene } from './scenes/VhodScene';
 import { SportScene } from './scenes/SportScene';
 
+/** Ширина видимой области в игровых пикселях при вертикальном телефоне */
+const PORTRAIT_W = 300;
+
 /** Ждём пиксельные шрифты: Phaser рисует надписи на canvas и должен получить уже загруженный шрифт. */
 async function loadFonts(): Promise<void> {
   const sample = 'АаЯя Aa 0…';
@@ -40,13 +43,19 @@ function startGame(): Phaser.Game {
   });
 
   /**
-   * Масштаб «по размеру окна». Если целое увеличение заполняет экран почти полностью (≥ 85%),
-   * берём его — пиксели получаются идеально ровными. Иначе — дробный масштаб, чтобы не было больших рамок.
+   * Масштаб «по размеру окна». Игровое поле занимает весь экран.
+   * Горизонтально: всегда видно минимум 480×270 игровых пикселей — комната целиком.
+   * Вертикально (телефон): по ширине 300 игровых пикселей, крупнее; камера следует за персонажем.
+   * Если целое увеличение почти не меняет размер (≥ 85%), берём его — пиксели идеально ровные.
    */
   const fitToWindow = () => {
-    const z = Math.min(window.innerWidth / GAME_W, window.innerHeight / GAME_H);
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const z = h > w ? w / PORTRAIT_W : Math.min(w / GAME_W, h / GAME_H);
     const zi = Math.floor(z);
-    game.scale.setZoom(zi >= 1 && zi / z >= 0.85 ? zi : z);
+    const zoom = zi >= 1 && zi / z >= 0.85 ? zi : z;
+    game.scale.resize(Math.ceil(w / zoom), Math.ceil(h / zoom));
+    game.scale.setZoom(zoom);
   };
   window.addEventListener('resize', fitToWindow);
   window.addEventListener('orientationchange', () => setTimeout(fitToWindow, 200));

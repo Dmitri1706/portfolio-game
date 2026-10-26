@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { createAnims, loadSprites } from '../assets/manifest';
 import { finishLoading, setLoadProgress } from '../ui/loader';
 import { createHud } from '../ui/hud';
+import { orientationHint } from '../ui/orientation';
 import type { RoomData } from './RoomScene';
 
 /** Загрузка ресурсов игры; прогресс показывается на экране «Считаю конверсию вашего визита… N%». */
@@ -19,6 +20,7 @@ export class BootScene extends Phaser.Scene {
     createAnims(this.anims);
     await finishLoading();
     createHud();
+    orientationHint();
     this.scene.start('Lobby', { intro: true } satisfies RoomData);
   }
 }

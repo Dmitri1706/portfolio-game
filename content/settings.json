@@ -20,5 +20,19 @@
     "telegram": "username",
     "email": "mail@example.com",
     "phone": "+7 900 000-00-00"
+  },
+  "siteUrl": "",
+  "audio": {
+    "music": "",
+    "step": "",
+    "door": "",
+    "fall": "",
+    "land": "",
+    "bump": "",
+    "pickup": "",
+    "place": "",
+    "type": "",
+    "applause": "",
+    "achievement": ""
   }
 }

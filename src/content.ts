@@ -6,6 +6,10 @@ import mediakitMd from '../content/cases/mediakit.md?raw';
 import webinarMd from '../content/cases/webinar.md?raw';
 import resumeMd from '../content/resume.md?raw';
 import sportmasterMd from '../content/cases/sportmaster.md?raw';
+import aboutMd from '../content/about.md?raw';
+
+/** Короткое «обо мне» для страницы «Быстрый просмотр» — из content/about.md */
+export const ABOUT = aboutMd;
 import dialog from '../content/dialog.json';
 
 /** Сценарий диалога продажи — из content/dialog.json */

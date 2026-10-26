@@ -58,8 +58,10 @@ export abstract class RoomScene extends Phaser.Scene {
     this.marker = this.add.sprite(0, 0, 'marker').setDepth(DEPTH.marker).setVisible(false);
     this.marker.play('marker:loop');
 
-    const b = this.room.bounds();
-    this.cameras.main.centerOn(Math.round(b.centerX), Math.round(b.centerY));
+    this.setupCamera();
+    const onResize = () => this.setupCamera();
+    this.scale.on(Phaser.Scale.Events.RESIZE, onResize);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.scale.off(Phaser.Scale.Events.RESIZE, onResize));
 
     this.input.on('pointerdown', (p: Phaser.Input.Pointer, over: Phaser.GameObjects.GameObject[]) => {
       if (over.length === 0) this.onFloorTap(p.worldX, p.worldY);
@@ -71,6 +73,27 @@ export abstract class RoomScene extends Phaser.Scene {
 
     this.refreshHud();
     this.onEnter(data);
+  }
+
+  /**
+   * Камера: если комната помещается на экран — стоит неподвижно по центру,
+   * если нет (вертикальный телефон) — плавно следует за персонажем в пределах комнаты.
+   */
+  private setupCamera(): void {
+    const cam = this.cameras.main;
+    cam.setSize(this.scale.width, this.scale.height);
+    const b = this.room.bounds();
+    const pad = 12;
+    if (b.width + pad <= cam.width && b.height + pad <= cam.height) {
+      cam.stopFollow();
+      cam.removeBounds();
+      cam.centerOn(Math.round(b.centerX), Math.round(b.centerY));
+      return;
+    }
+    const bw = Math.max(b.width + 2 * pad, cam.width);
+    const bh = Math.max(b.height + 2 * pad, cam.height);
+    cam.setBounds(Math.round(b.centerX - bw / 2), Math.round(b.centerY - bh / 2), Math.round(bw), Math.round(bh));
+    cam.startFollow(this.player.sprite, true, 0.15, 0.15);
   }
 
   /** Что происходит при входе в комнату. По умолчанию — падение сверху. */
@@ -289,7 +312,18 @@ export abstract class RoomScene extends Phaser.Scene {
     });
   }
 
+  private stepMs = 0;
+
   update(_time: number, delta: number): void {
-    this.player.update(Math.min(delta, 50));
+    const dt = Math.min(delta, 50);
+    this.player.update(dt);
+    // звук шагов
+    if (this.player.moving) {
+      this.stepMs += dt;
+      if (this.stepMs >= 270) {
+        this.stepMs = 0;
+        sfx('step');
+      }
+    } else this.stepMs = 200;
   }
 }

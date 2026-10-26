@@ -1,5 +1,19 @@
-import { SETTINGS } from '../content';
-import { el } from './modal';
+import { SETTINGS, asset } from '../content';
+import { el, openModal } from './modal';
+import { track } from '../analytics';
+
+/** Окно «Связаться»: контакты и резюме. */
+export function openContacts(): void {
+  track('contacts_open');
+  const wrap = el('div');
+  wrap.appendChild(el('p', '', 'Буду рад обсудить задачу или вакансию — пишите удобным способом:'));
+  wrap.appendChild(contactsBlock());
+  openModal({
+    title: 'Связаться',
+    content: wrap,
+    buttons: [{ label: 'Резюме (PDF) ⬇', href: asset(SETTINGS.resume.pdf), download: true }],
+  });
+}
 
 /** Блок контактов из settings.json (Telegram, почта, телефон). Пустые поля не показываются. */
 export function contactsBlock(): HTMLElement {

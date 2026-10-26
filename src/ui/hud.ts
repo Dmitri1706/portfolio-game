@@ -1,19 +1,45 @@
 import { el } from './modal';
 import { showRules } from './rules';
+import { openContacts } from './contacts';
+import { isSoundOn, onSoundChange, setSound } from '../audio';
+import { track } from '../analytics';
 
 let progressEl: HTMLElement | null = null;
 
-/** Кнопки в углах экрана. (Звук, «Связаться», «Быстрый просмотр» — на Этапе 5.) */
+/** Кнопки в углах экрана: быстрый просмотр, связаться, звук, правила; слева — счётчик комнаты. */
 export function createHud(): void {
   const root = document.getElementById('ui');
   if (!root || root.querySelector('.hud')) return;
   const right = el('div', 'hud hud--top-right');
+
+  const quick = el('a', 'btn btn--ghost hud__text', 'Быстрый просмотр');
+  quick.href = './quick.html';
+  quick.title = 'Все кейсы на одной странице, без игры';
+  quick.addEventListener('click', () => track('quick_view_open'));
+
+  const contact = el('button', 'btn hud__text', 'Связаться');
+  contact.type = 'button';
+  contact.addEventListener('click', openContacts);
+
+  const sound = el('button', 'btn btn--ghost hud__icon');
+  sound.type = 'button';
+  const renderSound = (on: boolean) => {
+    sound.textContent = on ? '🔊' : '🔇';
+    sound.title = on ? 'Выключить звук' : 'Включить звук';
+    sound.setAttribute('aria-label', sound.title);
+    sound.setAttribute('aria-pressed', String(on));
+  };
+  renderSound(isSoundOn());
+  onSoundChange(renderSound);
+  sound.addEventListener('click', () => setSound(!isSoundOn()));
+
   const help = el('button', 'btn', '?');
   help.type = 'button';
   help.title = 'Правила';
   help.setAttribute('aria-label', 'Правила');
   help.addEventListener('click', () => showRules());
-  right.appendChild(help);
+
+  right.append(quick, contact, sound, help);
   root.appendChild(right);
 
   const left = el('div', 'hud hud--top-left');

@@ -3,6 +3,12 @@ import { IsoRoom } from '../world/IsoRoom';
 import { RoomScene, type RoomData } from './RoomScene';
 import { rulesSeen, showRules } from '../ui/rules';
 import { TEXTS } from '../texts';
+import { hasAchievement } from '../state';
+import { load, save } from '../storage';
+import { track } from '../analytics';
+import { sfx } from '../audio';
+import { el, openModal } from '../ui/modal';
+import { openContacts } from '../ui/contacts';
 
 /**
  * Лобби: белая минималистичная комната, табличка-приветствие и 4 двери.
@@ -83,13 +89,46 @@ export class LobbyScene extends RoomScene {
 
   protected onEnter(data: RoomData): void {
     if (!data.intro) {
-      super.onEnter(data);
+      this.cameras.main.fadeIn(300, 0x2b, 0x26, 0x40);
+      this.fallIn().then(() => {
+        this.busy = false;
+        this.maybeShowFinal();
+      });
       return;
     }
     // Сразу после экрана загрузки: падение, затем (в первый раз) правила
     this.fallIn().then(() => {
-      if (rulesSeen()) this.busy = false;
-      else this.time.delayedCall(250, () => showRules(() => (this.busy = false)));
+      if (rulesSeen()) {
+        this.busy = false;
+        this.maybeShowFinal();
+      } else this.time.delayedCall(250, () => showRules(() => (this.busy = false)));
+    });
+  }
+
+  /** Обе комнаты пройдены — один раз показываем финальное окно. */
+  private maybeShowFinal(): void {
+    if (!hasAchievement('vhod_done') || !hasAchievement('sport_done') || load('finalShown', false)) return;
+    save('finalShown', true);
+    track('final_window');
+    this.time.delayedCall(400, () => {
+      const body = el('div', 'final');
+      body.appendChild(el('div', 'final__rate', 'Конверсия визита: 100% ✓'));
+      body.appendChild(el('p', '', 'Вы прошли обе комнаты. Если хотите обсудить работу — буду рад знакомству!'));
+      sfx('achievement');
+      openModal({
+        title: 'Спасибо, что заглянули!',
+        content: body,
+        backLabel: 'Остаться в игре',
+        buttons: [
+          {
+            label: 'Связаться',
+            onClick: (close) => {
+              close();
+              openContacts();
+            },
+          },
+        ],
+      });
     });
   }
 }

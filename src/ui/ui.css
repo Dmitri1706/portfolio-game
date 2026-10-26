@@ -167,6 +167,53 @@ a.btn {
   box-sizing: border-box;
 }
 
+/* ---------- Подсказка «Поверните телефон» ---------- */
+.rotate-hint {
+  position: fixed;
+  left: 50%;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 8px 12px;
+  font-family: var(--font-text);
+  font-size: 14px;
+  white-space: nowrap;
+  z-index: 15;
+}
+.rotate-hint__icon {
+  font-size: 20px;
+  animation: rotate-wiggle 1.6s steps(4) infinite;
+}
+.rotate-hint__close {
+  border: 0;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--ink);
+  padding: 2px 4px;
+}
+@keyframes rotate-wiggle {
+  50% {
+    transform: rotate(90deg);
+  }
+}
+
+/* ---------- Финальное окно ---------- */
+.final__rate {
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  line-height: 24px;
+  color: #25844a;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #e6f7ec;
+  border: 3px solid #25844a;
+  text-align: center;
+  animation: pixel-pop 0.35s steps(4) 0.2s both;
+}
+
 /* ---------- HUD ---------- */
 .hud {
   position: fixed;
@@ -179,11 +226,22 @@ a.btn {
   right: max(12px, env(safe-area-inset-right));
 }
 .hud .btn {
-  width: 44px;
+  min-width: 44px;
   height: 44px;
   padding: 0;
   font-size: 16px;
   line-height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.hud .btn.hud__text {
+  font-size: 10px;
+  padding: 0 12px;
+}
+.hud .btn.hud__icon {
+  font-size: 20px;
 }
 
 @media (max-width: 600px), (max-height: 420px) {
@@ -202,9 +260,29 @@ a.btn {
     padding: 10px 14px 8px;
   }
   .hud .btn {
-    width: 40px;
-    height: 40px;
+    min-width: 36px;
+    height: 36px;
     font-size: 12px;
+  }
+  .hud .btn.hud__text {
+    font-size: 8px;
+    padding: 0 8px;
+  }
+  .hud {
+    gap: 6px;
+  }
+}
+/* На узком экране — быстрый просмотр и «связаться» в две строки справа */
+@media (max-width: 520px) {
+  .hud--top-right {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: 150px;
+  }
+  .hud .hud-label {
+    font-size: 8px;
+    line-height: 12px;
+    padding: 7px 8px 5px;
   }
 }
 

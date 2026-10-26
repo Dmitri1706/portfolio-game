@@ -12,6 +12,7 @@ import { playerSheet } from './sprites/character.mjs';
 import * as W from './sprites/world.mjs';
 import * as V from './sprites/vhod.mjs';
 import * as S from './sprites/sport.mjs';
+import * as X from './sprites/social.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const spec = JSON.parse(fs.readFileSync(path.join(root, 'src/assets/sprites.json'), 'utf8'));
@@ -116,3 +117,19 @@ for (const [key, s] of Object.entries(spec)) {
   made++;
 }
 console.log(`Готово: ${made} спрайтов в public/assets/sprites/`);
+
+// Превью для соцсетей и иконки сайта — в корень public/
+const SOCIAL = {
+  'og-image.png': X.ogImage,
+  'favicon-16.png': X.favicon16,
+  'favicon-32.png': X.favicon32,
+  'apple-touch-icon.png': X.appleTouch,
+};
+for (const [file, draw] of Object.entries(SOCIAL)) {
+  if (keep.has(file)) {
+    console.log(`• ${file} — оставляю ваш файл (custom-sprites.txt)`);
+    continue;
+  }
+  draw().save(path.join(root, 'public', file));
+}
+console.log('Готово: превью для соцсетей и иконки в public/');
