@@ -1,0 +1,67 @@
+{
+  "floor_lobby": {
+    "file": "floor_lobby.png",
+    "width": 32,
+    "height": 16,
+    "about": "Плитка пола лобби, ромб 2:1"
+  },
+  "floor_edge_left": {
+    "file": "floor_edge_left.png",
+    "width": 16,
+    "height": 22,
+    "about": "Торец пола (толщина) под левой нижней гранью крайних плиток"
+  },
+  "floor_edge_right": {
+    "file": "floor_edge_right.png",
+    "width": 16,
+    "height": 22,
+    "about": "Торец пола (толщина) под правой нижней гранью крайних плиток"
+  },
+  "wall_lobby_left": {
+    "file": "wall_lobby_left.png",
+    "width": 16,
+    "height": 80,
+    "about": "Кусок левой стены лобби шириной в одну плитку"
+  },
+  "wall_lobby_right": {
+    "file": "wall_lobby_right.png",
+    "width": 16,
+    "height": 80,
+    "about": "Кусок правой стены лобби шириной в одну плитку"
+  },
+  "door_free_boarded": {
+    "file": "door_free_boarded.png",
+    "width": 36,
+    "height": 67,
+    "anchorX": 17,
+    "anchorY": 56,
+    "about": "Отдельно стоящая заколоченная дверь «Проекты», стоит на 2 клетках. anchor — пиксель середины нижнего края"
+  },
+  "shadow": {
+    "file": "shadow.png",
+    "width": 16,
+    "height": 6,
+    "about": "Тень под персонажем"
+  },
+  "marker": {
+    "file": "marker.png",
+    "width": 16,
+    "height": 8,
+    "frames": 4,
+    "about": "Маркер точки назначения, 4 кадра в ряд (лист 64×8)"
+  },
+  "player": {
+    "file": "player.png",
+    "width": 24,
+    "height": 40,
+    "columns": 4,
+    "anchorY": 38,
+    "about": "Персонаж игрока. Каждая строка листа — одна анимация, кадры слева направо",
+    "anims": {
+      "idle_front": { "row": 0, "frames": 2, "fps": 2 },
+      "idle_back": { "row": 1, "frames": 2, "fps": 2 },
+      "walk_front": { "row": 2, "frames": 4, "fps": 8 },
+      "walk_back": { "row": 3, "frames": 4, "fps": 8 }
+    }
+  }
+}

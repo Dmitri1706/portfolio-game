@@ -1,0 +1,24 @@
+{
+  "name": "portfolio-game",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Портфолио-игра Дмитрия Мельшина",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "sprites": "node scripts/generate-sprites.mjs"
+  },
+  "dependencies": {
+    "easystarjs": "^0.4.4",
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/pngjs": "^6.0.5",
+    "pngjs": "^7.0.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  }
+}
