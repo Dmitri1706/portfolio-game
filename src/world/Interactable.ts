@@ -16,6 +16,8 @@ export interface InteractableDef {
   onUse: () => void;
   /** Название для аналитики */
   id: string;
+  /** false — кликать можно по всему прямоугольнику спрайта, а не только по нарисованным пикселям */
+  pixelPerfect?: boolean;
 }
 
 /** На устройствах без мышки (телефон, планшет) подсветки при наведении нет — вместо неё искорки. */
@@ -28,6 +30,7 @@ export const isTouchOnly = (): boolean => window.matchMedia('(hover: none)').mat
 export class Interactable {
   private outlines: Phaser.GameObjects.Image[] = [];
   private sparkTimer?: Phaser.Time.TimerEvent;
+  enabled = true;
 
   constructor(
     private scene: Phaser.Scene,
@@ -35,7 +38,7 @@ export class Interactable {
     onClick: (i: Interactable) => void,
   ) {
     for (const s of def.sprites) {
-      s.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+      this.makeInteractive(s);
       s.on('pointerover', () => this.highlight(true));
       s.on('pointerout', () => this.highlight(false));
       s.on('pointerdown', () => onClick(this));
@@ -47,6 +50,22 @@ export class Interactable {
         callback: () => this.sparkle(),
       });
     }
+  }
+
+  private makeInteractive(s: Obj): void {
+    if (this.def.pixelPerfect === false) s.setInteractive({ useHandCursor: true });
+    else s.setInteractive({ pixelPerfect: true, alphaTolerance: 1, useHandCursor: true });
+  }
+
+  /** Включить/выключить предмет (выключенный не подсвечивается и не нажимается). */
+  setEnabled(on: boolean): void {
+    if (on === this.enabled) return;
+    this.enabled = on;
+    for (const s of this.def.sprites) {
+      if (on) this.makeInteractive(s);
+      else s.disableInteractive();
+    }
+    if (!on) this.highlight(false);
   }
 
   highlight(on: boolean): void {
@@ -69,6 +88,7 @@ export class Interactable {
   }
 
   private sparkle(): void {
+    if (!this.enabled) return;
     const s = this.def.sprites[0];
     const b = s.getBounds();
     for (let tries = 0; tries < 12; tries++) {
@@ -89,5 +109,6 @@ export class Interactable {
   destroy(): void {
     this.sparkTimer?.remove();
     this.highlight(false);
+    for (const s of this.def.sprites) if (s.active) s.removeAllListeners().disableInteractive();
   }
 }

@@ -115,6 +115,11 @@ export const P = {
   manila: hex('#f2c46d'),
   manilaDark: hex('#d39d3e'),
 
+  // Золото (доска «Лучший продавец»)
+  gold: hex('#f5c542'),
+  goldLight: hex('#ffe58a'),
+  goldDark: hex('#b8861b'),
+
   shadow: hex('#231d33', 70),
   dust: hex('#e9e6f0'),
   dustDark: hex('#bdb7cc'),

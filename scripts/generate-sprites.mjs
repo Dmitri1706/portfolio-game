@@ -11,6 +11,7 @@ import { P } from './lib/palette.mjs';
 import { playerSheet } from './sprites/character.mjs';
 import * as W from './sprites/world.mjs';
 import * as V from './sprites/vhod.mjs';
+import * as S from './sprites/sport.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const spec = JSON.parse(fs.readFileSync(path.join(root, 'src/assets/sprites.json'), 'utf8'));
@@ -71,6 +72,21 @@ const drawers = {
   chart_growth: () => V.chartGrowth(side('chart_growth')),
   chart_line: () => V.chartLine(side('chart_line')),
   sticky_board: () => V.stickyBoard(side('sticky_board')),
+
+  shelf_wall: () => S.shelfWall(side('shelf_wall')),
+  sneaker_iso: S.sneakerIso,
+  held_sneaker: S.heldSneaker,
+  clothes_rack: S.clothesRack,
+  cash_counter: S.cashCounter,
+  fitting_room: S.fittingRoom,
+  ball_basket: S.ballBasket,
+  board_best: () => S.boardBest(side('board_best')),
+  npc_customer: () => S.npcSheet('customer'),
+  shopper1: () => S.npcSheet('shopper1'),
+  shopper2: () => S.npcSheet('shopper2'),
+  shopper3: () => S.npcSheet('shopper3'),
+  icon_talk: S.iconTalk,
+  arrow_down: S.arrowDown,
 
   shadow: W.shadow,
   marker: W.marker,

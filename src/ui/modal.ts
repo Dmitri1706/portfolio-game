@@ -26,9 +26,19 @@ export interface ModalHandle {
 }
 
 const stack: ModalHandle[] = [];
+/** Другие окна поверх игры (например, диалог), которые тоже останавливают персонажа */
+let locks = 0;
 
 export function isUiOpen(): boolean {
-  return stack.length > 0;
+  return stack.length > 0 || locks > 0;
+}
+
+export function lockUi(): void {
+  locks++;
+}
+
+export function unlockUi(): void {
+  locks = Math.max(0, locks - 1);
 }
 
 function root(): HTMLElement {

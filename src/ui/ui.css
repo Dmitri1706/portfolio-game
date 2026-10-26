@@ -16,6 +16,10 @@
   pointer-events: auto;
 }
 
+#ui [hidden] {
+  display: none !important;
+}
+
 /* ---------- Рамка-«пиксельная коробка» ---------- */
 .pixel-box {
   background: var(--paper);

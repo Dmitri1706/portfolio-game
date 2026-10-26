@@ -10,7 +10,7 @@ import { contactsBlock } from './contacts';
  * На телефоне панель с текстом уходит под контент.
  */
 interface CaseWindowOptions {
-  frame: 'monitor' | 'stage' | 'newspaper' | 'phone' | 'folder';
+  frame: 'monitor' | 'stage' | 'newspaper' | 'phone' | 'folder' | 'board';
   title: string;
   /** Содержимое рамки */
   content: HTMLElement;
@@ -225,6 +225,20 @@ export function openWebinarWindow(onClose: () => void): void {
   const tools: ModalButton[] = [];
   if (SETTINGS.webinar.url) tools.push({ label: 'Открыть видео ↗', href: SETTINGS.webinar.url });
   openCaseWindow({ frame: 'phone', title: 'Вебинар', content: stage, side: md(CASES.webinar), tools, onClose });
+}
+
+// ================= Спортмастер: доска «Лучший продавец» =================
+
+export function openBestSellerWindow(onClose: () => void): void {
+  const cert = el('div', 'cert');
+  cert.appendChild(el('div', 'cert__title', 'Лучший продавец'));
+  const face = el('div', 'cert__face');
+  face.style.backgroundImage = `url(${import.meta.env.BASE_URL}assets/sprites/player.png)`;
+  cert.appendChild(face);
+  cert.appendChild(el('div', 'cert__stars', '★★★★★'));
+  cert.appendChild(el('div', 'cert__name', 'Дмитрий Мельшин'));
+  cert.appendChild(el('div', 'cert__place', 'Спортмастер'));
+  openCaseWindow({ frame: 'board', title: 'Лучший продавец', content: cert, side: md(CASES.sportmaster), onClose });
 }
 
 // ================= 5. Папка: резюме =================

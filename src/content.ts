@@ -5,6 +5,31 @@ import presentationMd from '../content/cases/presentation.md?raw';
 import mediakitMd from '../content/cases/mediakit.md?raw';
 import webinarMd from '../content/cases/webinar.md?raw';
 import resumeMd from '../content/resume.md?raw';
+import sportmasterMd from '../content/cases/sportmaster.md?raw';
+import dialog from '../content/dialog.json';
+
+/** Сценарий диалога продажи — из content/dialog.json */
+export const DIALOG = dialog as SaleDialog;
+
+export interface DialogOption {
+  text: string;
+  correct?: boolean;
+  /** Только для сценария A или B */
+  scenario?: 'A' | 'B';
+  /** Ответ покупателя: строка или разные ответы для сценариев A и B */
+  reply?: string | { A: string; B: string };
+  /** Плашка бонуса за допродажу */
+  bonus?: string;
+}
+
+export interface SaleDialog {
+  names: { seller: string; customer: string };
+  doubt: string;
+  steps: { title: string; options: DialogOption[] }[];
+  final: string;
+  closed: string;
+  noBonus: string;
+}
 
 /** Все ссылки, пути и контакты — из content/settings.json */
 export const SETTINGS = settings;
@@ -15,6 +40,7 @@ export const CASES = {
   presentation: presentationMd,
   mediakit: mediakitMd,
   webinar: webinarMd,
+  sportmaster: sportmasterMd,
 };
 
 export const RESUME = resumeMd;

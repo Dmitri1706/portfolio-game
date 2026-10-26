@@ -122,8 +122,18 @@ export abstract class RoomScene extends Phaser.Scene {
     return it;
   }
 
+  protected removeInteractable(i: Interactable): void {
+    i.destroy();
+    this.interactables = this.interactables.filter((x) => x !== i);
+  }
+
+  /** Можно ли сейчас использовать предмет (комната может запретить и что-то сказать). */
+  protected canUse(_i: Interactable): boolean {
+    return true;
+  }
+
   private async use(i: Interactable): Promise<void> {
-    if (!this.canControl) return;
+    if (!this.canControl || !i.enabled || !this.canUse(i)) return;
     // Если по дороге кликнуть в другое место, персонаж просто пойдёт туда — действие отменится
     const ok = await this.walkTo(i.def.approach, i.def.face);
     if (ok && this.canControl) {

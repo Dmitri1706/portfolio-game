@@ -3,6 +3,7 @@ import './style.css';
 import './ui/fonts.css';
 import './ui/ui.css';
 import './ui/case.css';
+import './ui/dialog.css';
 import { BG_COLOR, GAME_H, GAME_W } from './config';
 import { BootScene } from './scenes/BootScene';
 import { LobbyScene } from './scenes/LobbyScene';

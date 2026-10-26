@@ -18,18 +18,22 @@ export class Player {
   /** Высота над полом (пока падает сверху) */
   lift = 0;
   dir: Dir = 'se';
+  /** Несёт предмет перед собой (кроссовок): другие анимации ходьбы и стойки */
+  carrying = false;
   private path: Cell[] = [];
   private onArrive?: () => void;
 
   constructor(
     private scene: Phaser.Scene,
     start: Cell,
+    /** Ключ листа кадров: player, shopper1, npc_customer… */
+    readonly key = 'player',
   ) {
     this.gx = start.x;
     this.gy = start.y;
-    const s = SPRITES.player;
+    const s = SPRITES[key];
     this.shadow = scene.add.image(0, 0, 'shadow');
-    this.sprite = scene.add.sprite(0, 0, 'player');
+    this.sprite = scene.add.sprite(0, 0, key);
     this.sprite.setDisplayOrigin(s.width / 2, (s.anchorY ?? s.height) + 1);
     this.idle();
     this.sync();
@@ -61,7 +65,7 @@ export class Player {
       this.arrive();
       return;
     }
-    this.play(this.facingFront ? 'walk_front' : 'walk_back');
+    this.play(this.walkAnim());
   }
 
   stop(): void {
@@ -76,12 +80,16 @@ export class Player {
   }
 
   idle(): void {
-    this.play(this.facingFront ? 'idle_front' : 'idle_back');
+    this.play(`${this.carrying ? 'hold' : 'idle'}_${this.facingFront ? 'front' : 'back'}`);
+  }
+
+  private walkAnim(): string {
+    return `${this.carrying ? 'carry' : 'walk'}_${this.facingFront ? 'front' : 'back'}`;
   }
 
   /** Включить анимацию по имени из sprites.json (например 'sit_front'). Зеркалится по направлению взгляда. */
   play(anim: string): void {
-    this.sprite.play(`player:${anim}`, true);
+    this.sprite.play(`${this.key}:${anim}`, true);
     this.sprite.setFlipX(this.dir === 'sw' || this.dir === 'nw');
   }
 
@@ -89,7 +97,7 @@ export class Player {
   playOnce(anim: string): Promise<void> {
     return new Promise((resolve) => {
       this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => resolve());
-      this.sprite.play(`player:${anim}`);
+      this.sprite.play(`${this.key}:${anim}`);
       this.sprite.setFlipX(this.dir === 'sw' || this.dir === 'nw');
     });
   }
@@ -163,7 +171,7 @@ export class Player {
     const dir: Dir = front ? (east ? 'se' : 'sw') : east ? 'ne' : 'nw';
     if (dir !== this.dir) {
       this.dir = dir;
-      this.play(front ? 'walk_front' : 'walk_back');
+      this.play(this.walkAnim());
     }
   }
 

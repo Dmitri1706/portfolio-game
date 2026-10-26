@@ -116,6 +116,26 @@ export class IsoRoom {
       .setDepth(DEPTH.wall + 50 + layer);
   }
 
+  /**
+   * Экранная точка пикселя стены: плитка tile, u — пиксель вдоль плитки слева направо (0…15),
+   * h — высота над полом. Нужна, чтобы ставить что-то на полки.
+   */
+  wallPoint(side: 'left' | 'right', tile: number, u: number, h: number): { x: number; y: number } {
+    if (side === 'left') {
+      const p = gridToScreen(0, tile);
+      return { x: p.x - TILE_W / 2 + u, y: p.y - TILE_H / 2 + Math.ceil((15 - u) / 2) - 1 - h };
+    }
+    const p = gridToScreen(tile, 0);
+    return { x: p.x + u, y: p.y - TILE_H / 2 - 1 + Math.ceil(u / 2) - h };
+  }
+
+  /** Все проходимые клетки (например, чтобы выбрать случайную). */
+  walkableCells(): Cell[] {
+    const out: Cell[] = [];
+    for (let y = 0; y < this.cfg.rows; y++) for (let x = 0; x < this.cfg.cols; x++) if (this.grid[y][x] === 0) out.push({ x, y });
+    return out;
+  }
+
   inBounds(c: Cell): boolean {
     return c.x >= 0 && c.y >= 0 && c.x < this.cfg.cols && c.y < this.cfg.rows;
   }

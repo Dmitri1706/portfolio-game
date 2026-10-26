@@ -23,6 +23,7 @@ export function person({
   blink = false,
   mouth = false,
   pal,
+  glasses = true,
 }) {
   // pal — замена цветов (волосы, футболка…) для других персонажей
   const P = pal ? { ...BASE, ...pal } : BASE;
@@ -134,19 +135,24 @@ export function person({
     c.rect(7 + ux, y0 + 5, 2, 1, P.hair);
     c.set(16 + ux, y0 + 4, P.hairDark);
     c.set(16 + ux, y0 + 5, P.hairDark);
-    // очки: тонкая оправа, светлые стёкла, глаза смотрят вправо
-    c.rect(8 + ux, y0 + 7, 3, 1, P.outline);
-    c.rect(13 + ux, y0 + 7, 3, 1, P.outline);
-    c.set(11 + ux, y0 + 8, P.outline);
-    c.set(12 + ux, y0 + 8, P.outline);
-    for (const x of [8, 13]) {
-      c.set(x + ux, y0 + 8, P.lens);
-      c.set(x + 1 + ux, y0 + 8, P.lens);
-      c.set(x + 2 + ux, y0 + 8, blink ? P.lens : P.outline);
-      c.rect(x + ux, y0 + 9, 3, 1, P.outline);
+    if (glasses) {
+      // очки: тонкая оправа, светлые стёкла, глаза смотрят вправо
+      c.rect(8 + ux, y0 + 7, 3, 1, P.outline);
+      c.rect(13 + ux, y0 + 7, 3, 1, P.outline);
+      c.set(11 + ux, y0 + 8, P.outline);
+      c.set(12 + ux, y0 + 8, P.outline);
+      for (const x of [8, 13]) {
+        c.set(x + ux, y0 + 8, P.lens);
+        c.set(x + 1 + ux, y0 + 8, P.lens);
+        c.set(x + 2 + ux, y0 + 8, blink ? P.lens : P.outline);
+        c.rect(x + ux, y0 + 9, 3, 1, P.outline);
+      }
+      c.set(7 + ux, y0 + 8, P.outline);
+      c.set(16 + ux, y0 + 8, P.outline);
+    } else {
+      // просто глаза (смотрят вправо)
+      for (const x of [10, 14]) c.rect(x + ux, y0 + 7, 1, blink ? 1 : 2, blink ? P.skinDark : P.outline);
     }
-    c.set(7 + ux, y0 + 8, P.outline);
-    c.set(16 + ux, y0 + 8, P.outline);
     // рот
     if (mouth) c.rect(11 + ux, y0 + 10, 2, 2, P.skinDark);
     else c.rect(11 + ux, y0 + 10, 2, 1, P.skinDark);
@@ -159,8 +165,10 @@ export function person({
     c.rect(8 + ux, y0 + 11, 8, 1, P.skinDark);
     c.set(6 + ux, y0 + 7, P.skin);
     c.set(17 + ux, y0 + 7, P.skinDark);
-    c.set(6 + ux, y0 + 6, P.outline); // дужки очков
-    c.set(17 + ux, y0 + 6, P.outline);
+    if (glasses) {
+      c.set(6 + ux, y0 + 6, P.outline); // дужки очков
+      c.set(17 + ux, y0 + 6, P.outline);
+    }
   }
 
   c.outline(P.outline);
