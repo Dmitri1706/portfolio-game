@@ -2,7 +2,7 @@
   "role": "Product / Маркетолог",
   "site": {
     "url": "https://dkozhevnikov.bitrix24site.ru/",
-    "embed": true,
+    "embed": false,
     "screenshot": "materials/site-screenshot.webp"
   },
   "presentation": {

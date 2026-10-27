@@ -108,7 +108,8 @@ export function openSiteWindow(onClose: () => void): void {
 
   const tools: (ModalButton | HTMLElement)[] = [];
   if (s.url) tools.push({ label: 'Открыть сайт в новой вкладке ↗', href: s.url });
-  if (s.url && s.screenshot) {
+  // переключатель «живой сайт ↔ скриншот» — только если встраивание включено
+  if (s.embed && s.url && s.screenshot) {
     const toggle = makeButton({
       label: label(),
       ghost: true,
