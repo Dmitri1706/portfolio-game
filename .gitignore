@@ -11,3 +11,4 @@ references/
 incoming/
 МАТЕРИАЛЫ-ДЛЯ-ИГРЫ.md
 *.docx
+__pycache__/
