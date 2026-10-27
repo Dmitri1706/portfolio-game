@@ -14,7 +14,7 @@
       { "type": "sconce", "at": 11.7 }
     ],
     "right": [
-      { "type": "sconce", "at": 1.6 },
+      { "type": "sconce", "at": 1.0 },
       { "type": "door", "id": "door_next", "style": "boarded", "at": 3, "plaque": ["Какая компания", "следующая?"] },
       { "type": "window", "at": 5.5, "width": 1.8 },
       { "type": "painting", "at": 7.8 },

@@ -2,11 +2,11 @@ import type { Cell } from '../iso';
 import LOBBY from '../../rooms/lobby.json';
 import LOBBY_LAYOUT from '../assets/rooms/lobby.layout.json';
 import { buildDiorama, type DioramaDoor, type Layout, type RoomDef } from '../world/diorama';
-import type { Interactable } from '../world/Interactable';
+import { doorMarker, type Interactable } from '../world/Interactable';
 import { constructionFx } from '../world/construction';
 import { RoomScene, type RoomData, type RoomId } from './RoomScene';
 import { rulesSeen, showRules } from '../ui/rules';
-import { TEXTS } from '../texts';
+import { LABELS, TEXTS } from '../texts';
 import { hasAchievement } from '../state';
 import { load, save } from '../storage';
 import { track } from '../analytics';
@@ -39,6 +39,7 @@ export class LobbyScene extends RoomScene {
         sprites: [dd.sprite],
         approach: dd.approach,
         face: dd.face,
+        ...(target ? { label: LABELS.door, markerAt: doorMarker(dd.sprite) } : {}),
         onUse: () => {
           if (target && READY_ROOMS.has(target)) this.enterDoor(dd, target, it);
           else if (target) this.peekDoor(dd, it);

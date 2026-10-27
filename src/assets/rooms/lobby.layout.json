@@ -34,16 +34,16 @@
       "open": {
         "file": "door_next_open.webp",
         "x": 1577,
-        "y": 210,
-        "w": 338,
-        "h": 462
+        "y": 196,
+        "w": 360,
+        "h": 476
       },
       "closed": {
         "file": "door_next_closed.webp",
         "x": 1577,
-        "y": 210,
-        "w": 338,
-        "h": 462
+        "y": 196,
+        "w": 360,
+        "h": 476
       },
       "side": "right",
       "at": 3
@@ -238,9 +238,9 @@
       "kind": "door_free",
       "file": "door_projects.webp",
       "x": 1570,
-      "y": 989,
+      "y": 965,
       "w": 240,
-      "h": 493,
+      "h": 517,
       "cell": {
         "x": 10,
         "y": 8,
@@ -398,5 +398,6 @@
         "d": 1
       }
     }
-  ]
+  ],
+  "points": {}
 }

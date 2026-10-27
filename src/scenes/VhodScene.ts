@@ -1,3 +1,5 @@
+import { LABELS } from '../texts';
+import { doorMarker } from '../world/Interactable';
 import type Phaser from 'phaser';
 import { DEPTH } from '../config';
 import { type Cell, depthAt, gridToScreen } from '../iso';
@@ -72,6 +74,7 @@ export class VhodScene extends RoomScene {
         this.addInteractable({
           id: ia.id,
           sprites: sprites(img, d.layers.get('desk_pc')),
+          label: LABELS.computer,
           approach: ia.approach,
           face: ia.face,
           onUse: async () => {
@@ -85,6 +88,7 @@ export class VhodScene extends RoomScene {
         this.addInteractable({
           id: ia.id,
           sprites: sprites(img, ...this.spectators.map((s) => s.sprite)),
+          label: LABELS.stage,
           approach: ia.approach,
           face: ia.face,
           onUse: async () => {
@@ -103,6 +107,7 @@ export class VhodScene extends RoomScene {
         this.addInteractable({
           id: ia.id,
           sprites: sprites(img, furnitureUnder(o)),
+          label: LABELS[ia.id as keyof typeof LABELS],
           approach: ia.approach,
           face: ia.face,
           onUse: () => {
@@ -119,6 +124,8 @@ export class VhodScene extends RoomScene {
       const it = this.addInteractable({
         id: 'exit',
         sprites: [exit.sprite],
+        label: LABELS.exit,
+        markerAt: doorMarker(exit.sprite),
         approach: exit.approach,
         face: exit.face,
         onUse: () => this.enterDoor(exit, 'lobby', it),

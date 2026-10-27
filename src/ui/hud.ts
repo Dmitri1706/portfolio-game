@@ -17,7 +17,7 @@ export function createHud(): void {
   quick.title = 'Все кейсы на одной странице, без игры';
   quick.addEventListener('click', () => track('quick_view_open'));
 
-  const contact = el('button', 'btn hud__text', 'Связаться');
+  const contact = el('button', 'btn hud__text hud__accent', 'Связаться');
   contact.type = 'button';
   contact.addEventListener('click', openContacts);
 
@@ -33,7 +33,7 @@ export function createHud(): void {
   onSoundChange(renderSound);
   sound.addEventListener('click', () => setSound(!isSoundOn()));
 
-  const help = el('button', 'btn', '?');
+  const help = el('button', 'btn hud__icon', '?');
   help.type = 'button';
   help.title = 'Правила';
   help.setAttribute('aria-label', 'Правила');

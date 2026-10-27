@@ -18,6 +18,16 @@ export interface InteractableDef {
   id: string;
   /** false — кликать можно по всему прямоугольнику спрайта, а не только по нарисованным пикселям */
   pixelPerfect?: boolean;
+  /** Подпись над парящей стрелкой («Сайт», «Вебинар»…). Без подписи стрелки нет. */
+  label?: string;
+  /** Куда указывает стрелка (по умолчанию — верх первого спрайта). */
+  markerAt?: { x: number; y: number };
+}
+
+/** Точка для стрелки у двери: на середине полотна, чтобы не закрывать вывеску. */
+export function doorMarker(s: Obj): { x: number; y: number } {
+  const b = s.getBounds();
+  return { x: b.centerX, y: b.top + b.height * 0.45 };
 }
 
 /** На устройствах без мышки (телефон, планшет) подсветки при наведении нет — вместо неё искорки. */
@@ -30,6 +40,7 @@ export const isTouchOnly = (): boolean => window.matchMedia('(hover: none)').mat
 export class Interactable {
   private outlines: Phaser.GameObjects.Image[] = [];
   private sparkTimer?: Phaser.Time.TimerEvent;
+  private marker?: Phaser.GameObjects.Container;
   enabled = true;
 
   constructor(
@@ -43,6 +54,7 @@ export class Interactable {
       s.on('pointerout', () => this.highlight(false));
       s.on('pointerdown', () => onClick(this));
     }
+    if (def.label) this.marker = this.makeMarker(def.label);
     if (isTouchOnly()) {
       this.sparkTimer = scene.time.addEvent({
         delay: 1100 + Math.random() * 500,
@@ -66,6 +78,39 @@ export class Interactable {
       else s.disableInteractive();
     }
     if (!on) this.highlight(false);
+    this.marker?.setVisible(on);
+  }
+
+  /** Парящая над предметом стрелка с подписью — сразу видно, куда нажимать. */
+  private makeMarker(label: string): Phaser.GameObjects.Container {
+    const scene = this.scene;
+    const at = this.def.markerAt ?? (() => {
+      const b = this.def.sprites[0].getBounds();
+      return { x: b.centerX, y: b.top - 4 };
+    })();
+    // текст рисуется с запасом по чёткости: камера увеличивает игровые пиксели (а при постройке комнаты её зум ещё не задан)
+    const res = Math.max(3, Math.ceil(scene.scale.height / 640) + 1);
+    const t = scene.add.text(0, 0, label, {
+      fontFamily: '"PT Sans", Arial, sans-serif',
+      fontSize: '13px',
+      fontStyle: 'bold',
+      color: '#fff3dc',
+      resolution: res,
+    });
+    const w = Math.ceil(t.width) + 18;
+    const h = Math.ceil(t.height) + 6;
+    const top = -h - 20;
+    t.setPosition(-t.width / 2, top + 3);
+    const g = scene.add.graphics();
+    g.fillStyle(0x000000, 0.3).fillRoundedRect(-w / 2 + 1, top + 2, w, h, h / 2);
+    g.fillStyle(0x1c1628, 0.86).fillRoundedRect(-w / 2, top, w, h, h / 2);
+    g.lineStyle(1.5, 0xffc34d, 0.9).strokeRoundedRect(-w / 2, top, w, h, h / 2);
+    // стрелка вниз
+    g.fillStyle(0xffc34d, 1).fillTriangle(-8, -14, 8, -14, 0, -2);
+    g.lineStyle(1.5, 0x1c1628, 1).strokeTriangle(-8, -14, 8, -14, 0, -2);
+    const c = scene.add.container(at.x, at.y, [g, t]).setDepth(950000);
+    scene.tweens.add({ targets: c, y: at.y - 6, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
+    return c;
   }
 
   highlight(on: boolean): void {
@@ -111,6 +156,7 @@ export class Interactable {
   destroy(): void {
     this.sparkTimer?.remove();
     this.highlight(false);
+    this.marker?.destroy();
     for (const s of this.def.sprites) if (s.active) s.removeAllListeners().disableInteractive();
   }
 }

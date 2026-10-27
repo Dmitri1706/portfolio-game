@@ -610,3 +610,73 @@
     background-position-x: -102px;
   }
 }
+
+/* ---------- HUD в стиле диорам: тёмное «стекло», тёплый свет ---------- */
+#ui .hud .btn,
+#ui .hud-label {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.2;
+  color: #fff3dc;
+  background: rgba(28, 22, 40, 0.78);
+  border: 1.5px solid rgba(255, 195, 77, 0.35);
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+#ui .hud .btn {
+  min-width: 42px;
+  height: 42px;
+}
+#ui .hud .btn.hud__text {
+  font-size: 15px;
+  padding: 0 16px;
+}
+#ui .hud .btn:hover {
+  filter: none;
+  background: rgba(46, 36, 62, 0.9);
+  border-color: rgba(255, 195, 77, 0.8);
+  transform: translateY(-1px);
+}
+#ui .hud .btn:active {
+  transform: translateY(1px);
+}
+#ui .hud .btn:focus-visible {
+  outline: 2px solid #ffc34d;
+  outline-offset: 2px;
+}
+/* «Связаться» — главная кнопка: тёплый янтарный */
+#ui .hud .btn.hud__accent {
+  color: #2a1d10;
+  background: linear-gradient(180deg, #ffd27a, #f5a93a);
+  border-color: rgba(255, 230, 170, 0.9);
+  box-shadow: 0 4px 16px rgba(245, 169, 58, 0.35);
+}
+#ui .hud .btn.hud__accent:hover {
+  background: linear-gradient(180deg, #ffdc93, #f7b450);
+}
+#ui .hud-label {
+  border-radius: 14px;
+  padding: 8px 14px;
+  font-size: 14px;
+}
+@media (max-width: 600px), (max-height: 420px) {
+  #ui .hud .btn {
+    min-width: 36px;
+    height: 36px;
+  }
+  #ui .hud .btn.hud__text {
+    font-size: 13px;
+    padding: 0 12px;
+  }
+  #ui .hud-label {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
+#ui .hud .btn.hud__icon {
+  font-size: 18px;
+}

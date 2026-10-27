@@ -364,11 +364,11 @@ def door_wall(m, p, spec, rng):
         point_light('sign_glow', (0, -0.5, ht + 0.38), (0.3, 1.0, 0.5), 15, 0.3, p)
     else:
         lines = spec.get('plaque', [])
-        box('plaque', (2.5, 0.05, 0.7), (0, -0.05, ht + 0.37), m['paper'], p, bevel=0.01)
+        box('plaque', (2.95, 0.05, 0.72), (0, -0.05, ht + 0.38), m['paper'], p, bevel=0.01)
         for i, line in enumerate(lines):
-            text('plaque_text', line, 0.29, (0, -0.085, ht + 0.51 - i * 0.29), m['ink'], p, font=FONT_SIGN, extrude=0.002)
+            text('plaque_text', line, 0.34, (0, -0.085, ht + 0.54 - i * 0.33), m['ink'], p, font=FONT_SIGN, extrude=0.002)
         for sx in (-1, 1):
-            box('nail', (0.03, 0.03, 0.03), (sx * 1.05, -0.08, ht + 0.66), m['steel'], p, bevel=0)
+            box('nail', (0.03, 0.03, 0.03), (sx * 1.3, -0.08, ht + 0.68), m['steel'], p, bevel=0)
     return hinge
 
 
@@ -386,10 +386,10 @@ def door_free(m, p, W, D, spec, rng):
     for a, z in ((R(30), 1.45), (R(-26), 0.75)):
         box('plank', (wd + 0.3, 0.05, 0.17), (0, -0.06, z), planks, p, rot=(0, a, 0))
     box('plank_h', (wd + 0.3, 0.05, 0.15), (0, -0.06, 1.95), planks, p)
-    box('sign', (1.7, 0.06, 0.5), (0, -0.04, ht + 0.48), m['paper'], p, bevel=0.01)
+    box('sign', (2.1, 0.06, 0.62), (0, -0.04, ht + 0.54), m['paper'], p, bevel=0.01)
     for sx in (-1, 1):
-        box('sign_post', (0.04, 0.04, 0.2), (sx * 0.6, 0, ht + 0.22), m['dark_wood'], p, bevel=0)
-    text('plaque_text', spec.get('plaque', ''), 0.34, (0, -0.075, ht + 0.48), m['ink'], p, font=FONT_SIGN, extrude=0.002)
+        box('sign_post', (0.04, 0.04, 0.24), (sx * 0.7, 0, ht + 0.22), m['dark_wood'], p, bevel=0)
+    text('plaque_text', spec.get('plaque', ''), 0.44, (0, -0.075, ht + 0.54), m['ink'], p, font=FONT_SIGN, extrude=0.002)
     # ведро с краской и стремянка — «тут кипит работа»
     cyl('bucket', 0.13, 0.25, (wd / 2 + 0.4, -0.25, 0), mat('bucket', hex_rgb('#3a6fb0'), rough=0.5), p, verts=14,
         r_top=0.15)

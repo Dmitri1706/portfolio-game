@@ -1,3 +1,4 @@
+import { LABELS } from '../texts';
 import Phaser from 'phaser';
 import { DEPTH } from '../config';
 import { type Cell, gridToScreen } from '../iso';
@@ -6,7 +7,7 @@ import SPORT_LAYOUT from '../assets/rooms/sport.layout.json';
 import { buildDiorama, type Layout, type RoomDef } from '../world/diorama';
 import { Player } from '../world/Player';
 import { Wanderer } from '../world/Wanderer';
-import type { Interactable } from '../world/Interactable';
+import { doorMarker, type Interactable } from '../world/Interactable';
 import { RoomScene } from './RoomScene';
 import { sfx } from '../audio';
 import { track } from '../analytics';
@@ -104,6 +105,8 @@ export class SportScene extends RoomScene {
       section.it = this.addInteractable({
         id: `shelf_${o.section}`,
         sprites: [shelf],
+        label: LABELS.shelf,
+        markerAt: { x: section.points[0].x, y: Math.min(...section.points.map((p) => p.y)) - 40 },
         approach: { x: o.x, y: o.y + 1 },
         face: 'ne',
         onUse: () => this.placeSneaker(section),
@@ -119,6 +122,7 @@ export class SportScene extends RoomScene {
       this.addInteractable({
         id: 'board',
         sprites: [board.sprite],
+        label: LABELS.board,
         approach: board.approach,
         face: board.face,
         onUse: () => {
@@ -135,6 +139,8 @@ export class SportScene extends RoomScene {
       const exitIt = this.addInteractable({
         id: 'exit',
         sprites: [exit.sprite],
+        label: LABELS.exit,
+        markerAt: doorMarker(exit.sprite),
         approach: exit.approach,
         face: exit.face,
         onUse: () => this.enterDoor(exit, 'lobby', exitIt),
@@ -154,6 +160,8 @@ export class SportScene extends RoomScene {
     this.addInteractable({
       id: 'customer',
       sprites: [this.npc.sprite, this.icon],
+      label: LABELS.customer,
+      markerAt: { x: head.x, y: head.y - 34 },
       approach: c.approach,
       face: 'ne',
       onUse: () => this.talk(),
@@ -223,6 +231,8 @@ export class SportScene extends RoomScene {
     f.it = this.addInteractable({
       id: 'sneaker',
       sprites: [sprite],
+      label: LABELS.sneaker,
+      markerAt: { x: p.x, y: p.y - 12 },
       pixelPerfect: false,
       approach: cell,
       face: this.player?.dir ?? 'se',
