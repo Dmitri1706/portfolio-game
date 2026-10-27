@@ -202,7 +202,9 @@ export function openWebinarWindow(onClose: () => void): void {
   const screen = el('div', 'phone__screen');
   phone.appendChild(screen);
   stage.appendChild(phone);
-  const url = videoEmbedUrl(SETTINGS.webinar.url);
+  // "embed" — готовый адрес для встраивания (нужен для приватных видео с ключом доступа)
+  const w = SETTINGS.webinar as { url: string; embed?: string };
+  const url = w.embed?.trim() || videoEmbedUrl(w.url);
   // видео вставляется, когда телефон повернулся горизонтально
   phone.addEventListener(
     'animationend',
@@ -223,7 +225,7 @@ export function openWebinarWindow(onClose: () => void): void {
     { once: true },
   );
   const tools: ModalButton[] = [];
-  if (SETTINGS.webinar.url) tools.push({ label: 'Открыть видео ↗', href: SETTINGS.webinar.url });
+  if (w.url) tools.push({ label: /rutube\.ru/.test(w.url) ? 'Смотреть на Rutube ↗' : 'Открыть видео ↗', href: w.url });
   openCaseWindow({ frame: 'phone', title: 'Вебинар', content: stage, side: md(CASES.webinar), tools, onClose });
 }
 

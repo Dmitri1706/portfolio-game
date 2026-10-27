@@ -1,8 +1,9 @@
 {
+  "role": "Product / Маркетолог",
   "site": {
-    "url": "https://example.com",
+    "url": "https://dkozhevnikov.bitrix24site.ru/",
     "embed": true,
-    "screenshot": "materials/site-screenshot.png"
+    "screenshot": "materials/site-screenshot.webp"
   },
   "presentation": {
     "pdf": "materials/presentation.pdf"
@@ -11,15 +12,18 @@
     "pdf": "materials/mediakit.pdf"
   },
   "webinar": {
-    "url": ""
+    "url": "https://rutube.ru/video/private/5bfc3dfaded36bf37bbd7d7d2ef097d3/?p=C7mVYVep4U6kvCppg1rq-Q",
+    "embed": "https://rutube.ru/play/embed/5bfc3dfaded36bf37bbd7d7d2ef097d3/?p=C7mVYVep4U6kvCppg1rq-Q"
   },
   "resume": {
     "pdf": "materials/resume.pdf"
   },
   "contacts": {
-    "telegram": "username",
-    "email": "mail@example.com",
-    "phone": "+7 900 000-00-00"
+    "telegram": "Dinoteg",
+    "email": "DmitryMelshin17@yandex.com",
+    "phone": "",
+    "showPhone": false,
+    "city": "Краснодар"
   },
   "siteUrl": "",
   "audio": {

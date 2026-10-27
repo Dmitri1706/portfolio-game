@@ -6,7 +6,8 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('.', import.meta.url));
 
 /**
- * Подставляет адрес сайта (content/settings.json → "siteUrl") в мета-теги превью для соцсетей.
+ * Подставляет из content/settings.json адрес сайта ("siteUrl") в мета-теги превью для соцсетей
+ * и подпись под именем ("role") — на экран загрузки и в описание страницы.
  * Telegram и соцсети требуют полный адрес картинки, например https://name.github.io/portfolio/og-image.png
  */
 function siteUrl(): Plugin {
@@ -14,13 +15,16 @@ function siteUrl(): Plugin {
     name: 'site-url',
     transformIndexHtml(html) {
       let url = '';
+      let role = 'Product / Маркетолог';
       try {
-        url = JSON.parse(readFileSync(resolve(root, 'content/settings.json'), 'utf8')).siteUrl ?? '';
+        const s = JSON.parse(readFileSync(resolve(root, 'content/settings.json'), 'utf8'));
+        url = s.siteUrl ?? '';
+        role = s.role ?? role;
       } catch {
         // без адреса превью останется с относительной ссылкой
       }
       if (url && !url.endsWith('/')) url += '/';
-      return html.replaceAll('%SITE_URL%', url);
+      return html.replaceAll('%SITE_URL%', url).replaceAll('%ROLE%', role);
     },
   };
 }

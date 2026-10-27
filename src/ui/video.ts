@@ -13,7 +13,9 @@ export function videoEmbedUrl(url: string): string | null {
 
   // Rutube
   if (/rutube\.ru\/play\/embed\//.test(u)) return u;
-  if ((m = u.match(/rutube\.ru\/video\/(?:private\/)?([\w]+)/))) return `https://rutube.ru/play/embed/${m[1]}`;
+  if ((m = u.match(/rutube\.ru\/video\/(?:private\/)?([\w]+)\/?(?:\?(?:.*&)?p=([\w-]+))?/)))
+    // у приватного видео ключ доступа ?p=… нужен и в адресе для встраивания
+    return `https://rutube.ru/play/embed/${m[1]}/${m[2] ? `?p=${m[2]}` : ''}`;
 
   // VK Видео: vk.com/video-123_456, vkvideo.ru/video-123_456, а также ?z=video-123_456
   if (/video_ext\.php/.test(u)) return u;

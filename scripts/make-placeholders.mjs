@@ -77,7 +77,7 @@ await pdf('resume.pdf', [
 ]);
 
 const shot = path.join(out, 'site-screenshot.png');
-if (fs.existsSync(shot)) console.log('• site-screenshot.png уже есть — не трогаю');
+if (fs.existsSync(shot) || fs.existsSync(path.join(out, 'site-screenshot.webp'))) console.log('• site-screenshot.png уже есть — не трогаю');
 else {
   const c = new Canvas(320, 1000);
   c.rect(0, 0, 320, 1000, P.white2);

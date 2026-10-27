@@ -62,22 +62,36 @@
 
 ```json
 {
+  "role": "Product / Маркетолог",
   "site": {
     "url": "https://адрес-сайта.ru",
     "embed": true,
-    "screenshot": "materials/site-screenshot.png"
+    "screenshot": "materials/site-screenshot.webp"
   },
   "presentation": { "pdf": "materials/presentation.pdf" },
   "mediakit": { "pdf": "materials/mediakit.pdf" },
-  "webinar": { "url": "https://vkvideo.ru/video-123_456" },
+  "webinar": {
+    "url": "https://rutube.ru/video/private/…/?p=…",
+    "embed": "https://rutube.ru/play/embed/…/?p=…"
+  },
   "resume": { "pdf": "materials/resume.pdf" },
-  "contacts": { "telegram": "username", "email": "mail@example.com", "phone": "+7 900 000-00-00" }
+  "contacts": {
+    "telegram": "username",
+    "email": "mail@example.com",
+    "phone": "+7 900 000-00-00",
+    "showPhone": false,
+    "city": "Краснодар"
+  }
 }
 ```
 
-- `site.url` — ваш сайт для компьютера. Если сайт не открывается внутри «монитора» (некоторые сайты запрещают встраивание), поставьте `"embed": false` — тогда сразу покажется длинный скриншот `site.screenshot`. Скриншот можно сделать, например, расширением GoFullPage в Chrome.
-- `webinar.url` — обычная ссылка на видео из адресной строки: VK Видео, Rutube или YouTube. Пустые кавычки `""` — показывается заглушка.
+- `role` — подпись под именем на экране загрузки, в быстром просмотре и в превью ссылки.
+- `site.url` — ваш сайт для компьютера. Если сайт не открывается внутри «монитора» (некоторые сайты запрещают встраивание), поставьте `"embed": false` — тогда сразу покажется длинный скриншот `site.screenshot`. Кнопка «Открыть сайт в новой вкладке» есть всегда.
+- `webinar.url` — обычная ссылка на видео из адресной строки: VK Видео, Rutube или YouTube. По ней работает кнопка «Смотреть на Rutube». Пустые кавычки `""` — показывается заглушка.
+- `webinar.embed` — адрес для встраивания видео в «телефон» (необязательно). Если его нет, игра сама попробует составить его из `url`.
 - `contacts.telegram` — имя пользователя без `@`. Пустое поле `""` — контакт не показывается.
+- `contacts.showPhone` — показывать ли телефон. `false` — телефон скрыт везде, `true` — показан в окне «Связаться» и в быстром просмотре.
+- `contacts.city` — город, показывается простым текстом.
 - Пути к файлам пишутся от папки `public/`: файл `public/materials/resume.pdf` → `"materials/resume.pdf"`.
 
 **Как не сломать JSON:**
@@ -112,9 +126,9 @@
 | `presentation.pdf` | Слайды презентации на сцене |
 | `mediakit.pdf` | МедиаКит в газете |
 | `resume.pdf` | Резюме для кнопки «Скачать» |
-| `site-screenshot.png` | Длинный скриншот сайта (запасной вариант) |
+| `site-screenshot.webp` | Длинный скриншот сайта (запасной вариант) |
 
-Сейчас там лежат пиксельные заглушки. Команда `npm run placeholders` создаёт заглушки только для **отсутствующих** файлов — ваши файлы она не трогает.
+Если какого-то файла нет, команда `npm run placeholders` создаёт заглушки только для **отсутствующих** файлов — ваши файлы она не трогает.
 
 ### «Обо мне» для быстрого просмотра — `content/about.md`
 
