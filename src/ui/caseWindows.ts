@@ -10,7 +10,7 @@ import { contactsBlock } from './contacts';
  * На телефоне панель с текстом уходит под контент.
  */
 interface CaseWindowOptions {
-  frame: 'monitor' | 'stage' | 'newspaper' | 'phone' | 'folder' | 'board';
+  frame: 'monitor' | 'stage' | 'newspaper' | 'phone' | 'folder' | 'board' | 'event';
   title: string;
   /** Содержимое рамки */
   content: HTMLElement;
@@ -227,6 +227,23 @@ export function openWebinarWindow(onClose: () => void): void {
   const tools: ModalButton[] = [];
   if (w.url) tools.push({ label: /rutube\.ru/.test(w.url) ? 'Смотреть на Rutube ↗' : 'Открыть видео ↗', href: w.url });
   openCaseWindow({ frame: 'phone', title: 'Вебинар', content: stage, side: md(CASES.webinar), tools, onClose });
+}
+
+// ================= 6. Трибуна: мероприятие по HR-автоматизации =================
+
+export function openEventWindow(onClose: () => void): void {
+  const photo = SETTINGS.event.photo;
+  const view = el('div', 'event-photo');
+  if (photo) {
+    const img = el('img');
+    img.src = asset(photo);
+    img.alt = 'Фото с мероприятия';
+    view.appendChild(img);
+  } else {
+    view.innerHTML =
+      '<div class="event-photo__empty"><span class="event-photo__icon">📷</span><br>Здесь будет фото с мероприятия<br><small>Путь к фото — в content/settings.json → event → photo</small></div>';
+  }
+  openCaseWindow({ frame: 'event', title: 'Мероприятие', content: view, side: md(CASES.event), onClose });
 }
 
 // ================= Спортмастер: доска «Лучший продавец» =================

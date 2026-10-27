@@ -12,6 +12,7 @@ import { sfx } from '../audio';
 import { achieve, explore, exploredCount } from '../state';
 import { showAchievement } from '../ui/toast';
 import {
+  openEventWindow,
   openMediakitWindow,
   openPresentationWindow,
   openResumeWindow,
@@ -20,7 +21,7 @@ import {
 } from '../ui/caseWindows';
 
 const ROOM = 'vhod';
-const TOTAL = 5;
+const TOTAL = 6;
 
 /** Предметы, которые берут в руки: картинка в руках и окно, которое открывается */
 const HELD: Record<string, [string, (onClose: () => void) => void]> = {
@@ -99,6 +100,19 @@ export class VhodScene extends RoomScene {
                 () => this.applause(),
               ),
             );
+          },
+        });
+      } else if (ia.id === 'event') {
+        // 6. Трибуна: персонаж встаёт за неё лицом к залу
+        this.addInteractable({
+          id: ia.id,
+          sprites: sprites(img),
+          label: LABELS.event,
+          approach: ia.approach,
+          face: ia.face,
+          onUse: () => {
+            this.busy = true;
+            this.openAfterAction('event', () => openEventWindow(() => (this.busy = false)));
           },
         });
       } else if (img && HELD[ia.id]) {

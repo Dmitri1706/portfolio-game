@@ -51,6 +51,7 @@ const items: { tag: string; text: string; links: ModalButton[] }[] = [
     text: CASES.webinar,
     links: webinar ? [{ label: 'Смотреть вебинар ↗', href: SETTINGS.webinar.url }] : [],
   },
+  { tag: 'В ХОД', text: CASES.event, links: [] },
   { tag: 'Спортмастер', text: CASES.sportmaster, links: [] },
 ];
 for (const it of items) {

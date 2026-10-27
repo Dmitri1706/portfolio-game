@@ -560,6 +560,23 @@ def stage(m, p, W, D, rng):
         point_light('spot_light', (x, -D / 2 + 0.25, 0.5), (0.8, 0.9, 1.0), 25, 0.05, p)
 
 
+def podium(m, p, W, D, rng):
+    """Трибуна с микрофоном (кейс «Мероприятие по HR-автоматизации»): лицом к зрителю, выступающий стоит за ней."""
+    o = office_mats()
+    box('pd_body', (0.62, 0.42, 1.0), (0, 0.04, 0.5), o['navy'], p, bevel=0.03)
+    box('pd_front', (0.56, 0.02, 0.62), (0, -0.18, 0.56), o['white'], p, bevel=0.01)
+    box('pd_logo', (0.34, 0.012, 0.05), (0, -0.192, 0.74), o['neon'], p, bevel=0)
+    box('pd_logo2', (0.22, 0.012, 0.03), (0, -0.192, 0.64), o['neon2'], p, bevel=0)
+    box('pd_base', (0.72, 0.5, 0.06), (0, 0.04, 0.03), m['black'], p, bevel=0.01)
+    box('pd_top', (0.7, 0.5, 0.04), (0, 0.06, 1.04), m['dark_wood'], p, bevel=0.01, rot=(R(10), 0, 0))
+    box('pd_paper', (0.2, 0.28, 0.006), (0.12, 0.08, 1.07), o['white'], p, bevel=0, rot=(R(10), 0, R(-6)))
+    # микрофон на гибкой ножке
+    cyl('pd_mic_base', 0.04, 0.03, (-0.16, -0.04, 1.03), m['black'], p, verts=10)
+    cyl('pd_mic_neck', 0.008, 0.32, (-0.16, -0.04, 1.05), m['metal'], p, verts=6, rot=(R(-35), 0, 0))
+    sphere('pd_mic', 0.035, (-0.16, -0.22, 1.32), m['black'], p, scale=(1, 1, 1.4), seg=10, rings=6)
+    point_light('pd_glow', (0, -0.5, 0.7), (0.4, 0.9, 1.0), 6, 0.2, p)
+
+
 def server_rack(m, p, W, D, rng):
     o = office_mats()
     box('rack', (0.7, 0.65, 2.1), (0, 0.05, 1.05), m['metal'], p, bevel=0.02)
@@ -984,7 +1001,7 @@ FLOOR = {
     'desk_pc': desk_pc, 'office_chair': office_chair, 'audience_chair': audience_chair, 'stage': stage,
     'server_rack': server_rack, 'filing_cabinet': filing_cabinet, 'water_cooler': water_cooler, 'rug_rect': rug_rect,
     'coffee_table_low': coffee_table_low, 'beanbag': beanbag, 'bar_table': bar_table, 'bar_stool': bar_stool,
-    'whiteboard': whiteboard, 'item_newspaper': item_newspaper, 'item_phone': item_phone, 'item_folder': item_folder,
+    'whiteboard': whiteboard, 'podium': podium, 'item_newspaper': item_newspaper, 'item_phone': item_phone, 'item_folder': item_folder,
     # магазин «Спортмастер»
     'shoe_shelf': shoe_shelf, 'clothes_rack': clothes_rack, 'cash_counter': cash_counter, 'fitting_room': fitting_room,
     'ball_basket': ball_basket, 'mannequin': mannequin, 'display_table': display_table, 'try_bench': try_bench,

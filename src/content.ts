@@ -6,6 +6,7 @@ import mediakitMd from '../content/cases/mediakit.md?raw';
 import webinarMd from '../content/cases/webinar.md?raw';
 import resumeMd from '../content/resume.md?raw';
 import sportmasterMd from '../content/cases/sportmaster.md?raw';
+import eventMd from '../content/cases/event.md?raw';
 import aboutMd from '../content/about.md?raw';
 
 /** Короткое «обо мне» для страницы «Быстрый просмотр» — из content/about.md */
@@ -44,6 +45,7 @@ export const CASES = {
   presentation: presentationMd,
   mediakit: mediakitMd,
   webinar: webinarMd,
+  event: eventMd,
   sportmaster: sportmasterMd,
 };
 
