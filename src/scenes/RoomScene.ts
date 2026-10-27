@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { BG_COLOR, DEPTH } from '../config';
+import { BG_COLOR, DEPTH, VIEW_H, VIEW_W_PORTRAIT } from '../config';
 import { type Cell, gridToScreen, screenToCell } from '../iso';
 import { IsoRoom } from '../world/IsoRoom';
 import { FALL_HEIGHT, Player, type Dir } from '../world/Player';
@@ -10,10 +10,10 @@ import { sfx } from '../audio';
 import { track } from '../analytics';
 import { setProgressLabel } from '../ui/hud';
 
-/** На сколько пикселей приподнять сидящего персонажа (высота сиденья) */
-const SEAT_LIFT = 5;
-/** Где в руках держится предмет: пикселей над точкой, где стоят ноги */
-const HELD_Y = 20;
+/** На сколько приподнять сидящего персонажа (у 3D-персонажа поза «сидя» уже на высоте сиденья) */
+const SEAT_LIFT = 0;
+/** Где в руках держится предмет: игровых пикселей над точкой, где стоят ноги */
+const HELD_Y = 62;
 
 export type RoomId = 'lobby' | 'vhod' | 'sport';
 
@@ -35,7 +35,7 @@ export abstract class RoomScene extends Phaser.Scene {
   protected player!: Player;
   /** Пока true — клики по полу и предметам игнорируются (идёт сценка) */
   protected busy = false;
-  private marker!: Phaser.GameObjects.Sprite;
+  private marker!: Phaser.GameObjects.Image;
   private interactables: Interactable[] = [];
   private bubble?: Bubble;
 
@@ -55,8 +55,8 @@ export abstract class RoomScene extends Phaser.Scene {
     this.player = new Player(this, this.spawnCell(data));
     this.player.setAlpha(0);
 
-    this.marker = this.add.sprite(0, 0, 'marker').setDepth(DEPTH.marker).setVisible(false);
-    this.marker.play('marker:loop');
+    this.marker = this.add.image(0, 0, 'marker3d').setDepth(DEPTH.marker).setVisible(false);
+    this.tweens.add({ targets: this.marker, scale: 0.8, duration: 450, yoyo: true, repeat: -1, ease: 'Sine.InOut' });
 
     this.setupCamera();
     const onResize = () => this.setupCamera();
@@ -76,24 +76,29 @@ export abstract class RoomScene extends Phaser.Scene {
   }
 
   /**
-   * Камера: если комната помещается на экран — стоит неподвижно по центру,
-   * если нет (вертикальный телефон) — плавно следует за персонажем в пределах комнаты.
+   * Камера: масштаб такой, чтобы по высоте было видно VIEW_H игровых пикселей (на вертикальном телефоне —
+   * VIEW_W_PORTRAIT по ширине). Если комната помещается на экран — камера стоит по центру,
+   * если нет — плавно следует за персонажем в пределах комнаты.
    */
   private setupCamera(): void {
     const cam = this.cameras.main;
     cam.setSize(this.scale.width, this.scale.height);
+    const portrait = this.scale.height > this.scale.width;
+    cam.setZoom(portrait ? this.scale.width / VIEW_W_PORTRAIT : this.scale.height / VIEW_H);
     const b = this.room.bounds();
     const pad = 12;
-    if (b.width + pad <= cam.width && b.height + pad <= cam.height) {
+    const vw = cam.width / cam.zoom;
+    const vh = cam.height / cam.zoom;
+    if (b.width + pad <= vw && b.height + pad <= vh) {
       cam.stopFollow();
       cam.removeBounds();
       cam.centerOn(Math.round(b.centerX), Math.round(b.centerY));
       return;
     }
-    const bw = Math.max(b.width + 2 * pad, cam.width);
-    const bh = Math.max(b.height + 2 * pad, cam.height);
+    const bw = Math.max(b.width + 2 * pad, vw);
+    const bh = Math.max(b.height + 2 * pad, vh);
     cam.setBounds(Math.round(b.centerX - bw / 2), Math.round(b.centerY - bh / 2), Math.round(bw), Math.round(bh));
-    cam.startFollow(this.player.sprite, true, 0.15, 0.15);
+    cam.startFollow(this.player.sprite, false, 0.08, 0.08, 0, 40);
   }
 
   /** Что происходит при входе в комнату. По умолчанию — падение сверху. */
@@ -203,7 +208,7 @@ export abstract class RoomScene extends Phaser.Scene {
   }
 
   /** Взять предмет: он исчезает со стола и появляется в руках, персонаж поворачивается к нам. */
-  protected pickUp(item: Phaser.GameObjects.Sprite, heldKey: string): void {
+  protected pickUp(item: Phaser.GameObjects.Image, heldKey: string): void {
     this.busy = true;
     sfx('pickup');
     item.setVisible(false);
@@ -214,11 +219,12 @@ export abstract class RoomScene extends Phaser.Scene {
     this.held = this.add
       .image(p.sprite.x, p.sprite.y - HELD_Y, heldKey)
       .setDepth(p.sprite.depth + 0.5)
-      .setFlipX(p.sprite.flipX);
+      .setFlipX(p.sprite.flipX)
+      .setScale(heldKey.startsWith('held3d_') ? 0.5 : 1);
   }
 
   /** Положить предмет обратно. */
-  protected putDown(item: Phaser.GameObjects.Sprite, face: Dir): void {
+  protected putDown(item: Phaser.GameObjects.Image, face: Dir): void {
     this.held?.destroy();
     this.held = undefined;
     item.setVisible(true);
@@ -258,16 +264,31 @@ export abstract class RoomScene extends Phaser.Scene {
         onComplete: async () => {
           sfx('land');
           this.cameras.main.shake(140, 0.006);
-          const d = this.add.sprite(p.sprite.x, p.sprite.y + 1, 'dust').setOrigin(0.5, 1);
-          d.setDepth(p.sprite.depth + 1);
-          d.play('dust:loop');
-          d.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => d.destroy());
+          this.dustPuff(p.sprite.x, p.sprite.y, p.sprite.depth + 1);
           await p.playOnce('land');
           p.idle();
           resolve();
         },
       });
     });
+  }
+
+  /** Облачко пыли: несколько клубов разлетаются в стороны по полу и тают. */
+  protected dustPuff(x: number, y: number, depth: number): void {
+    for (let i = 0; i < 9; i++) {
+      const a = (i / 9) * Math.PI * 2;
+      const puff = this.add.image(x, y - 6, 'puff').setDepth(depth).setScale(0.5).setAlpha(0.9);
+      this.tweens.add({
+        targets: puff,
+        x: x + Math.cos(a) * 46,
+        y: y - 6 + Math.sin(a) * 18 - 6,
+        scale: 1.1,
+        alpha: 0,
+        duration: 520,
+        ease: 'Quad.Out',
+        onComplete: () => puff.destroy(),
+      });
+    }
   }
 
   /** Спотыкание о заколоченную дверь + облачко с текстом. */
@@ -285,10 +306,11 @@ export abstract class RoomScene extends Phaser.Scene {
   }
 
   /** Открыть дверь, зайти в проём и перейти в другую комнату. */
-  protected async enterDoor(door: Phaser.GameObjects.Sprite, target: RoomId, it?: Interactable): Promise<void> {
+  protected async enterDoor(door: Phaser.GameObjects.Sprite | { open(): void }, target: RoomId, it?: Interactable): Promise<void> {
     this.busy = true;
     track('door_enter', { from: this.scene.key, to: target });
-    door.setFrame(1);
+    if ('open' in door) door.open();
+    else door.setFrame(1);
     it?.refresh();
     sfx('door');
     await new Promise((r) => this.time.delayedCall(220, r));

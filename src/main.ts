@@ -10,8 +10,8 @@ import { LobbyScene } from './scenes/LobbyScene';
 import { VhodScene } from './scenes/VhodScene';
 import { SportScene } from './scenes/SportScene';
 
-/** Ширина видимой области в игровых пикселях при вертикальном телефоне */
-const PORTRAIT_W = 300;
+/** Не больше стольких пикселей на холсте (быстродействие на слабых телефонах) */
+const MAX_PIXELS = 2560 * 1440;
 
 /** Ждём пиксельные шрифты: Phaser рисует надписи на canvas и должен получить уже загруженный шрифт. */
 async function loadFonts(): Promise<void> {
@@ -32,8 +32,10 @@ function startGame(): Phaser.Game {
     width: GAME_W,
     height: GAME_H,
     backgroundColor: BG_COLOR,
-    pixelArt: true,
-    roundPixels: true,
+    // Графика из Blender: сглаживание включено, пиксельный режим выключен
+    antialias: true,
+    pixelArt: false,
+    roundPixels: false,
     scale: {
       mode: Phaser.Scale.NONE,
       autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -43,19 +45,16 @@ function startGame(): Phaser.Game {
   });
 
   /**
-   * Масштаб «по размеру окна». Игровое поле занимает весь экран.
-   * Горизонтально: всегда видно минимум 480×270 игровых пикселей — комната целиком.
-   * Вертикально (телефон): по ширине 300 игровых пикселей, крупнее; камера следует за персонажем.
-   * Если целое увеличение почти не меняет размер (≥ 85%), берём его — пиксели идеально ровные.
+   * Холст — на весь экран и в «настоящих» пикселях устройства (с учётом плотности экрана),
+   * поэтому на телефонах картинка чёткая. Сколько комнаты видно — решает камера сцены (см. RoomScene).
    */
   const fitToWindow = () => {
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const z = h > w ? w / PORTRAIT_W : Math.min(w / GAME_W, h / GAME_H);
-    const zi = Math.floor(z);
-    const zoom = zi >= 1 && zi / z >= 0.85 ? zi : z;
-    game.scale.resize(Math.ceil(w / zoom), Math.ceil(h / zoom));
-    game.scale.setZoom(zoom);
+    let dpr = Math.min(window.devicePixelRatio || 1, 3);
+    if (w * h * dpr * dpr > MAX_PIXELS) dpr = Math.sqrt(MAX_PIXELS / (w * h));
+    game.scale.resize(Math.round(w * dpr), Math.round(h * dpr));
+    game.scale.setZoom(1 / dpr);
   };
   window.addEventListener('resize', fitToWindow);
   window.addEventListener('orientationchange', () => setTimeout(fitToWindow, 200));

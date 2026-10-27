@@ -7,7 +7,10 @@ import { Pathfinder } from './Pathfinder';
 export interface RoomConfig {
   cols: number;
   rows: number;
-  floor: SpriteKey;
+  /** Плитка пола (пиксельные комнаты). У диорам пола-плиток нет — его рисует фон-рендер */
+  floor?: SpriteKey;
+  /** Прямоугольник фона-рендера (игровые пиксели) — у диорам вместо пола и стен из плиток */
+  backdrop?: Phaser.Geom.Rectangle;
   wallLeft?: SpriteKey;
   wallRight?: SpriteKey;
 }
@@ -38,6 +41,7 @@ export class IsoRoom {
 
   private build(): void {
     const { cols, rows, floor, wallLeft, wallRight } = this.cfg;
+    if (!floor) return;
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
         const p = gridToScreen(x, y);
@@ -175,6 +179,7 @@ export class IsoRoom {
 
   /** Прямоугольник, который занимает комната на экране (для камеры). */
   bounds(): Phaser.Geom.Rectangle {
+    if (this.cfg.backdrop) return this.cfg.backdrop;
     const { cols, rows } = this.cfg;
     const left = gridToScreen(0, rows - 1).x - TILE_W / 2;
     const right = gridToScreen(cols - 1, 0).x + TILE_W / 2;

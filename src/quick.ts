@@ -20,7 +20,7 @@ const backToGame: ModalButton = { label: '▶ Вернуться в игру', h
 // ---------- Шапка ----------
 const head = el('header', 'q-head');
 const face = el('div', 'q-face');
-face.style.backgroundImage = `url(${import.meta.env.BASE_URL}assets/sprites/player.png)`;
+face.style.backgroundImage = `url(${import.meta.env.BASE_URL}assets/sprites3d/player_idle.webp)`;
 const titles = el('div');
 titles.append(el('h1', 'q-name', 'Дмитрий Мельшин'), el('p', 'q-role', 'Product / Маркетолог'));
 const headBtns = el('div', 'q-buttons');

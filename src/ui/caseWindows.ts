@@ -233,7 +233,7 @@ export function openBestSellerWindow(onClose: () => void): void {
   const cert = el('div', 'cert');
   cert.appendChild(el('div', 'cert__title', 'Лучший продавец'));
   const face = el('div', 'cert__face');
-  face.style.backgroundImage = `url(${import.meta.env.BASE_URL}assets/sprites/player.png)`;
+  face.style.backgroundImage = `url(${import.meta.env.BASE_URL}assets/sprites3d/player_idle.webp)`;
   cert.appendChild(face);
   cert.appendChild(el('div', 'cert__stars', '★★★★★'));
   cert.appendChild(el('div', 'cert__name', 'Дмитрий Мельшин'));

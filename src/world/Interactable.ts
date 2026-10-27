@@ -3,7 +3,7 @@ import type { Cell } from '../iso';
 import type { Dir } from './Player';
 import { outlineTexture } from './outline';
 
-type Obj = Phaser.GameObjects.Sprite;
+type Obj = Phaser.GameObjects.Image;
 
 export interface InteractableDef {
   /** Спрайты, по которым можно кликнуть (например, дверь и вывеска над ней) */
@@ -73,9 +73,12 @@ export class Interactable {
     this.outlines = [];
     if (!on || isTouchOnly()) return;
     for (const s of this.def.sprites) {
-      const key = outlineTexture(this.scene, s.texture.key, s.frame.name);
+      // у крупных картинок из Blender (показаны уменьшенными) контур толще и мягче
+      const pad = s.scaleX < 1 ? 6 : 1;
+      const key = outlineTexture(this.scene, s.texture.key, s.frame.name, pad);
       const o = this.scene.add.image(s.x, s.y, key);
-      o.setDisplayOrigin(s.displayOriginX + 1, s.displayOriginY + 1);
+      o.setDisplayOrigin(s.displayOriginX + pad, s.displayOriginY + pad);
+      o.setScale(s.scaleX, s.scaleY);
       o.setFlipX(s.flipX);
       o.setDepth(s.depth - 0.01);
       this.outlines.push(o);
@@ -94,13 +97,12 @@ export class Interactable {
     for (let tries = 0; tries < 12; tries++) {
       const x = Phaser.Math.Between(Math.floor(b.left), Math.floor(b.right) - 1);
       const y = Phaser.Math.Between(Math.floor(b.top), Math.floor(b.bottom) - 1);
-      const lx = Math.floor(x - b.left);
-      const ly = Math.floor(y - b.top);
+      const lx = Math.floor((x - b.left) / s.scaleX);
+      const ly = Math.floor((y - b.top) / s.scaleY);
       const alpha = this.scene.textures.getPixelAlpha(lx, ly, s.texture.key, s.frame.name);
       if (alpha && alpha > 0) {
-        const sp = this.scene.add.sprite(x, y, 'sparkle').setDepth(900000);
-        sp.play('sparkle:loop');
-        sp.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => sp.destroy());
+        const sp = this.scene.add.image(x, y, 'sparkle3d').setDepth(900000).setScale(0).setAngle(Phaser.Math.Between(0, 45));
+        this.scene.tweens.add({ targets: sp, scale: 1, angle: '+=45', duration: 300, yoyo: true, ease: 'Sine.Out', onComplete: () => sp.destroy() });
         return;
       }
     }

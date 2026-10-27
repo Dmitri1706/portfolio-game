@@ -1,6 +1,10 @@
 import type Phaser from 'phaser';
-import type { Cell } from '../iso';
-import { IsoRoom } from '../world/IsoRoom';
+import { DEPTH } from '../config';
+import { type Cell, depthAt, gridToScreen } from '../iso';
+import VHOD from '../../rooms/vhod.json';
+import VHOD_LAYOUT from '../assets/rooms/vhod.layout.json';
+import { buildDiorama, type Layout, type RoomDef, type RoomObject } from '../world/diorama';
+import { addCharacter } from '../world/characters';
 import { RoomScene } from './RoomScene';
 import { sfx } from '../audio';
 import { achieve, explore, exploredCount } from '../state';
@@ -16,13 +20,21 @@ import {
 const ROOM = 'vhod';
 const TOTAL = 5;
 
+/** Предметы, которые берут в руки: картинка в руках и окно, которое открывается */
+const HELD: Record<string, [string, (onClose: () => void) => void]> = {
+  mediakit: ['held3d_newspaper', openMediakitWindow],
+  webinar: ['held3d_phone', openWebinarWindow],
+  resume: ['held3d_folder', openResumeWindow],
+};
+
+const DEF = VHOD as RoomDef;
+
 /**
- * Комната «В ХОД»: светлый офис с неоновыми акцентами.
- * Сетка 11×10. Левая стена (x = 0): график, экран сцены, дверь выхода.
- * Правая стена (y = 0): плакат над столом, доска со стикерами над тумбой.
+ * Комната «В ХОД»: светлый офис с неоновыми акцентами (рендер Blender, описание — rooms/vhod.json).
+ * Левая стена: окно, экран сцены, дверь выхода. Правая: окна, неоновый логотип, график, доска со стикерами.
  */
 export class VhodScene extends RoomScene {
-  private spectators: Phaser.GameObjects.Sprite[] = [];
+  private spectators: { sprite: Phaser.GameObjects.Sprite; variant: string }[] = [];
 
   constructor() {
     super('Vhod');
@@ -30,135 +42,92 @@ export class VhodScene extends RoomScene {
 
   protected build(): void {
     this.spectators = [];
-    this.room = new IsoRoom(this, {
-      cols: 11,
-      rows: 10,
-      floor: 'floor_vhod',
-      wallLeft: 'wall_vhod_left',
-      wallRight: 'wall_vhod_right',
-    });
-    const r = this.room;
+    const d = buildDiorama(this, DEF, VHOD_LAYOUT as Layout);
+    this.room = d.room;
 
-    // ---- стены ----
-    r.placeOnWall('chart_line', 'left', 0, 2);
-    r.placeOnWall('stage_screen', 'left', 3, 4);
-    r.placeOnWall('chart_growth', 'right', 2, 3);
-    r.placeOnWall('sticky_board', 'right', 6, 3);
+    // id картинки-вырезки предмета: свой id из описания или «obj<номер>_<тип>»
+    const layerOf = (o: RoomObject) => d.layers.get(o.id ?? `obj${DEF.objects.indexOf(o)}_${o.type}`);
+    // мебель, на которой лежит предмет (та же клетка)
+    const furnitureUnder = (o: RoomObject) =>
+      DEF.objects.filter((f) => f !== o && !f.type.startsWith('item_') && f.x === o.x && f.y === o.y).map(layerOf)[0];
 
-    // ---- декор ----
-    r.placeObject('plant', 0, 0);
-    r.placeObject('plant', 10, 9);
-    r.placeObject('plant', 0, 9);
-    r.placeObject('server_rack', 10, 0).play('server_rack:loop');
-    r.placeObject('stage', 0, 3);
+    // ---- зрители на стульях ----
+    for (const o of DEF.objects) {
+      if (!o.spectator) continue;
+      const p = gridToScreen(o.x, o.y);
+      const s = addCharacter(this, o.spectator, p.x, p.y, 'sit', 'nw');
+      s.setDepth(DEPTH.objects + depthAt(o.x, o.y) + 0.3);
+      this.spectators.push({ sprite: s, variant: o.spectator });
+    }
 
-    // ---- 1. Компьютер на столе: персонаж садится на стул ----
-    const desk = r.placeObject('desk_pc', 3, 0);
-    const chair = r.placeObject('chair_office', 3, 1, { depthBias: 1 });
-    this.addInteractable({
-      id: 'computer',
-      sprites: [desk, chair],
-      approach: { x: 3, y: 2 },
-      face: 'ne',
-      onUse: async () => {
-        await this.sitOn({ x: 3, y: 1 }, 'ne');
-        this.openAfterAction('computer', () => openSiteWindow(() => this.standUp()));
-      },
-    });
-
-    // ---- 2. Сцена со зрителями: персонаж садится в зал ----
-    const seats: Cell[] = [
-      { x: 3, y: 3 },
-      { x: 3, y: 4 },
-      { x: 3, y: 5 },
-      { x: 3, y: 6 },
-      { x: 4, y: 3 },
-      { x: 4, y: 5 },
-      { x: 4, y: 6 },
-    ];
-    seats.forEach((s, i) => {
-      const v = i % 3;
-      const sp = r.placeObject('spectators', s.x, s.y, { flip: true });
-      sp.setFrame(v * 3);
-      sp.setData('variant', v);
-      this.spectators.push(sp);
-    });
-    const freeSeat = { x: 4, y: 4 };
-    const seatChair = r.placeObject('chair_audience', freeSeat.x, freeSeat.y, { flip: true, depthBias: 1 });
-    this.addInteractable({
-      id: 'stage',
-      sprites: [seatChair, ...this.spectators],
-      approach: { x: 5, y: 4 },
-      face: 'nw',
-      onUse: async () => {
-        await this.sitOn(freeSeat, 'nw');
-        this.openAfterAction('stage', () =>
-          openPresentationWindow(
-            () => this.standUp(),
-            () => this.applause(),
-          ),
-        );
-      },
-    });
-
-    // ---- 3. Газета на журнальном столике — медиакит ----
-    const coffee = r.placeObject('coffee_table', 6, 6);
-    const paper = r.placeObject('item_newspaper', 6, 6, { walkable: true, depthBias: 0.5 });
-    this.addInteractable({
-      id: 'mediakit',
-      sprites: [paper, coffee],
-      approach: { x: 6, y: 7 },
-      face: 'ne',
-      onUse: () => {
-        this.pickUp(paper, 'held_newspaper');
-        this.openAfterAction('mediakit', () => openMediakitWindow(() => this.putDown(paper, 'ne')));
-      },
-    });
-
-    // ---- 4. Телефон на высоком столике — вебинар ----
-    const bar = r.placeObject('bar_table', 9, 4);
-    const phone = r.placeObject('item_phone', 9, 4, { walkable: true, depthBias: 0.5 });
-    this.addInteractable({
-      id: 'webinar',
-      sprites: [phone, bar],
-      approach: { x: 8, y: 4 },
-      face: 'se',
-      onUse: () => {
-        this.pickUp(phone, 'held_phone');
-        this.openAfterAction('webinar', () => openWebinarWindow(() => this.putDown(phone, 'se')));
-      },
-    });
-
-    // ---- 5. Папка на тумбе — резюме ----
-    const cab = r.placeObject('cabinet', 7, 0);
-    const folder = r.placeObject('item_folder', 7, 0, { walkable: true, depthBias: 0.5 });
-    this.addInteractable({
-      id: 'resume',
-      sprites: [folder, cab],
-      approach: { x: 7, y: 1 },
-      face: 'ne',
-      onUse: () => {
-        this.pickUp(folder, 'held_folder');
-        this.openAfterAction('resume', () => openResumeWindow(() => this.putDown(folder, 'ne')));
-      },
-    });
+    // ---- предметы ----
+    const sprites = (...l: (Phaser.GameObjects.Image | undefined)[]) => l.filter((x): x is Phaser.GameObjects.Image => !!x);
+    for (const o of DEF.objects) {
+      const ia = o.interact;
+      if (!ia) continue;
+      const img = layerOf(o);
+      if (ia.id === 'computer' && ia.seat) {
+        // 1. Компьютер на столе: персонаж садится на стул
+        const seat = ia.seat;
+        this.addInteractable({
+          id: ia.id,
+          sprites: sprites(img, d.layers.get('desk_pc')),
+          approach: ia.approach,
+          face: ia.face,
+          onUse: async () => {
+            await this.sitOn(seat, ia.face);
+            this.openAfterAction('computer', () => openSiteWindow(() => this.standUp()));
+          },
+        });
+      } else if (ia.id === 'stage' && ia.seat) {
+        // 2. Сцена со зрителями: персонаж садится в зал
+        const seat = ia.seat;
+        this.addInteractable({
+          id: ia.id,
+          sprites: sprites(img, ...this.spectators.map((s) => s.sprite)),
+          approach: ia.approach,
+          face: ia.face,
+          onUse: async () => {
+            await this.sitOn(seat, ia.face);
+            this.openAfterAction('stage', () =>
+              openPresentationWindow(
+                () => this.standUp(),
+                () => this.applause(),
+              ),
+            );
+          },
+        });
+      } else if (img && HELD[ia.id]) {
+        // 3–5. Газета, телефон, папка: персонаж берёт предмет в руки
+        const [held, open] = HELD[ia.id];
+        this.addInteractable({
+          id: ia.id,
+          sprites: sprites(img, furnitureUnder(o)),
+          approach: ia.approach,
+          face: ia.face,
+          onUse: () => {
+            this.pickUp(img, held);
+            this.openAfterAction(ia.id, () => open(() => this.putDown(img, ia.face)));
+          },
+        });
+      }
+    }
 
     // ---- дверь выхода ----
-    const exit = r.placeOnWall('door_exit', 'left', 8);
-    const sign = r.placeOnWall('sign_exit', 'left', 7, 3, 1);
-    const it = this.addInteractable({
-      id: 'exit',
-      sprites: [exit, sign],
-      approach: { x: 0, y: 8 },
-      face: 'nw',
-      onUse: () => this.enterDoor(exit, 'lobby', it),
-    });
-
-    this.createSpectatorAnims();
+    const exit = d.doors.get('exit');
+    if (exit) {
+      const it = this.addInteractable({
+        id: 'exit',
+        sprites: [exit.sprite],
+        approach: exit.approach,
+        face: exit.face,
+        onUse: () => this.enterDoor(exit, 'lobby', it),
+      });
+    }
   }
 
   protected spawnCell(): Cell {
-    return { x: 6, y: 3 };
+    return DEF.spawn;
   }
 
   protected progressText(): string {
@@ -177,27 +146,13 @@ export class VhodScene extends RoomScene {
     });
   }
 
-  private createSpectatorAnims(): void {
-    for (let v = 0; v < 3; v++) {
-      const key = `spectators:clap${v}`;
-      if (this.anims.exists(key)) continue;
-      this.anims.create({
-        key,
-        frames: this.anims.generateFrameNumbers('spectators', { frames: [v * 3 + 1, v * 3 + 2] }),
-        frameRate: 6,
-        repeat: 8,
-      });
-    }
-  }
-
   /** Аплодисменты зрителей на последнем слайде. */
   private applause(): void {
     sfx('applause');
-    for (const sp of this.spectators) {
-      const v = sp.getData('variant') as number;
+    for (const { sprite, variant } of this.spectators) {
       this.time.delayedCall(Math.random() * 250, () => {
-        sp.play(`spectators:clap${v}`);
-        sp.once('animationcomplete', () => sp.setFrame(v * 3));
+        sprite.play(`${variant}:clap_nw`);
+        sprite.once('animationcomplete', () => sprite.play(`${variant}:sit_nw`));
       });
     }
   }

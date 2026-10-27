@@ -1,0 +1,63 @@
+{
+  "frameW": 160,
+  "frameH": 272,
+  "anchorX": 80,
+  "anchorY": 250,
+  "tex": 2,
+  "dirs": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "anims": {
+    "idle": {
+      "file": "player_idle.webp",
+      "frames": 4,
+      "fps": 3,
+      "repeat": -1
+    },
+    "walk": {
+      "file": "player_walk.webp",
+      "frames": 8,
+      "fps": 12,
+      "repeat": -1
+    },
+    "sit": {
+      "file": "player_sit.webp",
+      "frames": 1,
+      "fps": 1,
+      "repeat": -1
+    },
+    "hold": {
+      "file": "player_hold.webp",
+      "frames": 2,
+      "fps": 2,
+      "repeat": -1
+    },
+    "carry": {
+      "file": "player_carry.webp",
+      "frames": 8,
+      "fps": 12,
+      "repeat": -1
+    },
+    "stumble": {
+      "file": "player_stumble.webp",
+      "frames": 6,
+      "fps": 10,
+      "repeat": 0
+    },
+    "fall": {
+      "file": "player_fall.webp",
+      "frames": 2,
+      "fps": 8,
+      "repeat": -1
+    },
+    "land": {
+      "file": "player_land.webp",
+      "frames": 4,
+      "fps": 10,
+      "repeat": 0
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "sport",
+  "about": "Комната «Спортмастер» — торговый зал. Описание читают и Blender, и игра. Стеллажи с обувью стоят вдоль правой стены (y = 0); section — номер секции мини-игры (0 красная, 1 синяя, 2 зелёная, 3 жёлтая), у таких полок есть места для кроссовков. customer — покупатель для диалога.",
+  "cols": 16,
+  "rows": 13,
+  "wallHeight": 3.0,
+  "theme": { "floor": "light_planks", "walls": "shop" },
+  "spawn": { "x": 8, "y": 11 },
+  "customer": { "x": 8, "y": 3, "face": "sw", "approach": { "x": 8, "y": 4 } },
+  "walls": {
+    "left": [
+      { "type": "board_best", "id": "board", "at": 2.2 },
+      { "type": "mirror", "at": 8 },
+      { "type": "door", "id": "exit", "style": "exit", "at": 10, "sign": "ВЫХОД" },
+      { "type": "sport_poster", "at": 12.2, "text": "БЕГИ!", "color": "#3a72c8" }
+    ],
+    "right": [
+      { "type": "sport_banner", "at": 6.5, "width": 6, "text": "СПОРТМАСТЕР" },
+      { "type": "sport_poster", "at": 14.6, "text": "ДВИГАЙСЯ", "color": "#ff8c2e" }
+    ]
+  },
+  "objects": [
+    { "type": "shoe_shelf", "x": 0, "y": 0 },
+    { "type": "shoe_shelf", "x": 1, "y": 0 },
+    { "type": "shoe_shelf", "id": "shelf_0", "x": 2, "y": 0, "section": 0 },
+    { "type": "shoe_shelf", "x": 3, "y": 0 },
+    { "type": "shoe_shelf", "x": 4, "y": 0 },
+    { "type": "shoe_shelf", "id": "shelf_1", "x": 5, "y": 0, "section": 1 },
+    { "type": "shoe_shelf", "x": 6, "y": 0 },
+    { "type": "shoe_shelf", "x": 7, "y": 0 },
+    { "type": "shoe_shelf", "id": "shelf_2", "x": 8, "y": 0, "section": 2 },
+    { "type": "shoe_shelf", "x": 9, "y": 0 },
+    { "type": "shoe_shelf", "x": 10, "y": 0 },
+    { "type": "shoe_shelf", "id": "shelf_3", "x": 11, "y": 0, "section": 3 },
+    { "type": "shoe_shelf", "x": 12, "y": 0 },
+    { "type": "stack_boxes", "x": 13, "y": 0 },
+    { "type": "plant_big", "x": 15, "y": 0 },
+
+    { "type": "fitting_room", "x": 0, "y": 4, "w": 1, "d": 3, "face": "se" },
+    { "type": "clothes_rack", "x": 4, "y": 6, "w": 2, "d": 1 },
+    { "type": "clothes_rack", "x": 4, "y": 9, "w": 2, "d": 1 },
+    { "type": "display_table", "x": 8, "y": 6, "w": 2, "d": 1 },
+    { "type": "try_bench", "x": 12, "y": 5, "w": 2, "d": 1 },
+    { "type": "mannequin", "x": 7, "y": 9 },
+    { "type": "mannequin", "x": 2, "y": 10 },
+    { "type": "cash_counter", "x": 12, "y": 9, "w": 2, "d": 1, "face": "sw" },
+    { "type": "ball_basket", "x": 15, "y": 11 },
+    { "type": "stack_boxes", "x": 14, "y": 9 },
+    { "type": "plant_big", "x": 0, "y": 12 }
+  ]
+}

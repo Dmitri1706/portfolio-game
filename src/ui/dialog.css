@@ -43,15 +43,14 @@
   border: 4px solid var(--ink);
   background-color: #e2e5ee;
   background-repeat: no-repeat;
-  background-position: 0 0;
-  image-rendering: pixelated;
+  /* голова из листа 3D-персонажа (кадр 160×272, 4×4 кадра), масштаб 0.8 */
+  background-size: 512px 870px;
+  background-position: -16px -18px;
 }
 .dialog[data-speaker='seller'] .dialog__face {
-  background-size: 480px 2240px; /* player.png 120×560 ×4 */
   background-color: #c8e7ff;
 }
 .dialog[data-speaker='customer'] .dialog__face {
-  background-size: 384px 640px; /* npc_customer.png 96×160 ×4 */
   background-color: #ffe7a3;
 }
 .dialog__name {
@@ -206,11 +205,9 @@
     height: 42px;
     border-width: 3px;
   }
-  .dialog[data-speaker='seller'] .dialog__face {
-    background-size: 240px 1120px;
-  }
-  .dialog[data-speaker='customer'] .dialog__face {
-    background-size: 192px 320px;
+  .dialog__face {
+    background-size: 256px 435px;
+    background-position: -8px -9px;
   }
   .dialog__name {
     font-size: 7px;

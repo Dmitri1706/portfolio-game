@@ -9,7 +9,15 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "sprites": "node scripts/generate-sprites.mjs",
-    "placeholders": "node scripts/make-placeholders.mjs"
+    "placeholders": "node scripts/make-placeholders.mjs",
+    "render:lobby": "C:/Tools/blender/blender.exe -b --python blender/build_room.py -- rooms/lobby.json final all",
+    "render:lobby:preview": "C:/Tools/blender/blender.exe -b --python blender/build_room.py -- rooms/lobby.json preview all",
+    "render:character": "C:/Tools/blender/blender.exe -b --python blender/build_character.py -- final",
+    "render:character:preview": "C:/Tools/blender/blender.exe -b --python blender/build_character.py -- preview",
+    "render:vhod": "C:/Tools/blender/blender.exe -b --python blender/build_room.py -- rooms/vhod.json final all",
+    "render:sport": "C:/Tools/blender/blender.exe -b --python blender/build_room.py -- rooms/sport.json final all",
+    "render:items": "C:/Tools/blender/blender.exe -b --python blender/build_items.py -- final",
+    "render:people": "C:/Tools/blender/blender.exe -b --python blender/build_character.py -- final spectator1 && C:/Tools/blender/blender.exe -b --python blender/build_character.py -- final spectator2 && C:/Tools/blender/blender.exe -b --python blender/build_character.py -- final spectator3 && C:/Tools/blender/blender.exe -b --python blender/build_character.py -- final customer && C:/Tools/blender/blender.exe -b --python blender/build_character.py -- final shopper1 && C:/Tools/blender/blender.exe -b --python blender/build_character.py -- final shopper2 && C:/Tools/blender/blender.exe -b --python blender/build_character.py -- final shopper3"
   },
   "dependencies": {
     "easystarjs": "^0.4.4",

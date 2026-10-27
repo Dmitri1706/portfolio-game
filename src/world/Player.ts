@@ -2,12 +2,16 @@ import Phaser from 'phaser';
 import { DEPTH, PLAYER_SPEED } from '../config';
 import { type Cell, gridToScreen } from '../iso';
 import { SPRITES } from '../assets/manifest';
+import { CHARACTERS } from './characters';
 
 /** 4 изометрических направления: юго-восток (вниз-вправо), юго-запад, северо-восток, северо-запад */
 export type Dir = 'se' | 'sw' | 'ne' | 'nw';
 
-/** Высота, с которой персонаж падает в комнату (в пикселях) */
-export const FALL_HEIGHT = 240;
+/** Высота, с которой персонаж падает в комнату (игровые пиксели) */
+export const FALL_HEIGHT = 520;
+
+/** Персонажи из Blender: у каждой анимации свои кадры для всех 4 направлений */
+const IS_3D = (key: string) => key in CHARACTERS;
 
 export class Player {
   readonly sprite: Phaser.GameObjects.Sprite;
@@ -22,6 +26,7 @@ export class Player {
   carrying = false;
   private path: Cell[] = [];
   private onArrive?: () => void;
+  private readonly is3d: boolean;
 
   constructor(
     private scene: Phaser.Scene,
@@ -31,10 +36,18 @@ export class Player {
   ) {
     this.gx = start.x;
     this.gy = start.y;
-    const s = SPRITES[key];
-    this.shadow = scene.add.image(0, 0, 'shadow');
-    this.sprite = scene.add.sprite(0, 0, key);
-    this.sprite.setDisplayOrigin(s.width / 2, (s.anchorY ?? s.height) + 1);
+    this.is3d = IS_3D(key);
+    if (this.is3d) {
+      const m = CHARACTERS[key];
+      this.shadow = scene.add.image(0, 0, 'shadow3d');
+      this.sprite = scene.add.sprite(0, 0, `${key}_idle`);
+      this.sprite.setOrigin(m.anchorX / m.frameW, m.anchorY / m.frameH).setScale(1 / m.tex);
+    } else {
+      const s = SPRITES[key];
+      this.shadow = scene.add.image(0, 0, 'shadow');
+      this.sprite = scene.add.sprite(0, 0, key);
+      this.sprite.setDisplayOrigin(s.width / 2, (s.anchorY ?? s.height) + 1);
+    }
     this.idle();
     this.sync();
   }
@@ -49,7 +62,7 @@ export class Player {
 
   /** Экранная точка над головой (для облачков) */
   get headPoint(): { x: number; y: number } {
-    return { x: this.sprite.x, y: this.sprite.y - 40 };
+    return { x: this.sprite.x, y: this.sprite.y - (this.is3d ? 128 : 40) };
   }
 
   get facingFront(): boolean {
@@ -87,19 +100,28 @@ export class Player {
     return `${this.carrying ? 'carry' : 'walk'}_${this.facingFront ? 'front' : 'back'}`;
   }
 
-  /** Включить анимацию по имени из sprites.json (например 'sit_front'). Зеркалится по направлению взгляда. */
+  /**
+   * Включить анимацию по имени (например 'sit_front' или 'fall').
+   * У 3D-персонажа «_front/_back» не нужны — берётся кадр для текущего направления взгляда.
+   * Старые пиксельные персонажи зеркалятся по направлению взгляда.
+   */
   play(anim: string): void {
-    this.sprite.play(`${this.key}:${anim}`, true);
-    this.sprite.setFlipX(this.dir === 'sw' || this.dir === 'nw');
+    this.sprite.play(this.animKey(anim), true);
+    if (!this.is3d) this.sprite.setFlipX(this.dir === 'sw' || this.dir === 'nw');
   }
 
   /** Проиграть анимацию один раз и дождаться её конца. */
   playOnce(anim: string): Promise<void> {
     return new Promise((resolve) => {
       this.sprite.once(Phaser.Animations.Events.ANIMATION_COMPLETE, () => resolve());
-      this.sprite.play(`${this.key}:${anim}`);
-      this.sprite.setFlipX(this.dir === 'sw' || this.dir === 'nw');
+      this.sprite.play(this.animKey(anim));
+      if (!this.is3d) this.sprite.setFlipX(this.dir === 'sw' || this.dir === 'nw');
     });
+  }
+
+  private animKey(anim: string): string {
+    if (!this.is3d) return `${this.key}:${anim}`;
+    return `${this.key}:${anim.replace(/_(front|back)$/, '')}_${this.dir}`;
   }
 
   setLift(px: number): void {
@@ -177,13 +199,15 @@ export class Player {
 
   private sync(): void {
     const p = gridToScreen(this.gx, this.gy);
-    const x = Math.round(p.x);
-    const y = Math.round(p.y);
-    this.sprite.setPosition(x, y - Math.round(this.lift));
+    // пиксельные персонажи — по целым пикселям, 3D — плавно
+    const x = this.is3d ? p.x : Math.round(p.x);
+    const y = this.is3d ? p.y : Math.round(p.y);
+    this.sprite.setPosition(x, y - this.lift);
     this.shadow.setPosition(x, y);
     // тень растёт по мере приближения к полу
     const k = Math.min(1, this.lift / FALL_HEIGHT);
     this.shadow.setScale(1 - 0.7 * k);
+    this.shadow.setAlpha(this.sprite.alpha * (1 - 0.5 * k));
     this.sprite.setDepth(DEPTH.objects + p.y);
     this.shadow.setDepth(DEPTH.objects + p.y - 0.5);
   }

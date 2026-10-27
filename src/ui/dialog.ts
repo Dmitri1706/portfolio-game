@@ -84,7 +84,7 @@ export function runSaleDialog(onEnd: (r: DialogResult) => void): void {
   const setSpeaker = (who: Speaker) => {
     box.dataset.speaker = who;
     name.textContent = DIALOG.names[who];
-    face.style.backgroundImage = `url(${BASE}assets/sprites/${who === 'seller' ? 'player' : 'npc_customer'}.png)`;
+    face.style.backgroundImage = `url(${BASE}assets/sprites3d/${who === 'seller' ? 'player' : 'customer'}_idle.webp)`;
   };
 
   /** Напечатать реплику по буквам. */

@@ -1,0 +1,24 @@
+{
+  "frameW": 160,
+  "frameH": 272,
+  "anchorX": 80,
+  "anchorY": 250,
+  "tex": 2,
+  "dirs": [
+    "nw"
+  ],
+  "anims": {
+    "clap": {
+      "file": "spectator1_clap.webp",
+      "frames": 2,
+      "fps": 7,
+      "repeat": 8
+    },
+    "sit": {
+      "file": "spectator1_sit.webp",
+      "frames": 1,
+      "fps": 1,
+      "repeat": -1
+    }
+  }
+}

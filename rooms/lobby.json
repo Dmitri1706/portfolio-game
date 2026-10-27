@@ -1,0 +1,52 @@
+{
+  "id": "lobby",
+  "about": "Лобби — уютный холл. Это описание читают и Blender (строит и рендерит комнату), и игра (сетка проходимости, двери). Клетка (x, y): x растёт вдоль правой стены, y — вдоль левой. Предмет занимает клетки от (x, y) размером w × d.",
+  "cols": 14,
+  "rows": 14,
+  "wallHeight": 3.0,
+  "spawn": { "x": 7, "y": 11 },
+  "walls": {
+    "left": [
+      { "type": "window", "at": 3.5, "width": 1.6 },
+      { "type": "sign_hello", "at": 6.2, "width": 3.5 },
+      { "type": "sconce", "at": 8.3 },
+      { "type": "door", "id": "door_vhod", "style": "tech", "at": 10, "sign": "В ХОД" },
+      { "type": "sconce", "at": 11.7 }
+    ],
+    "right": [
+      { "type": "sconce", "at": 1.6 },
+      { "type": "door", "id": "door_next", "style": "boarded", "at": 3, "plaque": ["Какая компания", "следующая?"] },
+      { "type": "window", "at": 5.5, "width": 1.8 },
+      { "type": "painting", "at": 7.8 },
+      { "type": "door", "id": "door_sport", "style": "shop", "at": 10, "sign": "СПОРТМАСТЕР" },
+      { "type": "clock", "at": 12.2 }
+    ]
+  },
+  "objects": [
+    { "type": "bookshelf", "x": 0, "y": 0, "w": 1, "d": 2, "face": "se" },
+    { "type": "bench", "x": 5, "y": 0, "w": 2, "d": 1, "face": "sw" },
+    { "type": "umbrella_stand", "x": 11, "y": 0 },
+    { "type": "side_table_lamp", "x": 12, "y": 0 },
+    { "type": "plant_big", "x": 13, "y": 0 },
+    { "type": "rug_round", "x": 4, "y": 5, "w": 5, "d": 5, "walkable": true },
+    { "type": "coffee_table", "x": 5, "y": 7, "w": 2, "d": 1 },
+    { "type": "sofa", "x": 5, "y": 9, "w": 2, "d": 1, "face": "ne" },
+    { "type": "armchair", "x": 8, "y": 7, "face": "nw" },
+    { "type": "armchair", "x": 3, "y": 7, "face": "se" },
+    { "type": "floor_lamp", "x": 4, "y": 9 },
+    { "type": "plant_big", "x": 8, "y": 4 },
+    { "type": "door_free", "id": "door_projects", "x": 10, "y": 8, "w": 2, "d": 1, "face": "sw", "plaque": "Проекты", "approach": { "x": 10, "y": 9 } },
+    { "type": "coat_rack", "x": 0, "y": 12, "face": "se" },
+    { "type": "plant_big", "x": 0, "y": 13 },
+    { "type": "plant_small", "x": 13, "y": 12 },
+    { "type": "crate_books", "x": 13, "y": 6 },
+    { "type": "runner_rug", "x": 0, "y": 10, "w": 3, "d": 1, "walkable": true },
+    { "type": "pouf", "x": 7, "y": 9 },
+    { "type": "cat", "x": 5, "y": 0, "walkable": true },
+    { "type": "books_floor", "x": 1, "y": 0 },
+    { "type": "console_table", "x": 7, "y": 0, "w": 2, "d": 1, "face": "sw" },
+    { "type": "armchair", "x": 11, "y": 11, "face": "nw" },
+    { "type": "floor_lamp", "x": 12, "y": 10 },
+    { "type": "books_floor", "x": 12, "y": 12 }
+  ]
+}

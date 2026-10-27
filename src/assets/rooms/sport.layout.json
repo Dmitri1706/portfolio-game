@@ -1,0 +1,491 @@
+{
+  "id": "sport",
+  "image": "bg.webp",
+  "width": 2996,
+  "height": 2052,
+  "tex": 2,
+  "originX": 1354,
+  "originY": 508,
+  "bg": "#000000",
+  "layers": [
+    {
+      "id": "board",
+      "kind": "wall",
+      "file": "board.webp",
+      "x": 993,
+      "y": 260,
+      "w": 209,
+      "h": 262,
+      "side": "left",
+      "at": 2.2
+    },
+    {
+      "id": "exit",
+      "kind": "door",
+      "open": {
+        "file": "exit_open.webp",
+        "x": 272,
+        "y": 589,
+        "w": 156,
+        "h": 472
+      },
+      "closed": {
+        "file": "exit_closed.webp",
+        "x": 272,
+        "y": 589,
+        "w": 156,
+        "h": 472
+      },
+      "side": "left",
+      "at": 10
+    },
+    {
+      "id": "obj0_shoe_shelf",
+      "kind": "occluder",
+      "file": "obj0_shoe_shelf.webp",
+      "x": 1301,
+      "y": 163,
+      "w": 160,
+      "h": 376,
+      "cell": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj1_shoe_shelf",
+      "kind": "occluder",
+      "file": "obj1_shoe_shelf.webp",
+      "x": 1397,
+      "y": 211,
+      "w": 159,
+      "h": 376,
+      "cell": {
+        "x": 1,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "shelf_0",
+      "kind": "occluder",
+      "file": "shelf_0.webp",
+      "x": 1493,
+      "y": 259,
+      "w": 160,
+      "h": 376,
+      "cell": {
+        "x": 2,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj3_shoe_shelf",
+      "kind": "occluder",
+      "file": "obj3_shoe_shelf.webp",
+      "x": 1589,
+      "y": 307,
+      "w": 160,
+      "h": 376,
+      "cell": {
+        "x": 3,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj4_shoe_shelf",
+      "kind": "occluder",
+      "file": "obj4_shoe_shelf.webp",
+      "x": 1685,
+      "y": 355,
+      "w": 160,
+      "h": 376,
+      "cell": {
+        "x": 4,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "shelf_1",
+      "kind": "occluder",
+      "file": "shelf_1.webp",
+      "x": 1781,
+      "y": 403,
+      "w": 160,
+      "h": 376,
+      "cell": {
+        "x": 5,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj6_shoe_shelf",
+      "kind": "occluder",
+      "file": "obj6_shoe_shelf.webp",
+      "x": 1877,
+      "y": 451,
+      "w": 161,
+      "h": 376,
+      "cell": {
+        "x": 6,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj7_shoe_shelf",
+      "kind": "occluder",
+      "file": "obj7_shoe_shelf.webp",
+      "x": 1973,
+      "y": 499,
+      "w": 160,
+      "h": 376,
+      "cell": {
+        "x": 7,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "shelf_2",
+      "kind": "occluder",
+      "file": "shelf_2.webp",
+      "x": 2069,
+      "y": 547,
+      "w": 160,
+      "h": 376,
+      "cell": {
+        "x": 8,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj9_shoe_shelf",
+      "kind": "occluder",
+      "file": "obj9_shoe_shelf.webp",
+      "x": 2165,
+      "y": 595,
+      "w": 160,
+      "h": 376,
+      "cell": {
+        "x": 9,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj10_shoe_shelf",
+      "kind": "occluder",
+      "file": "obj10_shoe_shelf.webp",
+      "x": 2261,
+      "y": 643,
+      "w": 160,
+      "h": 376,
+      "cell": {
+        "x": 10,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "shelf_3",
+      "kind": "occluder",
+      "file": "shelf_3.webp",
+      "x": 2357,
+      "y": 691,
+      "w": 160,
+      "h": 376,
+      "cell": {
+        "x": 11,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj12_shoe_shelf",
+      "kind": "occluder",
+      "file": "obj12_shoe_shelf.webp",
+      "x": 2453,
+      "y": 739,
+      "w": 160,
+      "h": 376,
+      "cell": {
+        "x": 12,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj13_stack_boxes",
+      "kind": "occluder",
+      "file": "obj13_stack_boxes.webp",
+      "x": 2559,
+      "y": 1028,
+      "w": 83,
+      "h": 130,
+      "cell": {
+        "x": 13,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj14_plant_big",
+      "kind": "occluder",
+      "file": "obj14_plant_big.webp",
+      "x": 2716,
+      "y": 968,
+      "w": 155,
+      "h": 297,
+      "cell": {
+        "x": 15,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj15_fitting_room",
+      "kind": "occluder",
+      "file": "obj15_fitting_room.webp",
+      "x": 669,
+      "y": 372,
+      "w": 401,
+      "h": 479,
+      "cell": {
+        "x": 0,
+        "y": 4,
+        "w": 1,
+        "d": 3
+      }
+    },
+    {
+      "id": "obj16_clothes_rack",
+      "kind": "occluder",
+      "file": "obj16_clothes_rack.webp",
+      "x": 1091,
+      "y": 778,
+      "w": 238,
+      "h": 299,
+      "cell": {
+        "x": 4,
+        "y": 6,
+        "w": 2,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj17_clothes_rack",
+      "kind": "occluder",
+      "file": "obj17_clothes_rack.webp",
+      "x": 803,
+      "y": 922,
+      "w": 238,
+      "h": 299,
+      "cell": {
+        "x": 4,
+        "y": 9,
+        "w": 2,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj18_display_table",
+      "kind": "occluder",
+      "file": "obj18_display_table.webp",
+      "x": 1459,
+      "y": 1056,
+      "w": 269,
+      "h": 218,
+      "cell": {
+        "x": 8,
+        "y": 6,
+        "w": 2,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj19_try_bench",
+      "kind": "occluder",
+      "file": "obj19_try_bench.webp",
+      "x": 1952,
+      "y": 1221,
+      "w": 244,
+      "h": 189,
+      "cell": {
+        "x": 12,
+        "y": 5,
+        "w": 2,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj20_mannequin",
+      "kind": "occluder",
+      "file": "obj20_mannequin.webp",
+      "x": 1113,
+      "y": 1021,
+      "w": 98,
+      "h": 285,
+      "cell": {
+        "x": 7,
+        "y": 9,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj21_mannequin",
+      "kind": "occluder",
+      "file": "obj21_mannequin.webp",
+      "x": 537,
+      "y": 829,
+      "w": 98,
+      "h": 285,
+      "cell": {
+        "x": 2,
+        "y": 10,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj22_cash_counter",
+      "kind": "occluder",
+      "file": "obj22_cash_counter.webp",
+      "x": 1550,
+      "y": 1325,
+      "w": 290,
+      "h": 285,
+      "cell": {
+        "x": 12,
+        "y": 9,
+        "w": 2,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj23_ball_basket",
+      "kind": "occluder",
+      "file": "obj23_ball_basket.webp",
+      "x": 1647,
+      "y": 1638,
+      "w": 182,
+      "h": 169,
+      "cell": {
+        "x": 15,
+        "y": 11,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj24_stack_boxes",
+      "kind": "occluder",
+      "file": "obj24_stack_boxes.webp",
+      "x": 1792,
+      "y": 1509,
+      "w": 82,
+      "h": 131,
+      "cell": {
+        "x": 14,
+        "y": 9,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj25_plant_big",
+      "kind": "occluder",
+      "file": "obj25_plant_big.webp",
+      "x": 120,
+      "y": 827,
+      "w": 162,
+      "h": 294,
+      "cell": {
+        "x": 0,
+        "y": 12,
+        "w": 1,
+        "d": 1
+      }
+    }
+  ],
+  "points": {
+    "shelf_0": [
+      [
+        108.48,
+        11.19
+      ],
+      [
+        108.48,
+        -18.2
+      ],
+      [
+        108.48,
+        -47.6
+      ]
+    ],
+    "shelf_1": [
+      [
+        252.48,
+        83.19
+      ],
+      [
+        252.48,
+        53.8
+      ],
+      [
+        252.48,
+        24.4
+      ]
+    ],
+    "shelf_2": [
+      [
+        396.48,
+        155.19
+      ],
+      [
+        396.48,
+        125.8
+      ],
+      [
+        396.48,
+        96.4
+      ]
+    ],
+    "shelf_3": [
+      [
+        540.48,
+        227.19
+      ],
+      [
+        540.48,
+        197.8
+      ],
+      [
+        540.48,
+        168.4
+      ]
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "frameW": 160,
+  "frameH": 272,
+  "anchorX": 80,
+  "anchorY": 250,
+  "tex": 2,
+  "dirs": [
+    "se",
+    "sw",
+    "ne",
+    "nw"
+  ],
+  "anims": {
+    "idle": {
+      "file": "shopper3_idle.webp",
+      "frames": 4,
+      "fps": 3,
+      "repeat": -1
+    },
+    "walk": {
+      "file": "shopper3_walk.webp",
+      "frames": 8,
+      "fps": 12,
+      "repeat": -1
+    }
+  }
+}

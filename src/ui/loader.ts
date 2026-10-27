@@ -12,7 +12,7 @@ const pct = document.getElementById('loader-pct');
 const fill = document.getElementById('loader-fill');
 const runner = document.getElementById('loader-runner');
 
-if (runner) runner.style.backgroundImage = `url(${import.meta.env.BASE_URL}assets/sprites/player.png)`;
+if (runner) runner.style.backgroundImage = `url(${import.meta.env.BASE_URL}assets/sprites3d/player_walk.webp)`;
 
 function render(): void {
   if (pct) pct.textContent = String(shown);

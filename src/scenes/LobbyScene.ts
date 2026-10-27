@@ -1,6 +1,10 @@
 import type { Cell } from '../iso';
-import { IsoRoom } from '../world/IsoRoom';
-import { RoomScene, type RoomData } from './RoomScene';
+import LOBBY from '../../rooms/lobby.json';
+import LOBBY_LAYOUT from '../assets/rooms/lobby.layout.json';
+import { buildDiorama, type DioramaDoor, type Layout, type RoomDef } from '../world/diorama';
+import type { Interactable } from '../world/Interactable';
+import { constructionFx } from '../world/construction';
+import { RoomScene, type RoomData, type RoomId } from './RoomScene';
 import { rulesSeen, showRules } from '../ui/rules';
 import { TEXTS } from '../texts';
 import { hasAchievement } from '../state';
@@ -10,9 +14,12 @@ import { sfx } from '../audio';
 import { el, openModal } from '../ui/modal';
 import { openContacts } from '../ui/contacts';
 
+/** Комнаты, уже переведённые в новую графику. Двери в остальные пока только открываются и закрываются. */
+const READY_ROOMS = new Set<RoomId>(['vhod', 'sport']);
+
 /**
- * Лобби: белая минималистичная комната, табличка-приветствие и 4 двери.
- * Левая стена — «В ХОД». Правая — заколоченная (ближе к углу) и «Спортмастер».
+ * Лобби: уютный холл-диорама (рендер Blender, описание — rooms/lobby.json).
+ * Левая стена — «В ХОД». Правая — заколоченная «Какая компания следующая?» (ближе к углу) и «Спортмастер».
  * Посреди пола — отдельно стоящая заколоченная дверь «Проекты».
  */
 export class LobbyScene extends RoomScene {
@@ -21,70 +28,63 @@ export class LobbyScene extends RoomScene {
   }
 
   protected build(): void {
-    this.room = new IsoRoom(this, {
-      cols: 10,
-      rows: 10,
-      floor: 'floor_lobby',
-      wallLeft: 'wall_lobby_left',
-      wallRight: 'wall_lobby_right',
-    });
-    const r = this.room;
+    const d = buildDiorama(this, LOBBY as RoomDef, LOBBY_LAYOUT as Layout);
+    this.room = d.room;
 
-    r.placeOnWall('sign_hello', 'left', 0, 6);
+    const door = (id: string, target: RoomId | null, text?: string) => {
+      const dd = d.doors.get(id);
+      if (!dd) return;
+      const it = this.addInteractable({
+        id,
+        sprites: [dd.sprite],
+        approach: dd.approach,
+        face: dd.face,
+        onUse: () => {
+          if (target && READY_ROOMS.has(target)) this.enterDoor(dd, target, it);
+          else if (target) this.peekDoor(dd, it);
+          else this.stumble(text ?? '');
+        },
+      });
+    };
+    door('door_vhod', 'vhod');
+    door('door_sport', 'sport');
+    door('door_next', null, TEXTS.boardedNext);
 
-    // «В ХОД» — левая стена
-    const vhod = r.placeOnWall('door_vhod', 'left', 7);
-    const vhodSign = r.placeOnWall('sign_vhod', 'left', 6, 3, 1);
-    const vhodIt = this.addInteractable({
-      id: 'door_vhod',
-      sprites: [vhod, vhodSign],
-      approach: { x: 0, y: 7 },
-      face: 'nw',
-      onUse: () => this.enterDoor(vhod, 'vhod', vhodIt),
-    });
+    // «Проекты» — отдельно стоящая дверь посреди пола
+    const projects = d.layers.get('door_projects');
+    const def = (LOBBY as RoomDef).objects.find((o) => o.id === 'door_projects');
+    if (projects) constructionFx(this, projects); // «тут кипит работа»: обводка и искры сварки
+    if (projects && def?.approach) {
+      this.addInteractable({
+        id: 'door_projects',
+        sprites: [projects],
+        approach: def.approach,
+        face: 'ne',
+        onUse: () => this.stumble(TEXTS.boardedProjects),
+      });
+    }
+  }
 
-    // Заколоченная дверь «Какая компания следующая?» — правая стена, ближе к углу
-    const next = r.placeOnWall('door_boarded', 'right', 2);
-    const nextPlaque = r.placeOnWall('plaque_next', 'right', 0, 5, 1);
-    this.addInteractable({
-      id: 'door_next',
-      sprites: [next, nextPlaque],
-      approach: { x: 2, y: 0 },
-      face: 'ne',
-      onUse: () => this.stumble(TEXTS.boardedNext),
-    });
-
-    // «Спортмастер» — правая стена
-    const sport = r.placeOnWall('door_sport', 'right', 7);
-    const sportSign = r.placeOnWall('sign_sport', 'right', 5, 5, 1);
-    const sportIt = this.addInteractable({
-      id: 'door_sport',
-      sprites: [sport, sportSign],
-      approach: { x: 7, y: 0 },
-      face: 'ne',
-      onUse: () => this.enterDoor(sport, 'sport', sportIt),
-    });
-
-    // «Проекты» — отдельно стоящая дверь посреди пола (2 клетки)
-    const projects = r.place('door_free_boarded', 5.5, 5, {
-      blocks: [
-        { x: 5, y: 5 },
-        { x: 6, y: 5 },
-      ],
-    });
-    this.addInteractable({
-      id: 'door_projects',
-      sprites: [projects],
-      approach: { x: 5, y: 6 },
-      face: 'ne',
-      onUse: () => this.stumble(TEXTS.boardedProjects),
+  /** Комната ещё переезжает в новую графику: дверь открывается, персонаж заглядывает и говорит об этом. */
+  private peekDoor(door: DioramaDoor, it: Interactable): void {
+    this.busy = true;
+    door.open();
+    it.refresh();
+    sfx('door');
+    this.time.delayedCall(500, () => {
+      this.say('Комната переезжает в новую графику — скоро откроется!');
+      this.time.delayedCall(1400, () => {
+        door.close();
+        it.refresh();
+        this.busy = false;
+      });
     });
   }
 
   protected spawnCell(data: RoomData): Cell {
-    if (data.from === 'vhod') return { x: 1, y: 7 };
-    if (data.from === 'sport') return { x: 7, y: 1 };
-    return { x: 3, y: 4 };
+    if (data.from === 'vhod') return { x: 1, y: 10 };
+    if (data.from === 'sport') return { x: 10, y: 1 };
+    return (LOBBY as RoomDef).spawn;
   }
 
   protected onEnter(data: RoomData): void {

@@ -1,0 +1,402 @@
+{
+  "id": "lobby",
+  "image": "bg.webp",
+  "width": 2900,
+  "height": 2004,
+  "tex": 2,
+  "originX": 1450,
+  "originY": 508,
+  "bg": "#000000",
+  "layers": [
+    {
+      "id": "door_vhod",
+      "kind": "door",
+      "open": {
+        "file": "door_vhod_open.webp",
+        "x": 332,
+        "y": 560,
+        "w": 232,
+        "h": 501
+      },
+      "closed": {
+        "file": "door_vhod_closed.webp",
+        "x": 332,
+        "y": 560,
+        "w": 232,
+        "h": 501
+      },
+      "side": "left",
+      "at": 10
+    },
+    {
+      "id": "door_next",
+      "kind": "door",
+      "open": {
+        "file": "door_next_open.webp",
+        "x": 1577,
+        "y": 210,
+        "w": 338,
+        "h": 462
+      },
+      "closed": {
+        "file": "door_next_closed.webp",
+        "x": 1577,
+        "y": 210,
+        "w": 338,
+        "h": 462
+      },
+      "side": "right",
+      "at": 3
+    },
+    {
+      "id": "door_sport",
+      "kind": "door",
+      "open": {
+        "file": "door_sport_open.webp",
+        "x": 2204,
+        "y": 531,
+        "w": 418,
+        "h": 527
+      },
+      "closed": {
+        "file": "door_sport_closed.webp",
+        "x": 2204,
+        "y": 531,
+        "w": 418,
+        "h": 527
+      },
+      "side": "right",
+      "at": 10
+    },
+    {
+      "id": "obj0_bookshelf",
+      "kind": "occluder",
+      "file": "obj0_bookshelf.webp",
+      "x": 1247,
+      "y": 179,
+      "w": 253,
+      "h": 407,
+      "cell": {
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "d": 2
+      }
+    },
+    {
+      "id": "obj1_bench",
+      "kind": "occluder",
+      "file": "obj1_bench.webp",
+      "x": 1856,
+      "y": 628,
+      "w": 244,
+      "h": 206,
+      "cell": {
+        "x": 5,
+        "y": 0,
+        "w": 2,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj2_umbrella_stand",
+      "kind": "occluder",
+      "file": "obj2_umbrella_stand.webp",
+      "x": 2471,
+      "y": 899,
+      "w": 70,
+      "h": 160,
+      "cell": {
+        "x": 11,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj3_side_table_lamp",
+      "kind": "occluder",
+      "file": "obj3_side_table_lamp.webp",
+      "x": 2538,
+      "y": 925,
+      "w": 128,
+      "h": 187,
+      "cell": {
+        "x": 12,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj4_plant_big",
+      "kind": "occluder",
+      "file": "obj4_plant_big.webp",
+      "x": 2629,
+      "y": 876,
+      "w": 141,
+      "h": 293,
+      "cell": {
+        "x": 13,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj6_coffee_table",
+      "kind": "occluder",
+      "file": "obj6_coffee_table.webp",
+      "x": 1184,
+      "y": 990,
+      "w": 244,
+      "h": 177,
+      "cell": {
+        "x": 5,
+        "y": 7,
+        "w": 2,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj7_sofa",
+      "kind": "occluder",
+      "file": "obj7_sofa.webp",
+      "x": 971,
+      "y": 1050,
+      "w": 286,
+      "h": 225,
+      "cell": {
+        "x": 5,
+        "y": 9,
+        "w": 2,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj8_armchair",
+      "kind": "occluder",
+      "file": "obj8_armchair.webp",
+      "x": 1461,
+      "y": 1101,
+      "w": 170,
+      "h": 169,
+      "cell": {
+        "x": 8,
+        "y": 7,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj9_armchair",
+      "kind": "occluder",
+      "file": "obj9_armchair.webp",
+      "x": 981,
+      "y": 835,
+      "w": 171,
+      "h": 195,
+      "cell": {
+        "x": 3,
+        "y": 7,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj10_floor_lamp",
+      "kind": "occluder",
+      "file": "obj10_floor_lamp.webp",
+      "x": 912,
+      "y": 893,
+      "w": 116,
+      "h": 266,
+      "cell": {
+        "x": 4,
+        "y": 9,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj11_plant_big",
+      "kind": "occluder",
+      "file": "obj11_plant_big.webp",
+      "x": 1761,
+      "y": 822,
+      "w": 154,
+      "h": 299,
+      "cell": {
+        "x": 8,
+        "y": 4,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "door_projects",
+      "kind": "door_free",
+      "file": "door_projects.webp",
+      "x": 1570,
+      "y": 989,
+      "w": 240,
+      "h": 493,
+      "cell": {
+        "x": 10,
+        "y": 8,
+        "w": 2,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj13_coat_rack",
+      "kind": "occluder",
+      "file": "obj13_coat_rack.webp",
+      "x": 242,
+      "y": 849,
+      "w": 105,
+      "h": 264,
+      "cell": {
+        "x": 0,
+        "y": 12,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj14_plant_big",
+      "kind": "occluder",
+      "file": "obj14_plant_big.webp",
+      "x": 122,
+      "y": 874,
+      "w": 160,
+      "h": 295,
+      "cell": {
+        "x": 0,
+        "y": 13,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj15_plant_small",
+      "kind": "occluder",
+      "file": "obj15_plant_small.webp",
+      "x": 1499,
+      "y": 1587,
+      "w": 90,
+      "h": 148,
+      "cell": {
+        "x": 13,
+        "y": 12,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj16_crate_books",
+      "kind": "occluder",
+      "file": "obj16_crate_books.webp",
+      "x": 2049,
+      "y": 1297,
+      "w": 144,
+      "h": 164,
+      "cell": {
+        "x": 13,
+        "y": 6,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj18_pouf",
+      "kind": "occluder",
+      "file": "obj18_pouf.webp",
+      "x": 1196,
+      "y": 1195,
+      "w": 124,
+      "h": 117,
+      "cell": {
+        "x": 7,
+        "y": 9,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj20_books_floor",
+      "kind": "occluder",
+      "file": "obj20_books_floor.webp",
+      "x": 1492,
+      "y": 490,
+      "w": 114,
+      "h": 102,
+      "cell": {
+        "x": 1,
+        "y": 0,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj21_console_table",
+      "kind": "occluder",
+      "file": "obj21_console_table.webp",
+      "x": 2058,
+      "y": 652,
+      "w": 243,
+      "h": 273,
+      "cell": {
+        "x": 7,
+        "y": 0,
+        "w": 2,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj22_armchair",
+      "kind": "occluder",
+      "file": "obj22_armchair.webp",
+      "x": 1365,
+      "y": 1437,
+      "w": 170,
+      "h": 169,
+      "cell": {
+        "x": 11,
+        "y": 11,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj23_floor_lamp",
+      "kind": "occluder",
+      "file": "obj23_floor_lamp.webp",
+      "x": 1584,
+      "y": 1325,
+      "w": 116,
+      "h": 266,
+      "cell": {
+        "x": 12,
+        "y": 10,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "obj24_books_floor",
+      "kind": "occluder",
+      "file": "obj24_books_floor.webp",
+      "x": 1396,
+      "y": 1598,
+      "w": 113,
+      "h": 98,
+      "cell": {
+        "x": 12,
+        "y": 12,
+        "w": 1,
+        "d": 1
+      }
+    }
+  ]
+}

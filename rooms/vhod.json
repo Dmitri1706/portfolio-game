@@ -1,0 +1,70 @@
+{
+  "id": "vhod",
+  "about": "Комната «В ХОД» — светлый офис с неоновыми акцентами. Описание читают и Blender, и игра. Клетка (x, y): x — вдоль правой стены, y — вдоль левой. interact — как с предметом взаимодействует персонаж: куда подходит (approach), куда смотрит (face), куда садится (seat).",
+  "cols": 16,
+  "rows": 13,
+  "wallHeight": 3.0,
+  "theme": { "floor": "tiles", "walls": "office" },
+  "spawn": { "x": 8, "y": 11 },
+  "walls": {
+    "left": [
+      { "type": "window", "style": "office", "at": 1.5, "width": 1.6 },
+      { "type": "stage_screen", "at": 5, "width": 4.4 },
+      { "type": "door", "id": "exit", "style": "exit", "at": 10, "sign": "ВЫХОД" },
+      { "type": "wall_shelf", "at": 12 }
+    ],
+    "right": [
+      { "type": "window", "style": "office", "at": 2.2, "width": 2.2 },
+      { "type": "neon_logo", "at": 4.8, "text": "В ХОД" },
+      { "type": "growth_chart", "at": 7.2 },
+      { "type": "sticky_board", "at": 10.2, "width": 2.2 },
+      { "type": "window", "style": "office", "at": 13.2, "width": 1.6 }
+    ]
+  },
+  "objects": [
+    { "type": "plant_big", "x": 0, "y": 0 },
+    { "type": "stage", "x": 0, "y": 3, "w": 2, "d": 5, "face": "se" },
+
+    { "type": "audience_chair", "x": 3, "y": 3, "face": "nw", "spectator": "spectator1" },
+    { "type": "audience_chair", "x": 3, "y": 4, "face": "nw", "spectator": "spectator2" },
+    { "type": "audience_chair", "x": 3, "y": 5, "face": "nw", "spectator": "spectator3" },
+    { "type": "audience_chair", "x": 3, "y": 6, "face": "nw", "spectator": "spectator1" },
+    { "type": "audience_chair", "x": 3, "y": 7, "face": "nw" },
+    { "type": "audience_chair", "x": 4, "y": 3, "face": "nw", "spectator": "spectator3" },
+    { "type": "audience_chair", "x": 4, "y": 4, "face": "nw", "spectator": "spectator1" },
+    { "type": "audience_chair", "id": "seat_stage", "x": 4, "y": 5, "face": "nw",
+      "interact": { "id": "stage", "approach": { "x": 5, "y": 5 }, "face": "nw", "seat": { "x": 4, "y": 5 } } },
+    { "type": "audience_chair", "x": 4, "y": 6, "face": "nw", "spectator": "spectator2" },
+    { "type": "audience_chair", "x": 4, "y": 7, "face": "nw", "spectator": "spectator3" },
+
+    { "type": "desk_pc", "id": "desk_pc", "x": 6, "y": 0, "w": 2, "d": 1, "face": "sw" },
+    { "type": "office_chair", "id": "chair_pc", "x": 6, "y": 1, "face": "ne",
+      "interact": { "id": "computer", "approach": { "x": 6, "y": 2 }, "face": "ne", "seat": { "x": 6, "y": 1 } } },
+    { "type": "plant_small", "x": 8, "y": 0 },
+    { "type": "filing_cabinet", "x": 10, "y": 0, "face": "sw" },
+    { "type": "item_folder", "id": "item_folder", "x": 10, "y": 0, "z": 0.98, "walkable": true,
+      "interact": { "id": "resume", "approach": { "x": 10, "y": 1 }, "face": "ne" } },
+    { "type": "water_cooler", "x": 12, "y": 0, "face": "sw" },
+    { "type": "server_rack", "x": 14, "y": 0, "face": "sw", "blink": true },
+    { "type": "server_rack", "x": 15, "y": 0, "face": "sw", "blink": true },
+
+    { "type": "rug_rect", "x": 8, "y": 5, "w": 5, "d": 5, "walkable": true },
+    { "type": "coffee_table_low", "x": 9, "y": 7, "w": 2, "d": 1 },
+    { "type": "item_newspaper", "id": "item_newspaper", "x": 9, "y": 7, "z": 0.42, "walkable": true,
+      "interact": { "id": "mediakit", "approach": { "x": 9, "y": 8 }, "face": "ne" } },
+    { "type": "beanbag", "x": 8, "y": 6 },
+    { "type": "beanbag", "x": 11, "y": 8 },
+    { "type": "plant_big", "x": 12, "y": 9 },
+
+    { "type": "bar_table", "x": 13, "y": 5 },
+    { "type": "item_phone", "id": "item_phone", "x": 13, "y": 5, "z": 1.06, "walkable": true,
+      "interact": { "id": "webinar", "approach": { "x": 12, "y": 5 }, "face": "se" } },
+    { "type": "bar_stool", "x": 14, "y": 5 },
+    { "type": "bar_stool", "x": 13, "y": 4 },
+
+    { "type": "whiteboard", "x": 14, "y": 10, "w": 2, "d": 1, "face": "sw" },
+    { "type": "plant_big", "x": 0, "y": 12 },
+    { "type": "plant_small", "x": 15, "y": 12 },
+    { "type": "plant_small", "x": 2, "y": 0 }
+  ]
+}

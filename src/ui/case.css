@@ -448,10 +448,9 @@
   height: 120px;
   background-color: #3a72c8;
   background-repeat: no-repeat;
-  background-size: 600px 2800px; /* player.png ×5 */
-  background-position: 0 -5px;
+  background-size: 640px 1088px; /* голова 3D-персонажа: лист 640×1088 */
+  background-position: -20px -16px;
   border: 4px solid #f5c542;
-  image-rendering: pixelated;
 }
 .cert__stars {
   font-size: 24px;
