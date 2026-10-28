@@ -10,7 +10,7 @@ export function orientationHint(): void {
   const mq = window.matchMedia('(hover: none) and (orientation: portrait)');
   const hint = el('div', 'rotate-hint pixel-box');
   hint.appendChild(el('span', 'rotate-hint__icon', '↻'));
-  hint.appendChild(el('span', '', 'Поверните телефон — так удобнее играть'));
+  hint.appendChild(el('span', '', 'Поверните телефон — так удобнее смотреть'));
   const close = el('button', 'rotate-hint__close', '✕');
   close.type = 'button';
   close.setAttribute('aria-label', 'Скрыть подсказку');

@@ -188,7 +188,6 @@ export function openMediakitWindow(onClose: () => void): void {
     title: 'МедиаКит',
     content: wrap,
     side: md(CASES.mediakit),
-    tools: [{ label: 'Скачать PDF ⬇', href: asset(SETTINGS.mediakit.pdf), download: true }],
     onClose: () => {
       viewer.destroy();
       onClose();
@@ -236,18 +235,65 @@ export function openWebinarWindow(onClose: () => void): void {
 // ================= 6. Трибуна: мероприятие по HR-автоматизации =================
 
 export function openEventWindow(onClose: () => void): void {
-  const photo = SETTINGS.event.photo;
-  const view = el('div', 'event-photo');
-  if (photo) {
-    const img = el('img');
-    img.src = asset(photo);
-    img.alt = 'Фото с мероприятия';
-    view.appendChild(img);
-  } else {
+  const photos = (SETTINGS.event.photos as { src: string; caption: string }[]).filter((p) => p.src);
+  const view = el('div', 'gallery');
+  if (!photos.length) {
     view.innerHTML =
-      '<div class="event-photo__empty"><span class="event-photo__icon">📷</span><br>Здесь будет фото с мероприятия<br><small>Путь к фото — в content/settings.json → event → photo</small></div>';
+      '<div class="event-photo__empty"><span class="event-photo__icon">📷</span><br>Здесь будут фото с мероприятия<br><small>Фото — в content/settings.json → event → photos</small></div>';
+    openCaseWindow({ frame: 'event', title: 'Мероприятие', content: view, side: md(CASES.event), onClose });
+    return;
   }
-  openCaseWindow({ frame: 'event', title: 'Мероприятие', content: view, side: md(CASES.event), onClose });
+  const pic = el('button', 'gallery__pic');
+  pic.type = 'button';
+  pic.title = 'Открыть на весь экран';
+  const img = el('img');
+  pic.appendChild(img);
+  const caption = el('div', 'gallery__caption');
+  let i = 0;
+  let zoom: { show: () => void; close: () => void } | null = null;
+  const show = () => {
+    img.src = asset(photos[i].src);
+    img.alt = photos[i].caption;
+    caption.textContent = photos[i].caption;
+    nav.set(i + 1, photos.length);
+    zoom?.show();
+  };
+  const go = (d: number) => {
+    const n = i + d;
+    if (n < 0 || n >= photos.length) return;
+    i = n;
+    show();
+  };
+  const nav = pager(
+    () => go(-1),
+    () => go(1),
+  );
+  onSwipe(pic, () => go(1), () => go(-1));
+  // по клику — фото на весь экран (отдельное окно поверх: Esc или клик закрывают только его)
+  pic.addEventListener('click', () => {
+    const big = el('img', 'lightbox__img');
+    const cap = el('div', 'lightbox__caption');
+    const box = el('div', 'lightbox');
+    box.append(big, cap);
+    onSwipe(box, () => go(1), () => go(-1));
+    const showBig = () => {
+      big.src = asset(photos[i].src);
+      big.alt = cap.textContent = photos[i].caption;
+    };
+    const h = openModal({ className: 'modal__panel--lightbox', content: box, backLabel: '✕ Закрыть', onClose: () => (zoom = null) });
+    zoom = { show: showBig, close: h.close };
+    showBig();
+  });
+  view.append(pic, caption, nav.el);
+  openCaseWindow({
+    frame: 'event',
+    title: 'Мероприятие',
+    content: view,
+    side: md(CASES.event),
+    onClose,
+    onArrow: (d) => go(d),
+  });
+  show();
 }
 
 // ================= Спортмастер: доска «Лучший продавец» =================
@@ -261,6 +307,7 @@ export function openBestSellerWindow(onClose: () => void): void {
   cert.appendChild(el('div', 'cert__stars', '★★★★★'));
   cert.appendChild(el('div', 'cert__name', 'Дмитрий Мельшин'));
   cert.appendChild(el('div', 'cert__place', 'Спортмастер'));
+  cert.appendChild(el('div', 'cert__hint', 'Расставьте кроссовки по полкам — так выглядела часть моей работы в торговом зале'));
   openCaseWindow({ frame: 'board', title: 'Лучший продавец', content: cert, side: md(CASES.sportmaster), onClose });
 }
 

@@ -599,3 +599,136 @@ body.quick {
     font-size: 15px;
   }
 }
+
+/* ---------- Трибуна: галерея фото ---------- */
+.gallery {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.gallery__pic {
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #12142a;
+  cursor: zoom-in;
+  touch-action: pan-y;
+}
+.gallery__pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+.gallery__caption {
+  color: #fbf6ec;
+  font-weight: 700;
+  font-size: 15px;
+  text-align: center;
+}
+.frame--event .pager__label {
+  color: #fbf6ec;
+}
+.modal__panel--lightbox {
+  overflow: hidden;
+  max-width: min(1400px, 100%);
+  width: min(1400px, 100%);
+  padding: 14px;
+  background: #12101a;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.lightbox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  touch-action: pan-y;
+}
+.lightbox__img {
+  max-width: 100%;
+  max-height: calc(100dvh - 180px);
+  object-fit: contain;
+  border-radius: 10px;
+  align-self: center;
+}
+.lightbox__caption {
+  color: #fbf6ec;
+  font-weight: 700;
+  text-align: center;
+}
+.modal__panel--lightbox .btn--ghost {
+  color: #fbf6ec;
+  border-color: rgba(251, 246, 236, 0.35);
+}
+
+/* ---------- Вступление и «Как пользоваться» ---------- */
+.modal__panel--intro {
+  max-width: min(640px, 100%);
+}
+.intro p {
+  margin: 0 0 12px;
+}
+.intro__lead {
+  font-size: 24px;
+  line-height: 30px;
+}
+.intro__why {
+  margin-top: 6px;
+  background: var(--accent-light);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+.intro__why summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+.intro__why[open] summary {
+  margin-bottom: 8px;
+}
+.intro__why ol {
+  margin: 0 0 10px;
+  padding-left: 22px;
+}
+.intro__why p:last-child {
+  margin-bottom: 0;
+}
+.rules__corner-title {
+  font-weight: 700;
+  margin: 16px 0 6px;
+}
+.rules__corner {
+  margin: 0;
+  padding-left: 22px;
+}
+
+/* Доска: подсказка про мини-игру */
+.cert__hint {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #ffe9bf;
+  max-width: 340px;
+  margin-top: 4px;
+}
+
+/* кнопки вступления всегда видны, даже когда блок «Почему такой формат» раскрыт */
+.modal__panel--intro .modal__buttons {
+  position: sticky;
+  bottom: -22px;
+  margin: 12px -28px -22px;
+  padding: 14px 28px 18px;
+  background: var(--paper);
+  border-top: 1px solid var(--paper-line);
+}
+@media (max-width: 600px), (max-height: 420px) {
+  .modal__panel--intro .modal__buttons {
+    bottom: -16px;
+    margin: 10px -16px -16px;
+    padding: 12px 16px 14px;
+  }
+}

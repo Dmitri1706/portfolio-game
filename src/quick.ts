@@ -16,7 +16,7 @@ import { track } from './analytics';
 track('quick_view');
 
 const root = document.getElementById('quick')!;
-const backToGame: ModalButton = { label: '▶ Вернуться в игру', href: './index.html' };
+const backToGame: ModalButton = { label: '▶ Вернуться к осмотру', href: './index.html' };
 
 // ---------- Шапка ----------
 const head = el('header', 'q-head');
@@ -46,7 +46,7 @@ const items: { tag: string; text: string; links: ModalButton[] }[] = [
     links: SETTINGS.site.url ? [{ label: 'Открыть сайт ↗', href: SETTINGS.site.url }] : [],
   },
   { tag: 'В ХОД', text: CASES.presentation, links: [{ label: 'Презентация (PDF) ↗', href: asset(SETTINGS.presentation.pdf) }] },
-  { tag: 'В ХОД', text: CASES.mediakit, links: [{ label: 'МедиаКит (PDF) ↗', href: asset(SETTINGS.mediakit.pdf) }] },
+  { tag: 'В ХОД', text: CASES.mediakit, links: [] },
   {
     tag: 'В ХОД',
     text: CASES.webinar,

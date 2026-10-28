@@ -400,7 +400,7 @@ export class SportScene extends RoomScene {
 
   private checkRoomDone(): void {
     if (isExplored(ROOM, 'sale') && counter(PAIRS) >= PAIRS_FOR_ROOM && achieve('sport_done')) {
-      this.time.delayedCall(900, () => showAchievement('Кейс Спортмастер пройден! 🏆'));
+      this.time.delayedCall(900, () => showAchievement('Все кейсы Спортмастера изучены ✓'));
     }
   }
 

@@ -1,5 +1,6 @@
 import { el } from './modal';
 import { showRules } from './rules';
+import { showIntro } from './intro';
 import { openContacts } from './contacts';
 import { isSoundOn, onSoundChange, setSound } from '../audio';
 import { track } from '../analytics';
@@ -14,7 +15,7 @@ export function createHud(): void {
 
   const quick = el('a', 'btn btn--ghost hud__text', 'Быстрый просмотр');
   quick.href = './quick.html';
-  quick.title = 'Все кейсы на одной странице, без игры';
+  quick.title = 'Все кейсы на одной странице';
   quick.addEventListener('click', () => track('quick_view_open'));
 
   const contact = el('button', 'btn hud__text hud__accent', 'Связаться');
@@ -39,7 +40,11 @@ export function createHud(): void {
   help.setAttribute('aria-label', 'Правила');
   help.addEventListener('click', () => showRules());
 
-  right.append(quick, contact, sound, help);
+  const about = el('button', 'btn btn--ghost hud__text', 'О портфолио');
+  about.type = 'button';
+  about.addEventListener('click', () => showIntro());
+
+  right.append(about, quick, contact, sound, help);
   root.appendChild(right);
 
   const left = el('div', 'hud hud--top-left');

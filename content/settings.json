@@ -16,7 +16,10 @@
     "embed": "https://rutube.ru/play/embed/5bfc3dfaded36bf37bbd7d7d2ef097d3/?p=C7mVYVep4U6kvCppg1rq-Q"
   },
   "event": {
-    "photo": ""
+    "photos": [
+      { "src": "materials/event-1.webp", "caption": "Моя часть: базовый функционал Bitrix24 для HR" },
+      { "src": "materials/event-2.webp", "caption": "Руководитель: системная логика HR-процессов" }
+    ]
   },
   "resume": {
     "pdf": "materials/resume.pdf"
@@ -29,6 +32,7 @@
     "city": "Краснодар"
   },
   "siteUrl": "",
+  "analyticsEnabled": false,
   "audio": {
     "music": "",
     "step": "",

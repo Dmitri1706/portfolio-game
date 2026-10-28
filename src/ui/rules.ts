@@ -1,30 +1,45 @@
 import { el, openModal } from './modal';
 import { load, save } from '../storage';
 
-const RULES: { icon: string; text: string }[] = [
-  { icon: '▶', text: 'Клик или тап по полу — персонаж идёт туда.' },
-  { icon: '★', text: 'Клик или тап по предмету — персонаж подойдёт к нему и что-нибудь сделает.' },
+/** Окно «Как пользоваться». Тексты — здесь. */
+const RULES: { icon: string; title: string; text: string }[] = [
+  { icon: '▶', title: 'Перемещение', text: 'кликните или коснитесь пола, и персонаж пойдёт туда.' },
   {
     icon: '✦',
-    text: 'Интерактивные предметы подсвечиваются при наведении мышки, а на телефоне — мерцают искорками.',
+    title: 'Кейсы',
+    text: 'светящиеся предметы. Кликните на предмет: персонаж подойдёт к нему и откроется окно с кейсом и материалами. Закрыть окно — кнопка «Назад» или Esc.',
   },
-  { icon: '←', text: 'Закрыть окно — кнопка «Назад» (на компьютере ещё и Esc).' },
-  { icon: '?', text: 'Эти правила всегда можно открыть снова кнопкой «?» в углу.' },
+  { icon: '⌂', title: 'Комнаты', text: 'двери с названиями компаний. Заколоченные двери пока закрыты.' },
+];
+
+const CORNER: string[] = [
+  '«Быстрый просмотр» — все кейсы на одной странице',
+  '«Связаться» — мои контакты',
+  '🔊 — звук (по умолчанию выключен)',
+  '? — эта подсказка',
 ];
 
 export function showRules(onClose?: () => void): void {
+  const box = el('div');
   const list = el('ul', 'rules');
   for (const r of RULES) {
     const li = el('li');
     li.appendChild(el('span', 'rules__icon', r.icon));
-    li.appendChild(el('span', '', r.text));
+    const t = el('span');
+    t.append(el('b', '', r.title), ` — ${r.text}`);
+    li.appendChild(t);
     list.appendChild(li);
   }
+  box.appendChild(list);
+  box.appendChild(el('p', 'rules__corner-title', 'В углу экрана:'));
+  const corner = el('ul', 'rules__corner');
+  CORNER.forEach((c) => corner.appendChild(el('li', '', c)));
+  box.appendChild(corner);
   openModal({
-    title: 'Как играть',
-    content: list,
+    title: 'Как пользоваться',
+    content: box,
     backLabel: false,
-    buttons: [{ label: 'Понятно!' }],
+    buttons: [{ label: 'Понятно' }],
     onClose: () => {
       save('rulesSeen', true);
       onClose?.();

@@ -6,6 +6,7 @@ import { doorMarker, type Interactable } from '../world/Interactable';
 import { constructionFx } from '../world/construction';
 import { RoomScene, type RoomData, type RoomId } from './RoomScene';
 import { rulesSeen, showRules } from '../ui/rules';
+import { introSeen, showIntro } from '../ui/intro';
 import { LABELS, TEXTS } from '../texts';
 import { hasAchievement } from '../state';
 import { load, save } from '../storage';
@@ -14,6 +15,7 @@ import { sfx } from '../audio';
 import { el, openModal } from '../ui/modal';
 import { openContacts } from '../ui/contacts';
 import { openResumeWindow } from '../ui/caseWindows';
+import { SETTINGS, asset } from '../content';
 
 /** Комнаты, уже переведённые в новую графику. Двери в остальные пока только открываются и закрываются. */
 const READY_ROOMS = new Set<RoomId>(['vhod', 'sport']);
@@ -117,12 +119,16 @@ export class LobbyScene extends RoomScene {
       });
       return;
     }
-    // Сразу после экрана загрузки: падение, затем (в первый раз) правила
+    // Сразу после экрана загрузки: падение, затем (в первый раз) вступление и «Как пользоваться»
     this.fallIn().then(() => {
-      if (rulesSeen()) {
-        this.busy = false;
-        this.maybeShowFinal();
-      } else this.time.delayedCall(250, () => showRules(() => (this.busy = false)));
+      const rules = () => {
+        if (rulesSeen()) {
+          this.busy = false;
+          this.maybeShowFinal();
+        } else this.time.delayedCall(200, () => showRules(() => (this.busy = false)));
+      };
+      if (introSeen()) rules();
+      else this.time.delayedCall(250, () => showIntro(rules));
     });
   }
 
@@ -139,7 +145,7 @@ export class LobbyScene extends RoomScene {
       openModal({
         title: 'Спасибо, что заглянули!',
         content: body,
-        backLabel: 'Остаться в игре',
+        backLabel: 'Продолжить осмотр',
         buttons: [
           {
             label: 'Связаться',
@@ -148,6 +154,7 @@ export class LobbyScene extends RoomScene {
               openContacts();
             },
           },
+          { label: 'Скачать резюме (PDF) ⬇', ghost: true, href: asset(SETTINGS.resume.pdf), download: true },
         ],
       });
     });

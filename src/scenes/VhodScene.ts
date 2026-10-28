@@ -162,7 +162,7 @@ export class VhodScene extends RoomScene {
       explore(ROOM, id);
       this.refreshHud();
       if (this.explored() >= TOTAL && achieve('vhod_done')) {
-        this.time.delayedCall(500, () => showAchievement('Кейс В ХОД пройден! 🏆'));
+        this.time.delayedCall(500, () => showAchievement('Все кейсы В ХОД изучены ✓'));
       }
     });
   }
