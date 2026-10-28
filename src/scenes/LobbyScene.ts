@@ -13,6 +13,7 @@ import { track } from '../analytics';
 import { sfx } from '../audio';
 import { el, openModal } from '../ui/modal';
 import { openContacts } from '../ui/contacts';
+import { openResumeWindow } from '../ui/caseWindows';
 
 /** Комнаты, уже переведённые в новую графику. Двери в остальные пока только открываются и закрываются. */
 const READY_ROOMS = new Set<RoomId>(['vhod', 'sport']);
@@ -62,6 +63,25 @@ export class LobbyScene extends RoomScene {
         approach: def.approach,
         face: 'ne',
         onUse: () => this.stumble(TEXTS.boardedProjects),
+      });
+    }
+
+    // Папка с резюме на подставке: персонаж берёт её в руки
+    const folder = d.layers.get('item_folder');
+    const folderDef = (LOBBY as RoomDef).objects.find((o) => o.id === 'item_folder');
+    if (folder && folderDef?.interact) {
+      const ia = folderDef.interact;
+      const stand = d.layers.get('resume_stand');
+      this.addInteractable({
+        id: 'resume',
+        sprites: stand ? [folder, stand] : [folder],
+        label: LABELS.resume,
+        approach: ia.approach,
+        face: ia.face,
+        onUse: () => {
+          this.pickUp(folder, 'held3d_folder');
+          this.time.delayedCall(280, () => openResumeWindow(() => this.putDown(folder, ia.face)));
+        },
       });
     }
   }

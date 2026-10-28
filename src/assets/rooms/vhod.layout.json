@@ -280,24 +280,9 @@
       }
     },
     {
-      "id": "item_folder",
-      "kind": "item",
-      "file": "item_folder.webp",
-      "x": 2272,
-      "y": 838,
-      "w": 79,
-      "h": 53,
-      "cell": {
-        "x": 10,
-        "y": 0,
-        "w": 1,
-        "d": 1
-      }
-    },
-    {
-      "id": "obj17_water_cooler",
+      "id": "obj16_water_cooler",
       "kind": "occluder",
-      "file": "obj17_water_cooler.webp",
+      "file": "obj16_water_cooler.webp",
       "x": 2462,
       "y": 890,
       "w": 98,
@@ -310,16 +295,16 @@
       }
     },
     {
-      "id": "obj18_server_rack",
+      "id": "obj17_server_rack",
       "kind": "occluder",
-      "file": "obj18_server_rack_0.webp",
+      "file": "obj17_server_rack_0.webp",
       "x": 2627,
       "y": 888,
       "w": 151,
       "h": 333,
       "frames": [
-        "obj18_server_rack_0.webp",
-        "obj18_server_rack_1.webp"
+        "obj17_server_rack_0.webp",
+        "obj17_server_rack_1.webp"
       ],
       "cell": {
         "x": 14,
@@ -329,16 +314,16 @@
       }
     },
     {
-      "id": "obj19_server_rack",
+      "id": "obj18_server_rack",
       "kind": "occluder",
-      "file": "obj19_server_rack_0.webp",
+      "file": "obj18_server_rack_0.webp",
       "x": 2723,
       "y": 936,
       "w": 151,
       "h": 333,
       "frames": [
-        "obj19_server_rack_0.webp",
-        "obj19_server_rack_1.webp"
+        "obj18_server_rack_0.webp",
+        "obj18_server_rack_1.webp"
       ],
       "cell": {
         "x": 15,
@@ -348,9 +333,9 @@
       }
     },
     {
-      "id": "obj21_coffee_table_low",
+      "id": "obj20_coffee_table_low",
       "kind": "occluder",
-      "file": "obj21_coffee_table_low.webp",
+      "file": "obj20_coffee_table_low.webp",
       "x": 1471,
       "y": 1185,
       "w": 246,
@@ -378,9 +363,9 @@
       }
     },
     {
-      "id": "obj23_beanbag",
+      "id": "obj22_beanbag",
       "kind": "occluder",
-      "file": "obj23_beanbag.webp",
+      "file": "obj22_beanbag.webp",
       "x": 1455,
       "y": 1068,
       "w": 182,
@@ -393,9 +378,9 @@
       }
     },
     {
-      "id": "obj24_beanbag",
+      "id": "obj23_beanbag",
       "kind": "occluder",
-      "file": "obj24_beanbag.webp",
+      "file": "obj23_beanbag.webp",
       "x": 1551,
       "y": 1308,
       "w": 182,
@@ -408,9 +393,9 @@
       }
     },
     {
-      "id": "obj25_plant_big",
+      "id": "obj24_plant_big",
       "kind": "occluder",
-      "file": "obj25_plant_big.webp",
+      "file": "obj24_plant_big.webp",
       "x": 1566,
       "y": 1260,
       "w": 157,
@@ -423,9 +408,9 @@
       }
     },
     {
-      "id": "obj26_bar_table",
+      "id": "obj25_bar_table",
       "kind": "occluder",
-      "file": "obj26_bar_table.webp",
+      "file": "obj25_bar_table.webp",
       "x": 2041,
       "y": 1202,
       "w": 163,
@@ -453,9 +438,9 @@
       }
     },
     {
-      "id": "obj28_bar_stool",
+      "id": "obj27_bar_stool",
       "kind": "occluder",
-      "file": "obj28_bar_stool.webp",
+      "file": "obj27_bar_stool.webp",
       "x": 2169,
       "y": 1299,
       "w": 98,
@@ -468,9 +453,9 @@
       }
     },
     {
-      "id": "obj29_bar_stool",
+      "id": "obj28_bar_stool",
       "kind": "occluder",
-      "file": "obj29_bar_stool.webp",
+      "file": "obj28_bar_stool.webp",
       "x": 2169,
       "y": 1203,
       "w": 98,
@@ -498,9 +483,9 @@
       }
     },
     {
-      "id": "obj31_whiteboard",
+      "id": "obj30_whiteboard",
       "kind": "occluder",
-      "file": "obj31_whiteboard.webp",
+      "file": "obj30_whiteboard.webp",
       "x": 1678,
       "y": 1415,
       "w": 216,
@@ -513,9 +498,9 @@
       }
     },
     {
-      "id": "obj32_plant_big",
+      "id": "obj31_plant_big",
       "kind": "occluder",
-      "file": "obj32_plant_big.webp",
+      "file": "obj31_plant_big.webp",
       "x": 131,
       "y": 814,
       "w": 147,
@@ -528,9 +513,9 @@
       }
     },
     {
-      "id": "obj33_plant_small",
+      "id": "obj32_plant_small",
       "kind": "occluder",
-      "file": "obj33_plant_small.webp",
+      "file": "obj32_plant_small.webp",
       "x": 1599,
       "y": 1688,
       "w": 86,
@@ -543,9 +528,9 @@
       }
     },
     {
-      "id": "obj34_plant_small",
+      "id": "obj33_plant_small",
       "kind": "occluder",
-      "file": "obj34_plant_small.webp",
+      "file": "obj33_plant_small.webp",
       "x": 1503,
       "y": 489,
       "w": 87,

@@ -131,10 +131,13 @@ export function openPresentationWindow(onClose: () => void, onLastSlide: () => v
   const wrap = el('div', 'stage-view');
   const screen = el('div', 'frame__screen stage-view__screen');
   const audience = el('div', 'audience');
-  audience.style.setProperty('--sheet', `url(${import.meta.env.BASE_URL}assets/sprites/spectators.png)`);
+  // зрители — те же 3D-человечки, что сидят в зале, со спины
+  const base = `${import.meta.env.BASE_URL}assets/sprites3d/`;
   for (let i = 0; i < 7; i++) {
     const a = el('div', 'audience__seat');
-    a.style.setProperty('--row', String(i % 3));
+    const v = `spectator${(i % 3) + 1}`;
+    a.style.setProperty('--sit', `url(${base}${v}_sit.webp)`);
+    a.style.setProperty('--clap', `url(${base}${v}_clap.webp)`);
     a.style.animationDelay = `${(i * 70) % 300}ms`;
     audience.appendChild(a);
   }

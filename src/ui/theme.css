@@ -1,0 +1,601 @@
+/*
+  Оформление окон в стиле 3D-диорам (подключается последним и перекрывает старый пиксельный вид).
+  Тёплая «бумага», скругления, мягкие тени, янтарный акцент — как свет ламп в комнатах.
+  Цвета — в переменных ниже.
+*/
+:root {
+  --ink: #2a2233;
+  --ink-soft: #6d6478;
+  --paper: #fbf6ec;
+  --paper-dark: #efe5d3;
+  --paper-line: rgba(42, 34, 51, 0.12);
+  --accent: #f5b041;
+  --accent-dark: #d9822b;
+  --accent-light: #ffe9bf;
+  --accent-text: #b35a14;
+  --night: #1c1628;
+  --glass: rgba(28, 22, 40, 0.82);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow: 0 24px 60px rgba(8, 5, 16, 0.55), 0 2px 0 rgba(255, 255, 255, 0.6) inset;
+  /* пиксельный шрифт больше не нужен — заголовки и кнопки читаемым шрифтом */
+  --font-pixel: 'PT Sans', 'Segoe UI', Arial, sans-serif;
+  --pixel: 0px;
+}
+
+/* ---------- Панели ---------- */
+.pixel-box {
+  background: var(--paper);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+}
+
+/* ---------- Кнопки ---------- */
+.btn {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 18px;
+  color: #2a1d10;
+  background: linear-gradient(180deg, #ffd27a, var(--accent));
+  border: 1px solid rgba(160, 90, 20, 0.35);
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(217, 130, 43, 0.3);
+  padding: 11px 20px;
+  transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
+}
+.btn:hover {
+  filter: none;
+  background: linear-gradient(180deg, #ffdc93, #f7b950);
+  transform: translateY(-1px);
+}
+.btn:active {
+  box-shadow: 0 2px 6px rgba(217, 130, 43, 0.3);
+  transform: translateY(1px);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--accent-dark);
+  outline-offset: 3px;
+}
+.btn--ghost {
+  color: var(--ink);
+  background: transparent;
+  border: 1.5px solid rgba(42, 34, 51, 0.25);
+  box-shadow: none;
+}
+.btn--ghost:hover {
+  background: rgba(42, 34, 51, 0.06);
+}
+.btn:disabled {
+  transform: none;
+}
+
+/* ---------- Модальные окна ---------- */
+.modal {
+  background: rgba(10, 7, 18, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.modal__panel {
+  padding: 26px 28px 22px;
+  animation: soft-pop 0.26s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+.modal.is-closing {
+  animation: fade-out 0.18s ease both;
+}
+.modal.is-closing .modal__panel {
+  animation: soft-pop-out 0.18s ease both;
+}
+.modal__title {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 30px;
+}
+@keyframes soft-pop {
+  from {
+    transform: translateY(14px) scale(0.96);
+    opacity: 0;
+  }
+}
+@keyframes soft-pop-out {
+  to {
+    transform: translateY(10px) scale(0.97);
+    opacity: 0;
+  }
+}
+
+/* Правила, контакты: значки-кружки */
+.rules__icon,
+.contacts__icon {
+  width: 34px;
+  height: 34px;
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--accent-text);
+  background: var(--accent-light);
+  border: 0;
+  border-radius: 50%;
+}
+.contacts a {
+  color: var(--ink);
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px;
+}
+
+.final__rate {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 20px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  animation: soft-pop 0.35s ease 0.2s both;
+}
+.rotate-hint {
+  border-radius: 999px;
+}
+
+/* Ачивка */
+.toast {
+  border-radius: 999px;
+  padding: 12px 26px;
+  animation: toast-in 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+.toast.is-leaving {
+  animation: toast-out 0.35s ease forwards;
+}
+.toast__title {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 22px;
+}
+
+/* ---------- Окно кейса ---------- */
+.case__tools .btn {
+  font-size: 14px;
+  line-height: 16px;
+  padding: 10px 16px;
+}
+.case__side {
+  font-size: 16px;
+  line-height: 1.5;
+}
+.case__side h1 {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+}
+.case__side h2 {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--accent-text);
+}
+.case__side h1 + p,
+.q-card h1 + p {
+  background: var(--accent-light);
+  border-left: 0;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+
+/* Общая рамка «под предмет»: скругления и мягкая тень вместо пиксельных бортиков */
+.frame {
+  border-radius: 18px;
+  border: 0;
+  box-shadow: 0 10px 30px rgba(8, 5, 16, 0.25);
+}
+.frame__screen,
+.stage-view__screen {
+  border-radius: 8px;
+}
+
+/* «◀ 2 / 6 ▶» */
+.pager__btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 13px;
+}
+.pager__label {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 15px;
+}
+.pdf__status {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+/* 1. Монитор */
+.frame--monitor {
+  background: linear-gradient(180deg, #2c3142, #1d212e);
+  border: 0;
+  padding: 14px 14px 26px;
+  box-shadow: 0 10px 30px rgba(8, 5, 16, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.frame--monitor::after {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  right: 20px;
+  bottom: 10px;
+  box-shadow: 0 0 8px #5cff8a;
+}
+.frame--monitor .frame__screen {
+  border: 0;
+}
+.site-shot img {
+  image-rendering: auto;
+}
+
+/* 2. Сцена */
+.frame--stage {
+  background: radial-gradient(ellipse at 50% 0%, #2d3166 0%, #191b36 70%);
+  border: 0;
+  border-top: 0;
+  padding: 14px 34px 0;
+  box-shadow: 0 10px 30px rgba(8, 5, 16, 0.3), inset 0 3px 0 #3de0e8;
+}
+.frame--stage::before,
+.frame--stage::after {
+  width: 28px;
+  background: linear-gradient(90deg, #7a1a2c, #c8344a 40%, #8f2236 70%, #c8344a);
+}
+.frame--stage::before {
+  border-radius: 18px 0 0 18px;
+}
+.frame--stage::after {
+  border-radius: 0 18px 18px 0;
+}
+.stage-view__screen {
+  border: 0;
+  box-shadow: 0 0 30px rgba(61, 224, 232, 0.25);
+}
+.frame--stage .pager__label {
+  color: #fbf6ec;
+}
+.audience {
+  height: 70px;
+  gap: 4px;
+  margin-top: 6px;
+}
+.audience__seat {
+  width: 80px;
+  height: 70px;
+  background-image: var(--sit);
+  background-size: 80px 136px;
+  background-position: 0 -30px;
+  background-repeat: no-repeat;
+  image-rendering: auto;
+}
+.audience.is-clapping .audience__seat {
+  background-image: var(--clap);
+  background-size: 160px 136px;
+  animation: clap3d 0.3s steps(1) infinite;
+}
+@keyframes clap3d {
+  0% {
+    background-position: 0 -30px;
+  }
+  50% {
+    background-position: -80px -30px;
+  }
+}
+
+/* 3. Газета */
+.frame--newspaper {
+  background: #fbf6ec;
+  border: 0;
+  padding: 12px 16px 8px;
+  box-shadow: 0 10px 30px rgba(8, 5, 16, 0.25), inset 0 0 0 1px var(--paper-line);
+}
+.newspaper__head {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 30px;
+  letter-spacing: 6px;
+  border-bottom: 3px double var(--ink);
+}
+
+/* 4. Телефон */
+.frame--phone {
+  background: radial-gradient(ellipse at 50% 40%, #3a3256, #1f1a30 75%);
+  border: 0;
+}
+.phone {
+  background: linear-gradient(180deg, #2f3446, #1c1f2b);
+  border: 0;
+  border-radius: 28px;
+  padding: 12px 30px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: phone-rotate 0.6s cubic-bezier(0.3, 0.8, 0.3, 1) 0.15s both;
+}
+.phone__screen {
+  border: 0;
+  border-radius: 12px;
+}
+.phone__empty,
+.event-photo__empty {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+/* 5. Папка — кожаная, как на подставке в холле */
+.frame--folder {
+  background: linear-gradient(180deg, #a8463a, #8a3529);
+  border: 0;
+  padding: 22px 18px 10px;
+  box-shadow: 0 10px 30px rgba(8, 5, 16, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+.frame--folder::before {
+  left: 18px;
+  top: -14px;
+  height: 18px;
+  background: #a8463a;
+  border: 0;
+  border-radius: 10px 10px 0 0;
+}
+.frame--folder .pager__label {
+  color: #fbf6ec;
+}
+.folder__page {
+  border: 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  background-image: none;
+  background-color: #fffdf8;
+}
+.folder__page h1 {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 30px;
+}
+.folder__page h2 {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.folder__page.turn-out {
+  animation: turn-out 0.22s ease-in forwards;
+}
+.folder__page.turn-in {
+  animation: turn-in 0.26s ease-out both;
+}
+.folder__page.turn-out-back {
+  animation: turn-in 0.22s ease-in reverse forwards;
+}
+.folder__page.turn-in-back {
+  animation: turn-out 0.26s ease-out reverse both;
+}
+
+/* Доска «Лучший продавец» */
+.frame--board {
+  background: linear-gradient(180deg, #f7cf5c, #d9a332);
+  border: 0;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(8, 5, 16, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+.cert {
+  border: 0;
+  border-radius: 12px;
+  background: radial-gradient(ellipse at 50% 20%, #2a63bf, #1a438c 75%);
+}
+.cert__title,
+.cert__name {
+  font-family: var(--font-text);
+  font-weight: 700;
+}
+.cert__title {
+  font-size: 24px;
+  letter-spacing: 0.06em;
+}
+.cert__name {
+  font-size: 20px;
+}
+.cert__face {
+  border: 3px solid #f5c542;
+  border-radius: 50%;
+}
+
+/* 6. Трибуна: фото */
+.frame--event {
+  background: linear-gradient(180deg, #262a52, #1a1d3a);
+  border: 0;
+  box-shadow: 0 10px 30px rgba(8, 5, 16, 0.3), inset 0 3px 0 #3de0e8;
+}
+.event-photo {
+  border: 0;
+  border-radius: 10px;
+}
+
+/* ---------- Диалог продажи ---------- */
+.dialog {
+  animation: dialog-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+}
+.dialog.is-closing {
+  animation: dialog-out 0.2s ease forwards;
+}
+.dialog__face {
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.dialog__name,
+.dialog__step,
+.dialog__closed,
+.dialog__bonus,
+.dialog__doubt {
+  font-family: var(--font-text);
+  font-weight: 700;
+}
+.dialog__name {
+  font-size: 14px;
+}
+.dialog__step {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+.dialog__doubt {
+  font-size: 14px;
+  border: 0;
+  border-radius: var(--radius-sm);
+}
+.dialog__choice {
+  border: 1.5px solid rgba(42, 34, 51, 0.18);
+  border-radius: var(--radius-sm);
+  transition: background 0.12s, border-color 0.12s;
+}
+.dialog__choice::before {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--accent-text);
+}
+.dialog__choice:hover:not(:disabled),
+.dialog__choice:focus-visible {
+  border-color: var(--accent);
+}
+.dialog__closed {
+  font-size: 30px;
+  line-height: 36px;
+  animation: soft-pop 0.3s ease both;
+}
+.dialog__bonus {
+  font-size: 17px;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 18px;
+  animation: soft-pop 0.3s ease 0.25s both;
+}
+
+/* ---------- Страница «Быстрый просмотр» ---------- */
+body.quick {
+  background: radial-gradient(ellipse at 50% 0%, #2c2440 0%, #120e1c 70%) fixed;
+}
+.q-face {
+  border: 3px solid #fbf6ec;
+  border-radius: 50%;
+}
+.q-name,
+.q-role,
+.q-h2,
+.q-tag {
+  font-family: var(--font-text);
+  font-weight: 700;
+}
+.q-name {
+  font-size: 34px;
+  line-height: 40px;
+}
+.q-role {
+  font-size: 18px;
+}
+.q-h2 {
+  font-size: 24px;
+  color: #ffd27a;
+}
+.q-tag {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 0;
+  border-radius: 999px;
+}
+
+@media (max-width: 600px), (max-height: 420px) {
+  .btn {
+    font-size: 14px;
+    padding: 9px 16px;
+  }
+  .modal__panel {
+    padding: 18px 16px 16px;
+  }
+  .modal__title {
+    font-size: 20px;
+    line-height: 26px;
+  }
+  .case__side h1 {
+    font-size: 19px;
+    line-height: 24px;
+  }
+}
+
+/* Ссылки в текстах — в цвет акцента */
+.folder__page a,
+.case__side a,
+.q-card a:not(.btn),
+.q-resume a:not(.btn) {
+  color: var(--accent-text);
+  text-decoration-color: rgba(179, 90, 20, 0.4);
+  text-underline-offset: 3px;
+}
+
+/* Быстрый просмотр: тексты карточек и кнопки */
+.q-text h1 {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+}
+.q-text h2 {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--accent-text);
+  margin: 16px 0 6px;
+}
+.q-text hr {
+  border-top: 1px solid var(--paper-line);
+}
+.q-cases {
+  align-items: start;
+}
+.q-links .btn,
+.q-buttons .btn,
+.q-resume .btn,
+.q-foot .btn {
+  font-size: 14px;
+  padding: 10px 18px;
+}
+/* «прозрачные» кнопки на тёмном фоне страницы — светлые */
+.q-buttons .btn--ghost,
+.q-foot .btn--ghost {
+  color: #fbf6ec;
+  border-color: rgba(251, 246, 236, 0.35);
+}
+.q-buttons .btn--ghost:hover,
+.q-foot .btn--ghost:hover {
+  background: rgba(251, 246, 236, 0.08);
+}
+.q-tag {
+  font-size: 11px;
+  padding: 4px 10px;
+}
+@media (max-width: 520px) {
+  .q-name {
+    font-size: 26px;
+    line-height: 30px;
+  }
+  .q-role {
+    font-size: 15px;
+  }
+}

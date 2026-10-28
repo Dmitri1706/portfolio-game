@@ -698,6 +698,33 @@ def item_folder(m, p, W, D, rng):
         rot=(0, 0, R(12)))
 
 
+def resume_stand(m, p, W, D, rng):
+    """Подставка для резюме в холле: тумба из тёмного дерева, латунная табличка «РЕЗЮМЕ», настольная лампа светит на папку."""
+    box('rs_base', (0.66, 0.5, 0.08), (0, 0.02, 0.04), m['dark_wood'], p, bevel=0.015)
+    box('rs_body', (0.56, 0.42, 0.86), (0, 0.02, 0.51), m['mid_wood'], p, bevel=0.02)
+    box('rs_panel', (0.46, 0.012, 0.6), (0, -0.195, 0.5), m['dark_wood'], p, bevel=0.008)
+    box('rs_top', (0.72, 0.56, 0.05), (0, 0.02, 0.965), m['dark_wood'], p, bevel=0.015)
+    brass = mat('brass', hex_rgb('#d8a54a'), rough=0.3, metal=0.9)
+    box('rs_plate', (0.38, 0.012, 0.11), (0, -0.205, 0.66), brass, p, bevel=0.004)
+    text('rs_plate_text', 'РЕЗЮМЕ', 0.07, (0, -0.213, 0.64), m['ink'], p, font=FONT_SIGN, extrude=0.002)
+    # лампа «банкирская»: латунная ножка и зелёный абажур, тёплый свет на папку
+    cyl('rs_lamp_base', 0.06, 0.02, (0.25, 0.17, 0.99), brass, p, verts=14)
+    cyl('rs_lamp_post', 0.012, 0.3, (0.25, 0.17, 1.0), brass, p, verts=8)
+    shade = mat('lamp_green', hex_rgb('#2f7a52'), rough=0.35, emit=(0.2, 0.6, 0.35), emit_strength=0.4)
+    box('rs_lamp_shade', (0.24, 0.1, 0.06), (0.17, 0.1, 1.3), shade, p, bevel=0.02, rot=(0, R(-15), R(35)))
+    point_light('rs_lamp_light', (0.12, 0.05, 1.22), WARM, 40, 0.05, p)
+
+
+def item_folder_big(m, p, W, D, rng):
+    """Крупная кожаная папка с золотым тиснением «CV» — лежит на подставке в холле."""
+    leather = mat('folder_leather', hex_rgb('#9c3b2e'), rough=0.55)
+    box('fb_cover', (0.46, 0.34, 0.045), (-0.04, -0.02, 0.0225), leather, p, bevel=0.01, rot=(0, 0, R(-8)))
+    box('fb_pages', (0.43, 0.31, 0.03), (-0.035, -0.015, 0.02), mat('paper_edge', hex_rgb('#f3ead8'), rough=0.8), p,
+        bevel=0.004, rot=(0, 0, R(-8)))
+    gold = mat('gold', hex_rgb('#f0c060'), rough=0.25, metal=1.0, emit=(1.0, 0.8, 0.4), emit_strength=0.3)
+    text('fb_cv', 'CV', 0.14, (-0.04, -0.02, 0.046), gold, p, font=FONT_SIGN, extrude=0.003, rot=(0, 0, R(-8)))
+
+
 def lib_empty(name, parent):
     return empty(name, (0, 0, 0), 0, parent)
 
@@ -1001,7 +1028,7 @@ FLOOR = {
     'desk_pc': desk_pc, 'office_chair': office_chair, 'audience_chair': audience_chair, 'stage': stage,
     'server_rack': server_rack, 'filing_cabinet': filing_cabinet, 'water_cooler': water_cooler, 'rug_rect': rug_rect,
     'coffee_table_low': coffee_table_low, 'beanbag': beanbag, 'bar_table': bar_table, 'bar_stool': bar_stool,
-    'whiteboard': whiteboard, 'podium': podium, 'item_newspaper': item_newspaper, 'item_phone': item_phone, 'item_folder': item_folder,
+    'whiteboard': whiteboard, 'podium': podium, 'resume_stand': resume_stand, 'item_folder_big': item_folder_big, 'item_newspaper': item_newspaper, 'item_phone': item_phone, 'item_folder': item_folder,
     # магазин «Спортмастер»
     'shoe_shelf': shoe_shelf, 'clothes_rack': clothes_rack, 'cash_counter': cash_counter, 'fitting_room': fitting_room,
     'ball_basket': ball_basket, 'mannequin': mannequin, 'display_table': display_table, 'try_bench': try_bench,

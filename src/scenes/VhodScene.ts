@@ -9,25 +9,25 @@ import { buildDiorama, type Layout, type RoomDef, type RoomObject } from '../wor
 import { addCharacter } from '../world/characters';
 import { RoomScene } from './RoomScene';
 import { sfx } from '../audio';
-import { achieve, explore, exploredCount } from '../state';
+import { achieve, explore, isExplored } from '../state';
 import { showAchievement } from '../ui/toast';
 import {
   openEventWindow,
   openMediakitWindow,
   openPresentationWindow,
-  openResumeWindow,
   openSiteWindow,
   openWebinarWindow,
 } from '../ui/caseWindows';
 
 const ROOM = 'vhod';
-const TOTAL = 6;
+/** Предметы комнаты, которые считаются в «Изучено: N/5» (резюме переехало в холл) */
+const ITEMS = ['computer', 'stage', 'mediakit', 'webinar', 'event'];
+const TOTAL = ITEMS.length;
 
 /** Предметы, которые берут в руки: картинка в руках и окно, которое открывается */
 const HELD: Record<string, [string, (onClose: () => void) => void]> = {
   mediakit: ['held3d_newspaper', openMediakitWindow],
   webinar: ['held3d_phone', openWebinarWindow],
-  resume: ['held3d_folder', openResumeWindow],
 };
 
 const DEF = VHOD as RoomDef;
@@ -152,19 +152,23 @@ export class VhodScene extends RoomScene {
   }
 
   protected progressText(): string {
-    return `Изучено: ${exploredCount(ROOM)}/${TOTAL}`;
+    return `Изучено: ${this.explored()}/${TOTAL}`;
   }
 
   /** Небольшая пауза после действия персонажа, затем окно; предмет отмечается изученным. */
   private openAfterAction(id: string, open: () => void): void {
     this.time.delayedCall(280, () => {
       open();
-      const n = explore(ROOM, id);
+      explore(ROOM, id);
       this.refreshHud();
-      if (n >= TOTAL && achieve('vhod_done')) {
+      if (this.explored() >= TOTAL && achieve('vhod_done')) {
         this.time.delayedCall(500, () => showAchievement('Кейс В ХОД пройден! 🏆'));
       }
     });
+  }
+
+  private explored(): number {
+    return ITEMS.filter((id) => isExplored(ROOM, id)).length;
   }
 
   /** Аплодисменты зрителей на последнем слайде. */

@@ -234,6 +234,36 @@
       }
     },
     {
+      "id": "resume_stand",
+      "kind": "occluder",
+      "file": "resume_stand.webp",
+      "x": 1956,
+      "y": 1011,
+      "w": 144,
+      "h": 206,
+      "cell": {
+        "x": 10,
+        "y": 4,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
+      "id": "item_folder",
+      "kind": "item",
+      "file": "item_folder.webp",
+      "x": 1973,
+      "y": 1027,
+      "w": 95,
+      "h": 66,
+      "cell": {
+        "x": 10,
+        "y": 4,
+        "w": 1,
+        "d": 1
+      }
+    },
+    {
       "id": "door_projects",
       "kind": "door_free",
       "file": "door_projects.webp",
@@ -249,9 +279,9 @@
       }
     },
     {
-      "id": "obj13_coat_rack",
+      "id": "obj15_coat_rack",
       "kind": "occluder",
-      "file": "obj13_coat_rack.webp",
+      "file": "obj15_coat_rack.webp",
       "x": 242,
       "y": 849,
       "w": 105,
@@ -264,9 +294,9 @@
       }
     },
     {
-      "id": "obj14_plant_big",
+      "id": "obj16_plant_big",
       "kind": "occluder",
-      "file": "obj14_plant_big.webp",
+      "file": "obj16_plant_big.webp",
       "x": 122,
       "y": 874,
       "w": 160,
@@ -279,9 +309,9 @@
       }
     },
     {
-      "id": "obj15_plant_small",
+      "id": "obj17_plant_small",
       "kind": "occluder",
-      "file": "obj15_plant_small.webp",
+      "file": "obj17_plant_small.webp",
       "x": 1499,
       "y": 1587,
       "w": 90,
@@ -294,9 +324,9 @@
       }
     },
     {
-      "id": "obj16_crate_books",
+      "id": "obj18_crate_books",
       "kind": "occluder",
-      "file": "obj16_crate_books.webp",
+      "file": "obj18_crate_books.webp",
       "x": 2049,
       "y": 1297,
       "w": 144,
@@ -309,9 +339,9 @@
       }
     },
     {
-      "id": "obj18_pouf",
+      "id": "obj20_pouf",
       "kind": "occluder",
-      "file": "obj18_pouf.webp",
+      "file": "obj20_pouf.webp",
       "x": 1196,
       "y": 1195,
       "w": 124,
@@ -324,9 +354,9 @@
       }
     },
     {
-      "id": "obj20_books_floor",
+      "id": "obj22_books_floor",
       "kind": "occluder",
-      "file": "obj20_books_floor.webp",
+      "file": "obj22_books_floor.webp",
       "x": 1492,
       "y": 490,
       "w": 114,
@@ -339,9 +369,9 @@
       }
     },
     {
-      "id": "obj21_console_table",
+      "id": "obj23_console_table",
       "kind": "occluder",
-      "file": "obj21_console_table.webp",
+      "file": "obj23_console_table.webp",
       "x": 2058,
       "y": 652,
       "w": 243,
@@ -354,9 +384,9 @@
       }
     },
     {
-      "id": "obj22_armchair",
+      "id": "obj24_armchair",
       "kind": "occluder",
-      "file": "obj22_armchair.webp",
+      "file": "obj24_armchair.webp",
       "x": 1365,
       "y": 1437,
       "w": 170,
@@ -369,9 +399,9 @@
       }
     },
     {
-      "id": "obj23_floor_lamp",
+      "id": "obj25_floor_lamp",
       "kind": "occluder",
-      "file": "obj23_floor_lamp.webp",
+      "file": "obj25_floor_lamp.webp",
       "x": 1584,
       "y": 1325,
       "w": 116,
@@ -384,9 +414,9 @@
       }
     },
     {
-      "id": "obj24_books_floor",
+      "id": "obj26_books_floor",
       "kind": "occluder",
-      "file": "obj24_books_floor.webp",
+      "file": "obj26_books_floor.webp",
       "x": 1396,
       "y": 1598,
       "w": 113,

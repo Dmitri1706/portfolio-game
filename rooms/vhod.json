@@ -42,8 +42,6 @@
       "interact": { "id": "computer", "approach": { "x": 6, "y": 2 }, "face": "ne", "seat": { "x": 6, "y": 1 } } },
     { "type": "plant_small", "x": 8, "y": 0 },
     { "type": "filing_cabinet", "x": 10, "y": 0, "face": "sw" },
-    { "type": "item_folder", "id": "item_folder", "x": 10, "y": 0, "z": 0.98, "walkable": true,
-      "interact": { "id": "resume", "approach": { "x": 10, "y": 1 }, "face": "ne" } },
     { "type": "water_cooler", "x": 12, "y": 0, "face": "sw" },
     { "type": "server_rack", "x": 14, "y": 0, "face": "sw", "blink": true },
     { "type": "server_rack", "x": 15, "y": 0, "face": "sw", "blink": true },

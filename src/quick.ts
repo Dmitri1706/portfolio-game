@@ -6,6 +6,7 @@
 import './ui/fonts.css';
 import './ui/ui.css';
 import './quick.css';
+import './ui/theme.css';
 import { ABOUT, CASES, RESUME, SETTINGS, asset, md, mdPages } from './content';
 import { el, makeButton, type ModalButton } from './ui/modal';
 import { contactsBlock } from './ui/contacts';
