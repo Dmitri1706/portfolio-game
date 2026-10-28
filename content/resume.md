@@ -10,7 +10,7 @@
 
 **Product Manager | Product Discovery | CRO | Experiments**
 
-Краснодар · [DmitryMelshin17@yandex.com](mailto:DmitryMelshin17@yandex.com) · Telegram: [@Dinoteg](https://t.me/Dinoteg)
+Краснодар · [cedivuter@gmail.com](mailto:cedivuter@gmail.com) · Telegram: [@Dinoteg](https://t.me/Dinoteg)
 
 Полная занятость · Офис / гибрид / удалённо
 
@@ -55,7 +55,7 @@
 
 ## Проекты
 
-**Telegram-бот «Дивидендный помощник»** — [@project32212_bot](https://t.me/project32212_bot)
+**Telegram-бот «Дивидендный помощник»**
 
 - Прорабатывал продуктовую концепцию, функциональность и пользовательские сценарии.
 - Анализировал конкурирующие решения и формировал предложения по развитию функциональности.
