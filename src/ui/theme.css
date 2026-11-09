@@ -789,3 +789,42 @@ body.quick {
     transform: rotate(360deg);
   }
 }
+.portal-view__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.portal-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.portal-tabs__tab {
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(109, 255, 154, 0.45);
+  background: rgba(16, 20, 28, 0.6);
+  color: #cdeed8;
+  cursor: pointer;
+}
+.portal-tabs__tab.is-active {
+  background: #6dff9a;
+  border-color: #6dff9a;
+  color: #10261a;
+}
+.case__tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 3px 10px;
+  margin-bottom: 8px;
+  border-radius: 999px;
+  background: #e4f3e9;
+  color: #24603d;
+}

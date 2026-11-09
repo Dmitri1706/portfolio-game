@@ -9,48 +9,37 @@
   "bg": "#000000",
   "layers": [
     {
-      "id": "curtain_bot",
+      "id": "curtain_arenda",
       "kind": "wall",
-      "file": "curtain_bot.webp",
-      "x": 791,
-      "y": 367,
-      "w": 257,
-      "h": 483,
+      "file": "curtain_arenda.webp",
+      "x": 725,
+      "y": 335,
+      "w": 388,
+      "h": 515,
       "side": "right",
       "at": 5
-    },
-    {
-      "id": "curtain_moving",
-      "kind": "wall",
-      "file": "curtain_moving.webp",
-      "x": 1109,
-      "y": 532,
-      "w": 190,
-      "h": 462,
-      "side": "right",
-      "at": 8
-    },
-    {
-      "id": "curtain_bpmn",
-      "kind": "wall",
-      "file": "curtain_bpmn.webp",
-      "x": 1358,
-      "y": 651,
-      "w": 273,
-      "h": 487,
-      "side": "right",
-      "at": 11
     },
     {
       "id": "curtain_hscc",
       "kind": "wall",
       "file": "curtain_hscc.webp",
-      "x": 1638,
-      "y": 791,
-      "w": 290,
-      "h": 491,
+      "x": 1205,
+      "y": 589,
+      "w": 190,
+      "h": 453,
       "side": "right",
-      "at": 14
+      "at": 9
+    },
+    {
+      "id": "curtain_widgets",
+      "kind": "wall",
+      "file": "curtain_widgets.webp",
+      "x": 1589,
+      "y": 772,
+      "w": 190,
+      "h": 462,
+      "side": "right",
+      "at": 13
     },
     {
       "id": "stairs",

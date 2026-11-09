@@ -54,14 +54,6 @@ const items: { tag: string; text: string; links: ModalButton[] }[] = [
   },
   { tag: 'В ХОД', text: CASES.event, links: [] },
   { tag: 'Спортмастер', text: CASES.sportmaster, links: [] },
-  ...PROJECTS.map((p) => ({
-    tag: 'Проекты',
-    text: p.text,
-    links: [
-      ...(p.pdf ? [{ label: 'Материалы (PDF) ↗', href: asset(p.pdf) }] : []),
-      ...p.links.map((l) => ({ label: l.label, href: l.url })),
-    ],
-  })),
 ];
 for (const it of items) {
   const card = el('article', 'q-card pixel-box');
@@ -75,6 +67,30 @@ for (const it of items) {
   cases.appendChild(card);
 }
 section('Кейсы', cases);
+
+// ---------- Проекты (подвал): тег, заголовок, строка-итог, кнопка с материалами ----------
+const projects = el('div', 'q-cases');
+for (const p of PROJECTS) {
+  const card = el('article', 'q-card pixel-box');
+  card.appendChild(el('span', 'q-tag', p.tag));
+  // из текста проекта берём только заголовок и жирную строку-итог
+  const full = document.createElement('div');
+  full.innerHTML = md(p.text);
+  const short = el('div', 'q-text');
+  short.append(...[full.querySelector('h1'), full.querySelector('h1 + p')].filter((x): x is Element => !!x));
+  card.appendChild(short);
+  const files = p.materials.filter((m) => m.pdf || m.image);
+  const links = el('div', 'q-links');
+  files.forEach((m) =>
+    links.appendChild(
+      linkBtn({ label: files.length > 1 ? `Открыть материалы: ${m.label} ↗` : 'Открыть материалы ↗', href: asset(m.pdf || m.image || ''), ghost: true }),
+    ),
+  );
+  p.links.forEach((l) => links.appendChild(linkBtn({ label: l.label, href: l.url, ghost: true })));
+  if (links.childElementCount) card.appendChild(links);
+  projects.appendChild(card);
+}
+section('Проекты', projects);
 
 // ---------- Резюме ----------
 const resume = el('div', 'q-resume pixel-box');

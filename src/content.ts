@@ -51,14 +51,23 @@ export const CASES = {
 
 export const RESUME = resumeMd;
 
+/** Материал проекта: PDF (листается) или картинка (по клику — на весь экран). Пустой путь — заглушка. */
+export interface ProjectMaterial {
+  label: string;
+  pdf?: string;
+  image?: string;
+  caption?: string;
+}
+
 /** Проект в подвале «Проекты»: текст — content/projects/<id>.md, материалы — settings.json → projects */
 export interface Project {
   id: string;
   title: string;
   /** Подпись над стрелкой у шторки */
   label: string;
-  photos: { src: string; caption: string }[];
-  pdf: string;
+  /** Маленький ярлык над заголовком */
+  tag: string;
+  materials: ProjectMaterial[];
   links: { label: string; url: string }[];
   text: string;
 }
@@ -70,11 +79,9 @@ const PROJECT_TEXTS = import.meta.glob('../content/projects/*.md', { query: '?ra
 
 export const PROJECTS: Project[] = (settings.projects as Omit<Project, 'text'>[]).map((p) => ({
   ...p,
-  photos: (p.photos ?? []).filter((x) => x.src),
+  materials: p.materials ?? [],
   links: (p.links ?? []).filter((x) => x.url),
-  text: PROJECT_TEXTS[`../content/projects/${p.id}.md`] ?? `# ${p.title}
-
-Описание скоро появится.`,
+  text: PROJECT_TEXTS[`../content/projects/${p.id}.md`] ?? `# ${p.title}\n\nОписание скоро появится.`,
 }));
 
 /** Путь из settings.json → адрес файла на сайте (учитывает подпапку на GitHub Pages). */

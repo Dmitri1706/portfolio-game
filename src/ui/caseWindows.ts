@@ -1,4 +1,4 @@
-import { CASES, RESUME, SETTINGS, asset, md, mdPages, type Project } from '../content';
+import { CASES, RESUME, SETTINGS, asset, md, mdPages, type Project, type ProjectMaterial } from '../content';
 import { el, makeButton, openModal, type ModalButton } from './modal';
 import { PdfViewer, onSwipe } from './pdfViewer';
 import { videoEmbedUrl } from './video';
@@ -301,45 +301,76 @@ function gallery(photos: Photo[]): { view: HTMLElement; go: (d: number) => void 
 
 // ================= Подвал «Проекты»: окно за шторкой =================
 
-/** Слева — картинки (галерея) или PDF, справа — текст проекта. Ссылки — кнопками под контентом. */
+/**
+ * Слева — материалы: PDF (листается) или картинка; если материалов несколько — сверху вкладки.
+ * Справа — тег и текст проекта. Ссылки — кнопками под контентом.
+ */
 export function openProjectWindow(p: Project, onClose: () => void): void {
   const tools: ModalButton[] = p.links.map((l) => ({ label: l.label, href: l.url }));
-  const side = md(p.text);
-  if (p.photos.length) {
-    const g = gallery(p.photos);
-    openCaseWindow({ frame: 'portal', title: p.title, content: g.view, side, tools, onClose, onArrow: g.go });
-    return;
-  }
-  if (p.pdf) {
-    const wrap = el('div', 'portal-view');
-    const screen = el('div', 'frame__screen portal-view__screen');
-    const viewer = new PdfViewer(screen, asset(p.pdf), (n, t) => nav.set(n, t));
-    const nav = pager(
-      () => viewer.prev(),
-      () => viewer.next(),
-    );
-    onSwipe(screen, () => viewer.next(), () => viewer.prev());
-    wrap.append(screen, nav.el);
-    openCaseWindow({
-      frame: 'portal',
-      title: p.title,
-      content: wrap,
-      side,
-      tools,
-      onClose: () => {
-        viewer.destroy();
-        onClose();
-      },
-      onArrow: (d) => (d > 0 ? viewer.next() : viewer.prev()),
+  const side = (p.tag ? `<div class="case__tag">${p.tag}</div>` : '') + md(p.text);
+  const wrap = el('div', 'portal-view');
+  const body = el('div', 'portal-view__body');
+  // листание текущего материала (стрелки ← →) и его уборка при переключении вкладки
+  let arrow: ((d: number) => void) | undefined;
+  let cleanup: (() => void) | undefined;
+
+  const show = (m: ProjectMaterial) => {
+    cleanup?.();
+    cleanup = arrow = undefined;
+    body.replaceChildren();
+    if (m.pdf) {
+      const screen = el('div', 'frame__screen portal-view__screen');
+      const viewer = new PdfViewer(screen, asset(m.pdf), (n, t) => nav.set(n, t));
+      const nav = pager(
+        () => viewer.prev(),
+        () => viewer.next(),
+      );
+      onSwipe(screen, () => viewer.next(), () => viewer.prev());
+      body.append(screen, nav.el);
+      viewer.open();
+      arrow = (d) => (d > 0 ? viewer.next() : viewer.prev());
+      cleanup = () => viewer.destroy();
+    } else if (m.image) {
+      const g = gallery([{ src: m.image, caption: m.caption ?? '' }]);
+      body.appendChild(g.view);
+    } else {
+      const empty = el('div', 'portal-empty');
+      empty.innerHTML =
+        '<span class="portal-empty__icon">◎</span><br>Скоро здесь появятся материалы проекта<br><small>Файлы — в content/settings.json → projects → materials</small>';
+      body.appendChild(empty);
+    }
+  };
+
+  if (p.materials.length > 1) {
+    const tabs = el('div', 'portal-tabs');
+    tabs.setAttribute('role', 'tablist');
+    p.materials.forEach((m, i) => {
+      const t = el('button', 'portal-tabs__tab', m.label);
+      t.type = 'button';
+      t.setAttribute('role', 'tab');
+      t.addEventListener('click', () => {
+        tabs.querySelectorAll('.portal-tabs__tab').forEach((x) => x.classList.toggle('is-active', x === t));
+        show(m);
+      });
+      if (i === 0) t.classList.add('is-active');
+      tabs.appendChild(t);
     });
-    viewer.open();
-    return;
+    wrap.appendChild(tabs);
   }
-  const empty = el('div', 'portal-empty');
-  empty.innerHTML = p.links.length
-    ? '<span class="portal-empty__icon">◎</span><br>Материалы проекта — по кнопкам ниже'
-    : '<span class="portal-empty__icon">◎</span><br>Скоро здесь появятся картинки или презентация<br><small>Материалы — в content/settings.json → projects</small>';
-  openCaseWindow({ frame: 'portal', title: p.title, content: empty, side, tools, onClose });
+  wrap.appendChild(body);
+  show(p.materials[0] ?? { label: '' });
+  openCaseWindow({
+    frame: 'portal',
+    title: p.title,
+    content: wrap,
+    side,
+    tools,
+    onClose: () => {
+      cleanup?.();
+      onClose();
+    },
+    onArrow: (d) => arrow?.(d),
+  });
 }
 
 // ================= Спортмастер: доска «Лучший продавец» =================

@@ -6,24 +6,22 @@
   "wallHeight": 3.6,
   "theme": { "floor": "basement", "walls": "basement" },
   "spawn": { "x": 3, "y": 1 },
-  "walkMaxX": 15,
-  "fade": { "from": 15.2, "to": 21 },
+  "walkMaxX": 14,
+  "fade": { "from": 14.6, "to": 21 },
   "walls": {
     "left": [
       { "type": "stair_arch", "at": 1, "width": 2.4 }
     ],
     "right": [
-      { "type": "portal_lamp", "at": 3.5 },
-      { "type": "curtain", "id": "curtain_bot", "at": 5, "sign": "Бот-помощник", "color": "#8c2f3f" },
-      { "type": "portal_lamp", "at": 6.5 },
-      { "type": "curtain", "id": "curtain_moving", "at": 8, "sign": "Переезд", "color": "#2f5f8c" },
-      { "type": "portal_lamp", "at": 9.5 },
-      { "type": "curtain", "id": "curtain_bpmn", "at": 11, "sign": "BPMN-процессы", "color": "#6a3f8c" },
-      { "type": "portal_lamp", "at": 12.5 },
-      { "type": "curtain", "id": "curtain_hscc", "at": 14, "sign": "Кейс-чемпионат", "color": "#2f7a63" },
-      { "type": "portal_lamp", "at": 15.5 },
+      { "type": "portal_lamp", "at": 3 },
+      { "type": "curtain", "id": "curtain_arenda", "at": 5, "sign": "Аренда спортобъектов", "color": "#2f5f8c" },
+      { "type": "portal_lamp", "at": 7 },
+      { "type": "curtain", "id": "curtain_hscc", "at": 9, "sign": "HSCC", "color": "#6a3f8c" },
+      { "type": "portal_lamp", "at": 11 },
+      { "type": "curtain", "id": "curtain_widgets", "at": 13, "sign": "Виджеты", "color": "#8c2f3f" },
+      { "type": "portal_lamp", "at": 15 },
       { "type": "curtain", "at": 17, "sign": "Скоро…", "color": "#4a4f5c" },
-      { "type": "portal_lamp", "at": 18.5 },
+      { "type": "portal_lamp", "at": 18.7 },
       { "type": "curtain", "at": 20, "color": "#3a3f4a" }
     ]
   },

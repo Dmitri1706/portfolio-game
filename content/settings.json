@@ -22,14 +22,33 @@
     ]
   },
   "projects": [
-    { "id": "bot", "title": "Telegram-бот «Дивидендный помощник»", "label": "Бот-помощник", "photos": [], "pdf": "", "links": [] },
-    { "id": "moving", "title": "«Переезд без стресса»", "label": "Переезд", "photos": [], "pdf": "", "links": [] },
-    { "id": "bpmn", "title": "Моделирование бизнес-процессов", "label": "BPMN-процессы", "photos": [], "pdf": "", "links": [] },
-    { "id": "hscc", "title": "Кейс-чемпионат «Газпром нефти»", "label": "Кейс-чемпионат", "photos": [], "pdf": "",
-      "links": [
-        { "label": "Макет платформы ↗", "url": "https://disk.yandex.ru/i/JeKNAufS4_VWpw" },
-        { "label": "Презентация ↗", "url": "https://disk.yandex.ru/i/zcGPr2z8PRNHkQ" }
-      ] }
+    {
+      "id": "arenda",
+      "title": "Аренда спортивных объектов",
+      "label": "Аренда спортобъектов",
+      "tag": "Командный проект · консалтинг · бизнес-анализ",
+      "materials": [{ "label": "Процесс аренды", "pdf": "materials/projects/arenda-process.pdf" }],
+      "links": []
+    },
+    {
+      "id": "hscc",
+      "title": "Кейс-чемпионат HSCC: корпоративная AI-платформа",
+      "label": "HSCC",
+      "tag": "Командный проект · кейс-чемпионат · финалист",
+      "materials": [
+        { "label": "Решение", "pdf": "materials/projects/hscc-solution.pdf" },
+        { "label": "Экраны платформы", "pdf": "materials/projects/hscc-ui.pdf" }
+      ],
+      "links": []
+    },
+    {
+      "id": "widgets",
+      "title": "Виджеты рабочего стола",
+      "label": "Виджеты",
+      "tag": "Пет-проект · Rainmeter + Claude",
+      "materials": [{ "label": "Рабочий стол", "image": "", "caption": "Виджеты на рабочем столе" }],
+      "links": []
+    }
   ],
   "resume": {
     "pdf": "materials/resume.pdf"
