@@ -49,7 +49,7 @@ export class ProjectsScene extends RoomScene {
         label: p.label,
         approach: w.approach,
         face: w.face,
-        onUse: () => this.peekIn(w.sprite, w.approach, p),
+        onUse: () => this.peekIn(w.sprite, w.approach, w.at, p),
       });
     }
 
@@ -130,11 +130,11 @@ export class ProjectsScene extends RoomScene {
   }
 
   /** Заглянуть за шторку: персонаж наклоняется к ней, голова скрывается за тканью, открывается окно проекта. */
-  private async peekIn(curtain: Phaser.GameObjects.Image, spot: Cell, project: Project): Promise<void> {
+  private async peekIn(curtain: Phaser.GameObjects.Image, spot: Cell, at: number, project: Project): Promise<void> {
     this.busy = true;
     const p = this.player;
     p.face('ne');
-    await p.slideTo(spot.x, spot.y - 0.32, 260);
+    await p.slideTo(at, spot.y - 0.32, 260);
     sfx('pickup');
     // копия шторки поверх персонажа — только выше плеч: голова «уходит» за ткань
     const k = curtain.scaleX;

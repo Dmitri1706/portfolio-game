@@ -828,3 +828,14 @@ body.quick {
   background: #e4f3e9;
   color: #24603d;
 }
+/* скриншоты телефона — в рамке телефона */
+.gallery--phone .gallery__pic {
+  align-self: center;
+  height: 100%;
+  aspect-ratio: 9 / 19;
+  max-width: 100%;
+  border: 8px solid #0d0f14;
+  border-radius: 28px;
+  box-shadow: 0 0 0 2px #3a4150, 0 10px 24px rgba(0, 0, 0, 0.4);
+  background: #0d0f14;
+}

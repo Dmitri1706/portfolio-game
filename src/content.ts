@@ -51,12 +51,17 @@ export const CASES = {
 
 export const RESUME = resumeMd;
 
-/** Материал проекта: PDF (листается) или картинка (по клику — на весь экран). Пустой путь — заглушка. */
+/**
+ * Материал проекта: PDF (листается), картинка или несколько картинок (галерея; по клику — на весь экран).
+ * phone: true — скриншоты телефона, показываются в рамке телефона. Пустой путь — заглушка.
+ */
 export interface ProjectMaterial {
   label: string;
   pdf?: string;
   image?: string;
+  images?: string[];
   caption?: string;
+  phone?: boolean;
 }
 
 /** Проект в подвале «Проекты»: текст — content/projects/<id>.md, материалы — settings.json → projects */
@@ -70,6 +75,9 @@ export interface Project {
   materials: ProjectMaterial[];
   links: { label: string; url: string }[];
   text: string;
+  /** Ссылка на бота: кнопка показывается, только если tgbotLinkEnabled = true */
+  botUrl?: string;
+  tgbotLinkEnabled?: boolean;
 }
 
 const PROJECT_TEXTS = import.meta.glob('../content/projects/*.md', { query: '?raw', import: 'default', eager: true }) as Record<
@@ -80,7 +88,10 @@ const PROJECT_TEXTS = import.meta.glob('../content/projects/*.md', { query: '?ra
 export const PROJECTS: Project[] = (settings.projects as Omit<Project, 'text'>[]).map((p) => ({
   ...p,
   materials: p.materials ?? [],
-  links: (p.links ?? []).filter((x) => x.url),
+  links: [
+    ...(p.links ?? []).filter((x) => x.url),
+    ...(p.botUrl && p.tgbotLinkEnabled ? [{ label: 'Открыть бота в Telegram ↗', url: p.botUrl }] : []),
+  ],
   text: PROJECT_TEXTS[`../content/projects/${p.id}.md`] ?? `# ${p.title}\n\nОписание скоро появится.`,
 }));
 

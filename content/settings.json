@@ -42,11 +42,23 @@
       "links": []
     },
     {
+      "id": "tgbot",
+      "title": "Telegram-бот «Дивидендный помощник»",
+      "label": "Telegram-бот",
+      "tag": "Учебный проект · продукт · MVP",
+      "materials": [
+        { "label": "Бот", "phone": true, "images": [] }
+      ],
+      "links": [],
+      "botUrl": "https://t.me/project32212_bot",
+      "tgbotLinkEnabled": false
+    },
+    {
       "id": "widgets",
       "title": "Виджеты рабочего стола",
       "label": "Виджеты",
       "tag": "Пет-проект · Rainmeter + Claude",
-      "materials": [{ "label": "Рабочий стол", "image": "", "caption": "Виджеты на рабочем столе" }],
+      "materials": [{ "label": "Рабочий стол", "image": "materials/projects/widgets-desktop.webp", "caption": "Виджеты на рабочем столе" }],
       "links": []
     }
   ],

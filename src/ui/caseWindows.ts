@@ -330,13 +330,17 @@ export function openProjectWindow(p: Project, onClose: () => void): void {
       viewer.open();
       arrow = (d) => (d > 0 ? viewer.next() : viewer.prev());
       cleanup = () => viewer.destroy();
-    } else if (m.image) {
-      const g = gallery([{ src: m.image, caption: m.caption ?? '' }]);
+    } else if (m.image || m.images?.some(Boolean)) {
+      const srcs = m.images?.filter(Boolean) ?? [m.image ?? ''];
+      const g = gallery(srcs.map((src) => ({ src, caption: m.caption ?? '' })));
+      if (m.phone) g.view.classList.add('gallery--phone');
       body.appendChild(g.view);
+      arrow = g.go;
     } else {
       const empty = el('div', 'portal-empty');
-      empty.innerHTML =
-        '<span class="portal-empty__icon">◎</span><br>Скоро здесь появятся материалы проекта<br><small>Файлы — в content/settings.json → projects → materials</small>';
+      empty.innerHTML = `<span class="portal-empty__icon">◎</span><br>${
+        m.phone ? 'Скоро здесь появятся скриншоты' : 'Скоро здесь появятся материалы проекта'
+      }<br><small>Файлы — в content/settings.json → projects → materials</small>`;
       body.appendChild(empty);
     }
   };

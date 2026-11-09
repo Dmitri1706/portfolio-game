@@ -95,6 +95,8 @@ export interface DioramaDoor {
 /** Интерактивный предмет на стене (например, доска «Лучший продавец») */
 export interface DioramaWallItem {
   sprite: Phaser.GameObjects.Image;
+  /** Где на стене (в клетках вдоль стены) */
+  at: number;
   approach: Cell;
   face: Dir;
 }
@@ -148,7 +150,7 @@ export function buildDiorama(scene: Phaser.Scene, def: RoomDef, layout: Layout):
         .setOrigin(0, 0)
         .setScale(k)
         .setDepth(DEPTH.wall + 50);
-      walls.set(l.id, { sprite, ...wallSpot(l.side, l.at ?? 0) });
+      walls.set(l.id, { sprite, at: l.at ?? 0, ...wallSpot(l.side, l.at ?? 0) });
       continue;
     }
     if (l.kind === 'door' && l.closed && l.open) {

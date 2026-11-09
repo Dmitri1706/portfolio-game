@@ -79,11 +79,11 @@ for (const p of PROJECTS) {
   const short = el('div', 'q-text');
   short.append(...[full.querySelector('h1'), full.querySelector('h1 + p')].filter((x): x is Element => !!x));
   card.appendChild(short);
-  const files = p.materials.filter((m) => m.pdf || m.image);
+  const files = p.materials.filter((m) => m.pdf || m.image || m.images?.some(Boolean));
   const links = el('div', 'q-links');
   files.forEach((m) =>
     links.appendChild(
-      linkBtn({ label: files.length > 1 ? `Открыть материалы: ${m.label} ↗` : 'Открыть материалы ↗', href: asset(m.pdf || m.image || ''), ghost: true }),
+      linkBtn({ label: files.length > 1 ? `Открыть материалы: ${m.label} ↗` : 'Открыть материалы ↗', href: asset(m.pdf || m.image || m.images?.find(Boolean) || ''), ghost: true }),
     ),
   );
   p.links.forEach((l) => links.appendChild(linkBtn({ label: l.label, href: l.url, ghost: true })));

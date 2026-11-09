@@ -1,13 +1,13 @@
 {
   "id": "projects",
   "about": "Подвал «Проекты» — длинный коридор со шторками. За каждой шторкой — проект (тексты — content/projects/, материалы — settings.json → projects). Дальний конец коридора растворяется в темноте (fade): туда будут добавляться новые проекты. Ходить можно до клетки walkMaxX.",
-  "cols": 22,
+  "cols": 23,
   "rows": 3,
   "wallHeight": 3.6,
   "theme": { "floor": "basement", "walls": "basement" },
   "spawn": { "x": 3, "y": 1 },
-  "walkMaxX": 14,
-  "fade": { "from": 14.6, "to": 21 },
+  "walkMaxX": 15,
+  "fade": { "from": 15.6, "to": 21.6 },
   "walls": {
     "left": [
       { "type": "stair_arch", "at": 1, "width": 2.4 }
@@ -16,13 +16,15 @@
       { "type": "portal_lamp", "at": 3 },
       { "type": "curtain", "id": "curtain_arenda", "at": 5, "sign": "Аренда спортобъектов", "color": "#2f5f8c" },
       { "type": "portal_lamp", "at": 7 },
-      { "type": "curtain", "id": "curtain_hscc", "at": 9, "sign": "HSCC", "color": "#6a3f8c" },
-      { "type": "portal_lamp", "at": 11 },
-      { "type": "curtain", "id": "curtain_widgets", "at": 13, "sign": "Виджеты", "color": "#8c2f3f" },
-      { "type": "portal_lamp", "at": 15 },
-      { "type": "curtain", "at": 17, "sign": "Скоро…", "color": "#4a4f5c" },
-      { "type": "portal_lamp", "at": 18.7 },
-      { "type": "curtain", "at": 20, "color": "#3a3f4a" }
+      { "type": "curtain", "id": "curtain_hscc", "at": 8.5, "sign": "HSCC", "color": "#6a3f8c" },
+      { "type": "portal_lamp", "at": 10 },
+      { "type": "curtain", "id": "curtain_tgbot", "at": 11.5, "sign": "Telegram-бот", "color": "#2f7a8c" },
+      { "type": "portal_lamp", "at": 13 },
+      { "type": "curtain", "id": "curtain_widgets", "at": 14.5, "sign": "Виджеты", "color": "#8c2f3f" },
+      { "type": "portal_lamp", "at": 16 },
+      { "type": "curtain", "at": 17.5, "sign": "Скоро…", "color": "#4a4f5c" },
+      { "type": "portal_lamp", "at": 19 },
+      { "type": "curtain", "at": 20.5, "color": "#3a3f4a" }
     ]
   },
   "objects": [
