@@ -7,7 +7,7 @@ import './ui/fonts.css';
 import './ui/ui.css';
 import './quick.css';
 import './ui/theme.css';
-import { ABOUT, CASES, RESUME, SETTINGS, asset, md, mdPages } from './content';
+import { ABOUT, CASES, PROJECTS, RESUME, SETTINGS, asset, md, mdPages } from './content';
 import { el, makeButton, type ModalButton } from './ui/modal';
 import { contactsBlock } from './ui/contacts';
 import { videoEmbedUrl } from './ui/video';
@@ -54,6 +54,14 @@ const items: { tag: string; text: string; links: ModalButton[] }[] = [
   },
   { tag: 'В ХОД', text: CASES.event, links: [] },
   { tag: 'Спортмастер', text: CASES.sportmaster, links: [] },
+  ...PROJECTS.map((p) => ({
+    tag: 'Проекты',
+    text: p.text,
+    links: [
+      ...(p.pdf ? [{ label: 'Материалы (PDF) ↗', href: asset(p.pdf) }] : []),
+      ...p.links.map((l) => ({ label: l.label, href: l.url })),
+    ],
+  })),
 ];
 for (const it of items) {
   const card = el('article', 'q-card pixel-box');

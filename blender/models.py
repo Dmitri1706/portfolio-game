@@ -373,27 +373,37 @@ def door_wall(m, p, spec, rng):
 
 
 def door_free(m, p, W, D, spec, rng):
-    """Отдельно стоящая заколоченная дверь «Проекты» (рама на полу, табличка сверху)."""
+    """Отдельно стоящая дверь «Проекты» (рама на полу, табличка сверху). За полотном — проём со ступенями вниз,
+    из глубины пробивается зелёный свет подвала. Полотно — на петле слева (возвращается для открытого состояния)."""
     wd, ht = 1.25, 2.3
     frame = m['dark_wood']
+    b = basement_mats()
     box('post_l', (0.14, 0.2, ht + 0.12), (-wd / 2 - 0.07, 0, (ht + 0.12) / 2), frame, p)
     box('post_r', (0.14, 0.2, ht + 0.12), (wd / 2 + 0.07, 0, (ht + 0.12) / 2), frame, p)
     box('lintel', (wd + 0.4, 0.22, 0.14), (0, 0, ht + 0.07), frame, p)
     for sx in (-1, 1):
         box('foot', (0.3, 0.6, 0.08), (sx * (wd / 2 + 0.07), 0, 0.04), frame, p)
-    box('leaf', (wd, 0.06, ht), (0, 0, ht / 2), m['fabric_cream'], p)
-    planks = mat('planks', hex_rgb('#9a7048'), rough=0.85)
-    for a, z in ((R(30), 1.45), (R(-26), 0.75)):
-        box('plank', (wd + 0.3, 0.05, 0.17), (0, -0.06, z), planks, p, rot=(0, a, 0))
-    box('plank_h', (wd + 0.3, 0.05, 0.15), (0, -0.06, 1.95), planks, p)
+    # проём: тёмная глубина, светящиеся кромки ступеней уходят вниз, снизу — зелёный отсвет
+    box('portal_void', (wd, 0.03, ht), (0, 0.07, ht / 2), b['void'], p, bevel=0)
+    for i in range(5):
+        z = 0.55 - i * 0.12
+        if z < 0.04:
+            break
+        box('portal_step', (wd - 0.16 - i * 0.08, 0.01, 0.02), (0, 0.05, z), mat(f'portal_step{i}', hex_rgb('#9df5bb'),
+            emit=PORTAL, emit_strength=1.6 - i * 0.3), p, bevel=0)
+    box('portal_glow', (wd - 0.1, 0.01, 0.35), (0, 0.055, 0.2),
+        mat('portal_glow', hex_rgb('#103a22'), emit=PORTAL, emit_strength=0.35), p, bevel=0)
+    hinge = empty(f"{spec.get('id', 'door_free')}_leaf", (-wd / 2, -0.01, 0), 0, p)
+    box('leaf', (wd, 0.06, ht), (wd / 2, 0, ht / 2), m['mid_wood'], hinge)
+    for i in range(4):
+        box('panel', (wd / 2 - 0.14, 0.02, ht / 2 - 0.25), (wd / 4 + (i % 2) * wd / 2, -0.035, ht / 4 + (i // 2) * ht / 2),
+            m['dark_wood'], hinge)
+    cyl('knob', 0.045, 0.06, (wd - 0.12, -0.03, 1.05), m['brass'], hinge, verts=12, rot=(R(90), 0, 0))
     box('sign', (2.1, 0.06, 0.62), (0, -0.04, ht + 0.54), m['paper'], p, bevel=0.01)
     for sx in (-1, 1):
         box('sign_post', (0.04, 0.04, 0.24), (sx * 0.7, 0, ht + 0.22), m['dark_wood'], p, bevel=0)
     text('plaque_text', spec.get('plaque', ''), 0.44, (0, -0.075, ht + 0.54), m['ink'], p, font=FONT_SIGN, extrude=0.002)
-    # ведро с краской и стремянка — «тут кипит работа»
-    cyl('bucket', 0.13, 0.25, (wd / 2 + 0.4, -0.25, 0), mat('bucket', hex_rgb('#3a6fb0'), rough=0.5), p, verts=14,
-        r_top=0.15)
-    box('brush', (0.04, 0.3, 0.02), (wd / 2 + 0.4, -0.25, 0.27), m['mid_wood'], p, bevel=0, rot=(R(20), 0, R(30)))
+    return hinge
 
 
 # ================================================================ на стенах
@@ -1039,3 +1049,103 @@ WALL = {'window': lambda m, p, s, r: (office_window if s.get('style') == 'office
         'stage_screen': stage_screen, 'neon_logo': neon_logo, 'growth_chart': growth_chart, 'sticky_board': sticky_board,
         'wall_shelf': wall_shelf, 'sport_banner': sport_banner, 'board_best': board_best, 'sport_poster': sport_poster,
         'mirror': mirror}
+
+
+# ================================================================ подвал «Проекты»
+
+PORTAL = (0.35, 1.0, 0.55)  # «портальный» зелёный свет
+
+
+def basement_mats():
+    return {
+        'wall': mat('bs_wall', hex_rgb('#4a5366'), rough=0.9),
+        'panel': mat('bs_panel', hex_rgb('#262b36'), rough=0.7),
+        'trim': mat('bs_trim', hex_rgb('#1a1e27'), rough=0.5, metal=0.3),
+        'neon': mat('bs_neon', hex_rgb('#6dff9a'), emit=PORTAL, emit_strength=5),
+        'neon_dim': mat('bs_neon_dim', hex_rgb('#3bb86a'), emit=PORTAL, emit_strength=1.2),
+        'pipe': mat('bs_pipe', hex_rgb('#59606e'), rough=0.35, metal=0.8),
+        'step': mat('bs_step', hex_rgb('#4b5263'), rough=0.8),
+        'step_edge': mat('bs_step_edge', hex_rgb('#c8f5d6'), emit=PORTAL, emit_strength=1.5),
+        'void': mat('bs_void', (0.004, 0.006, 0.006), rough=1.0),
+        'sign': mat('bs_sign', hex_rgb('#e9f2ec'), rough=0.5, emit=(0.85, 1.0, 0.9), emit_strength=0.35),
+        'sign_text': mat('bs_sign_text', hex_rgb('#14201a'), rough=0.6),
+    }
+
+
+def stairs(m, p, W, D, rng):
+    """Лестница вниз в подвал: верх у левой стены (−X), низ — в коридоре (+X). Кромки ступеней светятся."""
+    b = basement_mats()
+    n, rise = 8, 1.5
+    run = W / n
+    for i in range(n):
+        # ступень i (0 — верхняя): блок от стены до своей кромки, от пола до верха — лестница сплошная
+        top = rise * (n - i) / n
+        x1 = -W / 2 + (i + 1) * run
+        box(f'step{i}', (x1 + W / 2, D - 0.06, top), ((x1 - W / 2) / 2, 0, top / 2), b['step'], p, bevel=0.01)
+        box(f'step_edge{i}', (0.035, D - 0.1, 0.02), (x1 - 0.03, 0, top + 0.005), b['step_edge'], p, bevel=0)
+    # перила вдоль дальней стороны (у стены коридора)
+    for i in range(4):
+        x = -W / 2 + 0.3 + i * (W - 0.6) / 3
+        top = rise * (W / 2 - x) / W
+        cyl('rail_post', 0.025, 0.9, (x, D / 2 - 0.08, top), b['pipe'], p, verts=8)
+    ang = math.atan2(rise, W)
+    L = math.hypot(W - 0.6, rise * (W - 0.6) / W)
+    box('rail', (L, 0.05, 0.05), (0, D / 2 - 0.08, rise / 2 + 0.9), b['pipe'], p, bevel=0.01, rot=(0, ang, 0))
+
+
+def stair_arch(m, p, spec, rng):
+    """Тёмный проём над верхней ступенью: оттуда спускается персонаж (сверху — тёплый свет холла)."""
+    b = basement_mats()
+    w, z0, z1 = spec.get('width', 2.4), 1.5, 3.15
+    box('arch_void', (w, 0.04, z1 - z0), (0, -0.01, (z0 + z1) / 2), b['void'], p, bevel=0)
+    for sx in (-1, 1):
+        box('arch_side', (0.12, 0.14, z1 - z0 + 0.06), (sx * (w / 2 + 0.06), -0.05, (z0 + z1) / 2), b['trim'], p)
+    box('arch_top', (w + 0.36, 0.14, 0.12), (0, -0.05, z1 + 0.06), b['trim'], p)
+    box('arch_neon', (w, 0.02, 0.025), (0, -0.13, z1 - 0.01), b['neon'], p, bevel=0)
+    # отсвет холла в глубине проёма
+    box('arch_glow', (w - 0.3, 0.01, 0.5), (0, -0.035, z1 - 0.35),
+        mat('arch_glow', hex_rgb('#5a3a22'), emit=(1.0, 0.62, 0.32), emit_strength=0.25), p, bevel=0)
+    point_light('arch_light', (0, -0.6, z1 - 0.2), WARM, 30, 0.2, p)
+
+
+CURTAIN_COLORS = ['#8c2f3f', '#2f5f8c', '#6a3f8c', '#2f7a63', '#3a3f4a', '#3a3f4a']
+
+
+def curtain(m, p, spec, rng):
+    """Ниша со шторкой и табличкой — вход в проект. Из-под шторки пробивается зелёный свет."""
+    b = basement_mats()
+    w, h = 1.3, 2.25
+    cloth = mat(f"curtain_{spec.get('color', '#5a2a3a')}", hex_rgb(spec.get('color', '#5a2a3a')), rough=0.95)
+    box('nook', (w + 0.1, 0.03, h + 0.1), (0, -0.005, h / 2 + 0.05), b['void'], p, bevel=0)
+    for sx in (-1, 1):
+        box('nook_side', (0.1, 0.16, h + 0.15), (sx * (w / 2 + 0.1), -0.06, (h + 0.15) / 2), b['trim'], p)
+    box('nook_top', (w + 0.3, 0.16, 0.1), (0, -0.06, h + 0.2), b['trim'], p)
+    # складки: чередуем выступ, чтобы ткань «волной»
+    n = 9
+    for i in range(n):
+        x = -w / 2 + (i + 0.5) * w / n
+        box(f'fold{i}', (w / n + 0.02, 0.07, h - 0.08), (x, -0.07 - 0.03 * (i % 2), h / 2 + 0.03), cloth, p,
+            bevel=0.025)
+    box('rod', (w + 0.2, 0.03, 0.03), (0, -0.1, h + 0.1), b['pipe'], p, bevel=0)
+    box('gap_glow', (w - 0.1, 0.02, 0.025), (0, -0.04, 0.03), b['neon'], p, bevel=0)
+    point_light('gap_light', (0, -0.25, 0.08), PORTAL, 6 if spec.get('id') else 2, 0.15, p)
+    # табличка над нишей
+    sign = spec.get('sign', '')
+    if sign:
+        sw = max(1.1, 0.17 * len(sign) + 0.3)
+        box('plate_frame', (sw + 0.08, 0.04, 0.5), (0, -0.03, h + 0.55), b['neon'], p, bevel=0.015)
+        box('plate', (sw, 0.05, 0.42), (0, -0.045, h + 0.55), b['sign'], p, bevel=0.015)
+        text('plate_text', sign, 0.26, (0, -0.075, h + 0.5), b['sign_text'], p, font=FONT_SIGN, extrude=0.002)
+
+
+def portal_lamp(m, p, spec, rng):
+    """Круглая настенная лампа с зелёным светом."""
+    b = basement_mats()
+    z = 2.0
+    cyl('lamp_ring', 0.17, 0.05, (0, 0, z), b['trim'], p, verts=20, rot=(R(90), 0, 0))
+    cyl('lamp_glass', 0.12, 0.04, (0, -0.03, z), b['neon_dim'], p, verts=20, rot=(R(90), 0, 0))
+    point_light('lamp_light', (0, -0.35, z), PORTAL, 22, 0.12, p)
+
+
+FLOOR['stairs'] = stairs
+WALL.update({'stair_arch': stair_arch, 'curtain': curtain, 'portal_lamp': portal_lamp})

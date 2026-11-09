@@ -21,7 +21,7 @@ sys.path.append(os.path.dirname(__file__))
 import bpy  # noqa: E402
 import lib  # noqa: E402
 import models  # noqa: E402
-from lib import TEX, box, cell, hex_rgb, mat, wood_mat  # noqa: E402
+from lib import TEX, box, cell, cyl, hex_rgb, mat, wood_mat  # noqa: E402
 
 args = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 ROOM_PATH = args[0] if args else 'rooms/lobby.json'
@@ -39,7 +39,7 @@ rng = random.Random(7)
 sc = lib.reset_scene()
 lib.set_quality(sc, QUALITY)
 lib.world_color(sc, hex_rgb(BG_HEX), 1.0)
-sc.view_settings.exposure = 0.35 if room.get('theme', {}).get('walls') != 'office' else 0.0
+sc.view_settings.exposure = {'office': 0.0, 'basement': 0.8}.get(room.get('theme', {}).get('walls'), 0.35)
 m = models.M()
 
 # ================================================================ пол и «срез» диорамы
@@ -54,6 +54,16 @@ if THEME.get('floor') == 'tiles':
     for gy in range(ROWS):
         for gx in range(COLS):
             box('tile', (0.97, 0.97, 0.03), (gx, -gy, -0.015), rng.choice(tiles), floor, bevel=0.006)
+elif THEME.get('floor') == 'basement':
+    # тёмная плитка подвала, вдоль дальней стены — светящаяся полоса
+    tiles = [mat(f'bs_tile{i}', hex_rgb(c), rough=0.6) for i, c in enumerate(['#2c3240', '#293040', '#30364a'])]
+    grout = mat('bs_grout', hex_rgb('#14171f'), rough=0.9)
+    box('grout', (COLS, ROWS, 0.02), ((COLS - 1) / 2, -(ROWS - 1) / 2, -0.012), grout, floor, bevel=0)
+    for gy in range(ROWS):
+        for gx in range(COLS):
+            box('tile', (0.96, 0.96, 0.03), (gx, -gy, -0.015), rng.choice(tiles), floor, bevel=0.008)
+    box('floor_neon', (COLS, 0.04, 0.012), ((COLS - 1) / 2, 0.36, 0.006), models.basement_mats()['neon_dim'], floor,
+        bevel=0)
 else:
     # паркет из досок: тёплый (холл) или светлый (магазин)
     tones = ['#c9a274', '#bf986b', '#d1ab7e', '#b8925f'] if THEME.get('floor') == 'light_planks' else \
@@ -102,6 +112,16 @@ def wall(side):
         box('panel', (L, 0.03, 0.9), (0, -0.015, 0.45), o['navy'], root, bevel=0.005)
         box('neon_line', (L, 0.02, 0.025), (0, -0.035, 0.92), o['neon'], root, bevel=0)
         box('neon_top', (L, 0.02, 0.02), (0, -0.02, WH - 0.12), o['neon2'], root, bevel=0)
+        return root
+    if THEME.get('walls') == 'basement':
+        # подвал: тёмные стены, панель снизу, неоновая линия, трубы под потолком
+        b = models.basement_mats()
+        box('wall_body', (L, t, WH), (0, t / 2, WH / 2), b['wall'], root, bevel=0.01)
+        box('wall_cap', (L + 0.02, t + 0.04, 0.08), (0, t / 2 - 0.02, WH + 0.04), b['trim'], root)
+        box('panel', (L, 0.03, 0.8), (0, -0.015, 0.4), b['panel'], root, bevel=0.005)
+        box('neon_line', (L, 0.02, 0.025), (0, -0.035, 0.82), b['neon_dim'], root, bevel=0)
+        for k, (z, r) in enumerate(((WH - 0.25, 0.07), (WH - 0.45, 0.045))):
+            cyl(f'pipe{k}', r, L, (-L / 2, -0.12 - k * 0.04, z), b['pipe'], root, verts=12, rot=(0, math.radians(90), 0))
         return root
     if THEME.get('walls') == 'shop':
         # магазин: белые стены, синяя панель снизу, красная полоса
@@ -159,8 +179,9 @@ for i, o in enumerate(room['objects']):
     root = lib.empty(o.get('id', f"obj{i}_{o['type']}"), cell(cx, cy, o.get('z', 0.0)), FACE_ROT[face])
     W, D = (d, w) if face in ('se', 'nw') else (w, d)
     obj_roots.append(root)
+    hinge = None
     if o['type'] == 'door_free':
-        models.door_free(m, root, W, D, o, rng)
+        hinge = models.door_free(m, root, W, D, o, rng)
     else:
         fn = models.FLOOR[o['type']]
         # некоторым моделям нужны параметры из описания (например, номер секции полки)
@@ -178,10 +199,13 @@ for i, o in enumerate(room['objects']):
         layers.append({'id': root.name, 'root': backrest[0], 'kind': 'occluder', 'bias': 0.6, **cell_info})
     else:
         kind = 'door_free' if o['type'] == 'door_free' else 'occluder'
-        layers.append({'id': root.name, 'root': root, 'kind': kind, 'blink': o.get('blink', False), **cell_info})
+        layers.append({'id': root.name, 'root': root, 'kind': kind, 'blink': o.get('blink', False), 'hinge': hinge,
+                       **cell_info})
 # ================================================================ общий свет
 
-if THEME.get('walls') == 'office':  # офис светлее и холоднее
+if THEME.get('walls') == 'basement':  # подвал: приглушённый холодный свет, остальное — лампы
+    lib.area_light('fill', (COLS / 2, -ROWS / 2, 7.5), (0, 0, 0), (COLS, ROWS), (0.7, 0.8, 1.0), 900)
+elif THEME.get('walls') == 'office':  # офис светлее и холоднее
     lib.area_light('fill', (COLS / 2, -ROWS / 2, 7.5), (0, 0, 0), (COLS, ROWS), (0.95, 0.95, 1.0), 1100)
 else:
     lib.area_light('fill', (COLS / 2, -ROWS / 2, 7.5), (0, 0, 0), (COLS, ROWS), (1.0, 0.86, 0.7),
@@ -219,9 +243,21 @@ def render_bg():
     lib.render_to(tmp, sc)
     px = lib.load_pixels(tmp)
     px = lib.bloom(px)
+    c = px[2, 2, :3].copy()
+    fade = room.get('fade')
+    if fade:
+        # дальний конец коридора растворяется в темноте (намёк: проекты ещё будут)
+        import numpy as np
+        h, w = px.shape[:2]
+        sx = (np.arange(w) / TEX + minx)[None, :]
+        sy = (maxy - np.arange(h) / TEX)[:, None]  # строки снизу вверх
+        # координата вдоль оси X сетки: для пола — по экранной точке, для правой стены (y = −0.5) — по экранной X
+        g = np.maximum(sx / 96.0 + sy / 48.0, np.broadcast_to(sx / 48.0 - 0.5, (h, w)))
+        k = np.clip((g - fade['from']) / (fade['to'] - fade['from']), 0, 1)[..., None]
+        k = k * k * (3 - 2 * k)
+        px[..., :3] = px[..., :3] * (1 - k) + c * k
     lib.save_pixels(px, os.path.join(OUT, 'bg.webp'), quality=88 if QUALITY == 'final' else 80)
     # настоящий цвет фона после тонировки (угол кадра) — игра заливает им всё вокруг диорамы
-    c = px[2, 2, :3]
     global BG_HEX
     BG_HEX = '#' + ''.join(f'{int(round(v * 255)):02x}' for v in c)
     print(f'[room] фон готов за {time.time() - t:.0f} с')
@@ -254,7 +290,7 @@ if ONLY in ('all', 'layers'):
         meshes = [o for o in objs if o.type in ('MESH', 'FONT')]
         t = time.time()
         entry = {'id': L['id'], 'kind': L['kind']}
-        if L['kind'] == 'door':
+        if L['kind'] in ('door', 'door_free') and L.get('hinge'):
             closed_rect = tex_rect(meshes)
             L['hinge'].rotation_euler[2] = math.radians(-100)
             bpy.context.view_layer.update()
@@ -265,7 +301,11 @@ if ONLY in ('all', 'layers'):
             L['hinge'].rotation_euler[2] = 0
             bpy.context.view_layer.update()
             entry['closed'] = render_layer(f"{L['id']}_closed", meshes, rect)
-            entry.update({'side': L['side'], 'at': L['at']})
+            if L['kind'] == 'door':
+                entry.update({'side': L['side'], 'at': L['at']})
+            else:  # отдельно стоящая дверь — ещё и вырезка с глубиной (закрытое состояние)
+                entry.update(entry['closed'])
+                entry.update({'cell': {'x': L['x'], 'y': L['y'], 'w': L['w'], 'd': L['d']}})
         elif L['kind'] == 'wall':
             entry.update(render_layer(L['id'], meshes, tex_rect(meshes)))
             entry.update({'side': L['side'], 'at': L['at']})

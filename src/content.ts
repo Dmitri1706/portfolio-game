@@ -51,6 +51,32 @@ export const CASES = {
 
 export const RESUME = resumeMd;
 
+/** Проект в подвале «Проекты»: текст — content/projects/<id>.md, материалы — settings.json → projects */
+export interface Project {
+  id: string;
+  title: string;
+  /** Подпись над стрелкой у шторки */
+  label: string;
+  photos: { src: string; caption: string }[];
+  pdf: string;
+  links: { label: string; url: string }[];
+  text: string;
+}
+
+const PROJECT_TEXTS = import.meta.glob('../content/projects/*.md', { query: '?raw', import: 'default', eager: true }) as Record<
+  string,
+  string
+>;
+
+export const PROJECTS: Project[] = (settings.projects as Omit<Project, 'text'>[]).map((p) => ({
+  ...p,
+  photos: (p.photos ?? []).filter((x) => x.src),
+  links: (p.links ?? []).filter((x) => x.url),
+  text: PROJECT_TEXTS[`../content/projects/${p.id}.md`] ?? `# ${p.title}
+
+Описание скоро появится.`,
+}));
+
 /** Путь из settings.json → адрес файла на сайте (учитывает подпапку на GitHub Pages). */
 export function asset(p: string): string {
   if (!p) return '';

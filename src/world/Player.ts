@@ -22,6 +22,8 @@ export class Player {
   /** Высота над полом (пока падает сверху) */
   lift = 0;
   dir: Dir = 'se';
+  /** Сдвиг глубины отрисовки (например, чтобы персонаж был виден в проёме двери) */
+  depthBias = 0;
   /** Несёт предмет перед собой (кроссовок): другие анимации ходьбы и стойки */
   carrying = false;
   private path: Cell[] = [];
@@ -208,7 +210,7 @@ export class Player {
     const k = Math.min(1, this.lift / FALL_HEIGHT);
     this.shadow.setScale(1 - 0.7 * k);
     this.shadow.setAlpha(this.sprite.alpha * (1 - 0.5 * k));
-    this.sprite.setDepth(DEPTH.objects + p.y);
+    this.sprite.setDepth(DEPTH.objects + p.y + this.depthBias);
     this.shadow.setDepth(DEPTH.objects + p.y - 0.5);
   }
 }

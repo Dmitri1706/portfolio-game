@@ -3,6 +3,7 @@ import { createAnims, loadSprites } from '../assets/manifest';
 import LOBBY_LAYOUT from '../assets/rooms/lobby.layout.json';
 import VHOD_LAYOUT from '../assets/rooms/vhod.layout.json';
 import SPORT_LAYOUT from '../assets/rooms/sport.layout.json';
+import PROJECTS_LAYOUT from '../assets/rooms/projects.layout.json';
 import { loadDiorama, type Layout } from '../world/diorama';
 import { createCharacterAnims, loadCharacters } from '../world/characters';
 import { finishLoading, setLoadProgress } from '../ui/loader';
@@ -24,6 +25,7 @@ export class BootScene extends Phaser.Scene {
     loadDiorama(this.load, LOBBY_LAYOUT as Layout);
     loadDiorama(this.load, VHOD_LAYOUT as Layout);
     loadDiorama(this.load, SPORT_LAYOUT as Layout);
+    loadDiorama(this.load, PROJECTS_LAYOUT as Layout);
   }
 
   async create(): Promise<void> {
@@ -55,18 +57,6 @@ export class BootScene extends Phaser.Scene {
     g.fillStyle(0xd9cbb8, 0.85).fillCircle(16, 16, 15);
     g.fillStyle(0xf2e8da, 0.9).fillCircle(13, 12, 9);
     g.generateTexture('puff', 32, 32);
-    g.clear();
-    // искра сварки: яркая точка с ореолом
-    g.fillStyle(0xff9a2e, 0.35).fillCircle(6, 6, 6);
-    g.fillStyle(0xffd27a, 0.8).fillCircle(6, 6, 3.2);
-    g.fillStyle(0xffffff, 1).fillCircle(6, 6, 1.6);
-    g.generateTexture('spark', 12, 12);
-    g.clear();
-    // вспышка сварки
-    g.fillStyle(0x9fe8ff, 0.25).fillCircle(20, 20, 20);
-    g.fillStyle(0xd8f6ff, 0.6).fillCircle(20, 20, 10);
-    g.fillStyle(0xffffff, 1).fillCircle(20, 20, 4);
-    g.generateTexture('weld_flash', 40, 40);
     g.clear();
     // значки над покупателем: «!» (ждёт продавца) и «…» (продажа закрыта)
     for (const [key, dots] of [['talk_alert', false], ['talk_dots', true]] as const) {

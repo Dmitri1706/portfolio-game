@@ -266,11 +266,25 @@
     {
       "id": "door_projects",
       "kind": "door_free",
-      "file": "door_projects.webp",
-      "x": 1570,
+      "open": {
+        "file": "door_projects_open.webp",
+        "x": 1477,
+        "y": 965,
+        "w": 333,
+        "h": 496
+      },
+      "closed": {
+        "file": "door_projects_closed.webp",
+        "x": 1477,
+        "y": 965,
+        "w": 333,
+        "h": 496
+      },
+      "file": "door_projects_closed.webp",
+      "x": 1477,
       "y": 965,
-      "w": 240,
-      "h": 517,
+      "w": 333,
+      "h": 496,
       "cell": {
         "x": 10,
         "y": 8,

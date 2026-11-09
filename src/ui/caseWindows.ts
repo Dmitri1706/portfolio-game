@@ -1,4 +1,4 @@
-import { CASES, RESUME, SETTINGS, asset, md, mdPages } from '../content';
+import { CASES, RESUME, SETTINGS, asset, md, mdPages, type Project } from '../content';
 import { el, makeButton, openModal, type ModalButton } from './modal';
 import { PdfViewer, onSwipe } from './pdfViewer';
 import { videoEmbedUrl } from './video';
@@ -10,7 +10,7 @@ import { contactsBlock } from './contacts';
  * На телефоне панель с текстом уходит под контент.
  */
 interface CaseWindowOptions {
-  frame: 'monitor' | 'stage' | 'newspaper' | 'phone' | 'folder' | 'board' | 'event';
+  frame: 'monitor' | 'stage' | 'newspaper' | 'phone' | 'folder' | 'board' | 'event' | 'portal';
   title: string;
   /** Содержимое рамки */
   content: HTMLElement;
@@ -235,14 +235,23 @@ export function openWebinarWindow(onClose: () => void): void {
 // ================= 6. Трибуна: мероприятие по HR-автоматизации =================
 
 export function openEventWindow(onClose: () => void): void {
-  const photos = (SETTINGS.event.photos as { src: string; caption: string }[]).filter((p) => p.src);
-  const view = el('div', 'gallery');
+  const photos = (SETTINGS.event.photos as Photo[]).filter((p) => p.src);
   if (!photos.length) {
+    const view = el('div', 'gallery');
     view.innerHTML =
       '<div class="event-photo__empty"><span class="event-photo__icon">📷</span><br>Здесь будут фото с мероприятия<br><small>Фото — в content/settings.json → event → photos</small></div>';
     openCaseWindow({ frame: 'event', title: 'Мероприятие', content: view, side: md(CASES.event), onClose });
     return;
   }
+  const g = gallery(photos);
+  openCaseWindow({ frame: 'event', title: 'Мероприятие', content: g.view, side: md(CASES.event), onClose, onArrow: g.go });
+}
+
+type Photo = { src: string; caption: string };
+
+/** Галерея фото: листание стрелками и свайпом, по клику — на весь экран. */
+function gallery(photos: Photo[]): { view: HTMLElement; go: (d: number) => void } {
+  const view = el('div', 'gallery');
   const pic = el('button', 'gallery__pic');
   pic.type = 'button';
   pic.title = 'Открыть на весь экран';
@@ -284,16 +293,53 @@ export function openEventWindow(onClose: () => void): void {
     zoom = { show: showBig, close: h.close };
     showBig();
   });
-  view.append(pic, caption, nav.el);
-  openCaseWindow({
-    frame: 'event',
-    title: 'Мероприятие',
-    content: view,
-    side: md(CASES.event),
-    onClose,
-    onArrow: (d) => go(d),
-  });
+  view.append(pic, caption);
+  if (photos.length > 1) view.appendChild(nav.el);
   show();
+  return { view, go };
+}
+
+// ================= Подвал «Проекты»: окно за шторкой =================
+
+/** Слева — картинки (галерея) или PDF, справа — текст проекта. Ссылки — кнопками под контентом. */
+export function openProjectWindow(p: Project, onClose: () => void): void {
+  const tools: ModalButton[] = p.links.map((l) => ({ label: l.label, href: l.url }));
+  const side = md(p.text);
+  if (p.photos.length) {
+    const g = gallery(p.photos);
+    openCaseWindow({ frame: 'portal', title: p.title, content: g.view, side, tools, onClose, onArrow: g.go });
+    return;
+  }
+  if (p.pdf) {
+    const wrap = el('div', 'portal-view');
+    const screen = el('div', 'frame__screen portal-view__screen');
+    const viewer = new PdfViewer(screen, asset(p.pdf), (n, t) => nav.set(n, t));
+    const nav = pager(
+      () => viewer.prev(),
+      () => viewer.next(),
+    );
+    onSwipe(screen, () => viewer.next(), () => viewer.prev());
+    wrap.append(screen, nav.el);
+    openCaseWindow({
+      frame: 'portal',
+      title: p.title,
+      content: wrap,
+      side,
+      tools,
+      onClose: () => {
+        viewer.destroy();
+        onClose();
+      },
+      onArrow: (d) => (d > 0 ? viewer.next() : viewer.prev()),
+    });
+    viewer.open();
+    return;
+  }
+  const empty = el('div', 'portal-empty');
+  empty.innerHTML = p.links.length
+    ? '<span class="portal-empty__icon">◎</span><br>Материалы проекта — по кнопкам ниже'
+    : '<span class="portal-empty__icon">◎</span><br>Скоро здесь появятся картинки или презентация<br><small>Материалы — в content/settings.json → projects</small>';
+  openCaseWindow({ frame: 'portal', title: p.title, content: empty, side, tools, onClose });
 }
 
 // ================= Спортмастер: доска «Лучший продавец» =================

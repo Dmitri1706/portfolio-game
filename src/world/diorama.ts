@@ -16,6 +16,8 @@ export interface RoomDef {
   cols: number;
   rows: number;
   spawn: Cell;
+  /** Дальше этой клетки по X ходить нельзя (коридор уходит в темноту) */
+  walkMaxX?: number;
   walls: Record<'left' | 'right', { type: string; id?: string; at: number }[]>;
   objects: RoomObject[];
 }
@@ -122,6 +124,9 @@ export function buildDiorama(scene: Phaser.Scene, def: RoomDef, layout: Layout):
     rows: def.rows,
     backdrop: new Phaser.Geom.Rectangle(tl.x, tl.y, layout.width * k, layout.height * k),
   });
+  if (def.walkMaxX != null) {
+    for (let y = 0; y < def.rows; y++) for (let x = def.walkMaxX + 1; x < def.cols; x++) room.setBlocked({ x, y }, true);
+  }
   for (const o of def.objects) {
     if (o.walkable) continue;
     for (let y = o.y; y < o.y + (o.d ?? 1); y++)
@@ -175,6 +180,20 @@ export function buildDiorama(scene: Phaser.Scene, def: RoomDef, layout: Layout):
         .setScale(k)
         .setDepth(DEPTH.objects + depthAt(l.cell.x, l.cell.y) + TILE_H / 4 + bias);
       layers.set(l.id, img);
+      if (l.kind === 'door_free' && l.open && l.closed) {
+        // отдельно стоящая дверь, которая открывается (две картинки одного размера)
+        const open = l.open;
+        const closed = l.closed;
+        const o = def.objects.find((x) => x.id === l.id);
+        doors.set(l.id, {
+          id: l.id,
+          sprite: img,
+          approach: o?.approach ?? { x: l.cell.x, y: l.cell.y + 1 },
+          face: 'ne',
+          open: () => img.setTexture(texKey(layout.id, open.file)),
+          close: () => img.setTexture(texKey(layout.id, closed.file)),
+        });
+      }
       if (l.frames?.length) {
         // мигание: кадры по очереди
         let f = 0;

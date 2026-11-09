@@ -732,3 +732,60 @@ body.quick {
     padding: 12px 16px 14px;
   }
 }
+
+/* ---------- Подвал «Проекты»: окно за шторкой ---------- */
+.frame--portal {
+  background: radial-gradient(ellipse at 50% 110%, #1f5a3a 0%, #1a2230 55%, #141821 100%);
+  border: 0;
+  box-shadow: 0 10px 30px rgba(8, 5, 16, 0.3), inset 0 3px 0 #6dff9a;
+}
+.frame--portal .pager__label,
+.frame--portal .gallery__caption {
+  color: #e9f7ee;
+}
+.frame--portal .gallery__pic {
+  background: #10141c;
+}
+.portal-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  gap: 8px;
+}
+.portal-view__screen {
+  background: #fff;
+  border-radius: 10px;
+}
+.portal-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #cdeed8;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 24px;
+  min-height: 220px;
+}
+.portal-empty__icon {
+  font-size: 54px;
+  line-height: 1;
+  color: #6dff9a;
+  text-shadow: 0 0 18px rgba(109, 255, 154, 0.7);
+  animation: portal-spin 6s linear infinite;
+  display: inline-block;
+}
+.portal-empty small {
+  font-weight: 400;
+  font-size: 12px;
+  color: #93a8a0;
+}
+@keyframes portal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

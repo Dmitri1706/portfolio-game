@@ -15,7 +15,10 @@ const SEAT_LIFT = 0;
 /** Где в руках держится предмет: игровых пикселей над точкой, где стоят ноги */
 const HELD_Y = 62;
 
-export type RoomId = 'lobby' | 'vhod' | 'sport';
+export type RoomId = 'lobby' | 'vhod' | 'sport' | 'projects';
+
+/** Комната → ключ сцены Phaser */
+export const SCENE_OF: Record<RoomId, string> = { lobby: 'Lobby', vhod: 'Vhod', sport: 'Sport', projects: 'Projects' };
 
 export interface RoomData {
   /** Из какой комнаты пришли */
@@ -326,11 +329,15 @@ export abstract class RoomScene extends Phaser.Scene {
       onUpdate: (tw) => p.setAlpha(tw.getValue() ?? 0),
     });
     await p.slideTo(p.gx + dx, p.gy + dy, 500);
+    this.goTo(target);
+  }
+
+  /** Затемнить экран и перейти в другую комнату. */
+  protected goTo(target: RoomId): void {
     this.cameras.main.fadeOut(300, bg.red, bg.green, bg.blue);
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-      const scene = target === 'lobby' ? 'Lobby' : target === 'vhod' ? 'Vhod' : 'Sport';
       const from = this.scene.key.toLowerCase() as RoomId;
-      this.scene.start(scene, { from } satisfies RoomData);
+      this.scene.start(SCENE_OF[target], { from } satisfies RoomData);
     });
   }
 

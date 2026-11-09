@@ -1,0 +1,72 @@
+{
+  "id": "projects",
+  "image": "bg.webp",
+  "width": 2612,
+  "height": 1930,
+  "tex": 2,
+  "originX": 394,
+  "originY": 578,
+  "bg": "#000000",
+  "layers": [
+    {
+      "id": "curtain_bot",
+      "kind": "wall",
+      "file": "curtain_bot.webp",
+      "x": 791,
+      "y": 367,
+      "w": 257,
+      "h": 483,
+      "side": "right",
+      "at": 5
+    },
+    {
+      "id": "curtain_moving",
+      "kind": "wall",
+      "file": "curtain_moving.webp",
+      "x": 1109,
+      "y": 532,
+      "w": 190,
+      "h": 462,
+      "side": "right",
+      "at": 8
+    },
+    {
+      "id": "curtain_bpmn",
+      "kind": "wall",
+      "file": "curtain_bpmn.webp",
+      "x": 1358,
+      "y": 651,
+      "w": 273,
+      "h": 487,
+      "side": "right",
+      "at": 11
+    },
+    {
+      "id": "curtain_hscc",
+      "kind": "wall",
+      "file": "curtain_hscc.webp",
+      "x": 1638,
+      "y": 791,
+      "w": 290,
+      "h": 491,
+      "side": "right",
+      "at": 14
+    },
+    {
+      "id": "stairs",
+      "kind": "occluder",
+      "file": "stairs.webp",
+      "x": 98,
+      "y": 270,
+      "w": 592,
+      "h": 557,
+      "cell": {
+        "x": 0,
+        "y": 0,
+        "w": 3,
+        "d": 3
+      }
+    }
+  ],
+  "points": {}
+}

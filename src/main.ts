@@ -10,6 +10,7 @@ import { BootScene } from './scenes/BootScene';
 import { LobbyScene } from './scenes/LobbyScene';
 import { VhodScene } from './scenes/VhodScene';
 import { SportScene } from './scenes/SportScene';
+import { ProjectsScene } from './scenes/ProjectsScene';
 
 /** Не больше стольких пикселей на холсте (быстродействие на слабых телефонах) */
 const MAX_PIXELS = 2560 * 1440;
@@ -42,7 +43,7 @@ function startGame(): Phaser.Game {
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     input: { activePointers: 2 },
-    scene: [BootScene, LobbyScene, VhodScene, SportScene],
+    scene: [BootScene, LobbyScene, VhodScene, SportScene, ProjectsScene],
   });
 
   /**

@@ -21,6 +21,16 @@
       { "src": "materials/event-2.webp", "caption": "Руководитель: системная логика HR-процессов" }
     ]
   },
+  "projects": [
+    { "id": "bot", "title": "Telegram-бот «Дивидендный помощник»", "label": "Бот-помощник", "photos": [], "pdf": "", "links": [] },
+    { "id": "moving", "title": "«Переезд без стресса»", "label": "Переезд", "photos": [], "pdf": "", "links": [] },
+    { "id": "bpmn", "title": "Моделирование бизнес-процессов", "label": "BPMN-процессы", "photos": [], "pdf": "", "links": [] },
+    { "id": "hscc", "title": "Кейс-чемпионат «Газпром нефти»", "label": "Кейс-чемпионат", "photos": [], "pdf": "",
+      "links": [
+        { "label": "Макет платформы ↗", "url": "https://disk.yandex.ru/i/JeKNAufS4_VWpw" },
+        { "label": "Презентация ↗", "url": "https://disk.yandex.ru/i/zcGPr2z8PRNHkQ" }
+      ] }
+  ],
   "resume": {
     "pdf": "materials/resume.pdf"
   },

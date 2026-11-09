@@ -3,7 +3,6 @@ import LOBBY from '../../rooms/lobby.json';
 import LOBBY_LAYOUT from '../assets/rooms/lobby.layout.json';
 import { buildDiorama, type DioramaDoor, type Layout, type RoomDef } from '../world/diorama';
 import { doorMarker, type Interactable } from '../world/Interactable';
-import { constructionFx } from '../world/construction';
 import { RoomScene, type RoomData, type RoomId } from './RoomScene';
 import { rulesSeen, showRules } from '../ui/rules';
 import { introSeen, showIntro } from '../ui/intro';
@@ -17,13 +16,10 @@ import { openContacts } from '../ui/contacts';
 import { openResumeWindow } from '../ui/caseWindows';
 import { SETTINGS, asset } from '../content';
 
-/** Комнаты, уже переведённые в новую графику. Двери в остальные пока только открываются и закрываются. */
-const READY_ROOMS = new Set<RoomId>(['vhod', 'sport']);
-
 /**
  * Лобби: уютный холл-диорама (рендер Blender, описание — rooms/lobby.json).
  * Левая стена — «В ХОД». Правая — заколоченная «Какая компания следующая?» (ближе к углу) и «Спортмастер».
- * Посреди пола — отдельно стоящая заколоченная дверь «Проекты».
+ * Посреди пола — отдельно стоящая дверь «Проекты»: за ней лестница в подвал.
  */
 export class LobbyScene extends RoomScene {
   constructor() {
@@ -44,8 +40,7 @@ export class LobbyScene extends RoomScene {
         face: dd.face,
         ...(target ? { label: LABELS.door, markerAt: doorMarker(dd.sprite) } : {}),
         onUse: () => {
-          if (target && READY_ROOMS.has(target)) this.enterDoor(dd, target, it);
-          else if (target) this.peekDoor(dd, it);
+          if (target) this.enterDoor(dd, target, it);
           else this.stumble(text ?? '');
         },
       });
@@ -54,17 +49,17 @@ export class LobbyScene extends RoomScene {
     door('door_sport', 'sport');
     door('door_next', null, TEXTS.boardedNext);
 
-    // «Проекты» — отдельно стоящая дверь посреди пола
-    const projects = d.layers.get('door_projects');
-    const def = (LOBBY as RoomDef).objects.find((o) => o.id === 'door_projects');
-    if (projects) constructionFx(this, projects); // «тут кипит работа»: обводка и искры сварки
-    if (projects && def?.approach) {
-      this.addInteractable({
+    // «Проекты» — отдельно стоящая дверь посреди пола: за ней лестница в подвал
+    const projects = d.doors.get('door_projects');
+    if (projects) {
+      const it = this.addInteractable({
         id: 'door_projects',
-        sprites: [projects],
-        approach: def.approach,
+        sprites: [projects.sprite],
+        label: LABELS.door,
+        markerAt: doorMarker(projects.sprite),
+        approach: projects.approach,
         face: 'ne',
-        onUse: () => this.stumble(TEXTS.boardedProjects),
+        onUse: () => this.descend(projects, it),
       });
     }
 
@@ -88,25 +83,54 @@ export class LobbyScene extends RoomScene {
     }
   }
 
-  /** Комната ещё переезжает в новую графику: дверь открывается, персонаж заглядывает и говорит об этом. */
-  private peekDoor(door: DioramaDoor, it: Interactable): void {
+  /**
+   * Спуск в подвал: дверь открывается, персонаж шагает в проём и уходит вниз по ступеням —
+   * виден только внутри проёма (маска), поэтому кажется, что он спускается под пол.
+   */
+  private async descend(door: DioramaDoor, it: Interactable): Promise<void> {
     this.busy = true;
+    track('door_enter', { from: 'lobby', to: 'projects' });
     door.open();
     it.refresh();
     sfx('door');
-    this.time.delayedCall(500, () => {
-      this.say('Комната переезжает в новую графику — скоро откроется!');
-      this.time.delayedCall(1400, () => {
-        door.close();
-        it.refresh();
-        this.busy = false;
-      });
+    await new Promise((r) => this.time.delayedCall(250, r));
+    const def = (LOBBY as RoomDef).objects.find((o) => o.id === 'door_projects');
+    const cx = def ? def.x + ((def.w ?? 1) - 1) / 2 : this.player.gx;
+    const gy = def?.y ?? this.player.gy - 1;
+    const p = this.player;
+    p.dir = 'ne';
+    p.play('walk_back');
+    await p.slideTo(cx, gy + 0.05, 380);
+    // проём двери на экране: плоскость y = gy, ширина 1.25 м, высота 2.3 м
+    const PX_PER_M = 58.79;
+    const pt = (gx: number, z: number) => ({ x: 48 * (gx - gy), y: 24 * (gx + gy) - PX_PER_M * z });
+    const a = pt(cx - 0.6, 0);
+    const b = pt(cx + 0.6, 0);
+    const c = pt(cx + 0.6, 2.3);
+    const e = pt(cx - 0.6, 2.3);
+    const shape = this.make.graphics({}, false);
+    shape.fillStyle(0xffffff).fillPoints([a, b, c, e], true);
+    p.sprite.setMask(shape.createGeometryMask());
+    p.setShadowVisible(false);
+    p.depthBias = 40; // поверх тёмного проёма двери
+    this.tweens.addCounter({
+      from: 0,
+      to: 1,
+      duration: 1100,
+      onUpdate: (tw) => {
+        const u = tw.getValue() ?? 0;
+        p.gy = gy + 0.05 - 0.45 * u;
+        p.setLift(-95 * u);
+        p.sprite.setAlpha(1 - 0.6 * u);
+      },
+      onComplete: () => this.goTo('projects'),
     });
   }
 
   protected spawnCell(data: RoomData): Cell {
     if (data.from === 'vhod') return { x: 1, y: 10 };
     if (data.from === 'sport') return { x: 10, y: 1 };
+    if (data.from === 'projects') return { x: 10, y: 9 };
     return (LOBBY as RoomDef).spawn;
   }
 
