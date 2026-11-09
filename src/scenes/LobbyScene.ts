@@ -68,10 +68,14 @@ export class LobbyScene extends RoomScene {
 
     // Стена с дипломами: персонаж подходит и разглядывает рамки, потом окно «Образование»
     const diplomas = d.walls.get('diplomas');
+    const objects = (LOBBY as RoomDef).objects;
+    const tableIdx = objects.findIndex((o) => o.type === 'console_table');
+    const table = d.layers.get(`obj${tableIdx}_console_table`);
     if (diplomas) {
       this.addInteractable({
         id: 'education',
-        sprites: [diplomas.sprite],
+        // нажимать можно и на рамки, и на столик под ними
+        sprites: [diplomas.sprite, ...(table ? [table] : [])],
         label: LABELS.education,
         // под рамками стоит консольный столик — подходим к нему спереди
         approach: { x: diplomas.approach.x, y: diplomas.approach.y + 1 },
