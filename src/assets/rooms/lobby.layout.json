@@ -49,6 +49,17 @@
       "at": 3
     },
     {
+      "id": "diplomas",
+      "kind": "wall",
+      "file": "diplomas.webp",
+      "x": 2131,
+      "y": 564,
+      "w": 184,
+      "h": 206,
+      "side": "right",
+      "at": 7.6
+    },
+    {
       "id": "door_sport",
       "kind": "door",
       "open": {

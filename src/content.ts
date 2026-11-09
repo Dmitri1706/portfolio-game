@@ -8,6 +8,10 @@ import resumeMd from '../content/resume.md?raw';
 import sportmasterMd from '../content/cases/sportmaster.md?raw';
 import eventMd from '../content/cases/event.md?raw';
 import aboutMd from '../content/about.md?raw';
+import educationMd from '../content/education.md?raw';
+
+/** Окно «Образование» (стена с дипломами в холле) и блок в быстром просмотре — из content/education.md */
+export const EDUCATION = educationMd;
 
 /** Короткое «обо мне» для страницы «Быстрый просмотр» — из content/about.md */
 export const ABOUT = aboutMd;

@@ -467,6 +467,37 @@ def painting(m, p, spec, rng):
     cyl('sun', 0.07, 0.01, (0.25, -0.07, z + 0.15), mat('sun', hex_rgb('#e0a030')), p, verts=14, rot=(R(90), 0, 0))
 
 
+def diploma_wall(m, p, spec, rng):
+    """Стена с дипломами (предмет «Образование»): рамки разного размера, под ними узкая полка с книгами."""
+    paper = mat('diploma_paper', hex_rgb('#f6efdc'), rough=0.85)
+    line = mat('diploma_line', hex_rgb('#8a7a62'), rough=0.8)
+    seal = mat('diploma_seal', hex_rgb('#b0372e'), rough=0.5)
+    gold = mat('diploma_gold', hex_rgb('#d4aa4a'), rough=0.3, metal=0.9)
+    navy = mat('diploma_navy', hex_rgb('#24365c'), rough=0.6)
+    # (x, z, ширина, высота, материал рамки, вертикальная?)
+    frames = [(-0.5, 1.82, 0.52, 0.4, m['dark_wood']), (0.12, 1.86, 0.5, 0.62, gold),
+              (0.62, 1.94, 0.36, 0.28, m['dark_wood']), (0.6, 1.56, 0.34, 0.26, navy)]
+    for i, (x, z, w, h, fm) in enumerate(frames):
+        box(f'dip_frame{i}', (w, 0.04, h), (x, -0.02, z), fm, p, bevel=0.008)
+        box(f'dip_paper{i}', (w - 0.08, 0.01, h - 0.08), (x, -0.045, z), paper, p, bevel=0)
+        box(f'dip_title{i}', (w * 0.5, 0.005, 0.025), (x, -0.052, z + h / 2 - 0.1), line, p, bevel=0)
+        for k in range(3):
+            box(f'dip_l{i}{k}', (w * 0.62, 0.005, 0.012), (x, -0.052, z + 0.02 - k * 0.05), line, p, bevel=0)
+        cyl(f'dip_seal{i}', 0.035, 0.008, (x + w / 2 - 0.1, -0.05, z - h / 2 + 0.1), seal, p, verts=12,
+            rot=(R(90), 0, 0))
+    # полка с книгами
+    box('edu_shelf', (1.5, 0.2, 0.04), (0.05, -0.1, 1.24), m['mid_wood'], p, bevel=0.01)
+    for sx in (-0.55, 0.65):
+        box('edu_bracket', (0.03, 0.16, 0.12), (sx, -0.08, 1.16), m['brass'], p, bevel=0.005)
+    books = _book_mats()
+    for i, (dx, hh) in enumerate(((0.0, 0.24), (0.06, 0.21), (0.115, 0.26))):
+        box(f'edu_book{i}', (0.05, 0.16, hh), (-0.55 + dx, -0.1, 1.26 + hh / 2), books[i + 1], p, bevel=0.004)
+    box('edu_book_flat', (0.24, 0.17, 0.05), (0.35, -0.1, 1.285), books[4], p, bevel=0.004)
+    box('edu_book_flat2', (0.22, 0.15, 0.04), (0.35, -0.1, 1.33), books[6], p, bevel=0.004)
+    sphere('edu_cap', 0.045, (0.68, -0.1, 1.3), gold, p, scale=(1, 1, 0.6), seg=10, rings=6)
+    point_light('edu_light', (0.05, -0.45, 2.45), WARM, 35, 0.1, p)
+
+
 def clock(m, p, spec, rng):
     z = 2.0
     cyl('clock', 0.24, 0.05, (0, -0.0, z), m['dark_wood'], p, verts=24, rot=(R(90), 0, 0))
@@ -1047,7 +1078,7 @@ FLOOR = {
 WALL = {'window': lambda m, p, s, r: (office_window if s.get('style') == 'office' else window)(m, p, s, r),
         'sconce': sconce, 'sign_hello': sign_hello, 'painting': painting, 'clock': clock,
         'stage_screen': stage_screen, 'neon_logo': neon_logo, 'growth_chart': growth_chart, 'sticky_board': sticky_board,
-        'wall_shelf': wall_shelf, 'sport_banner': sport_banner, 'board_best': board_best, 'sport_poster': sport_poster,
+        'wall_shelf': wall_shelf, 'diploma_wall': diploma_wall, 'sport_banner': sport_banner, 'board_best': board_best, 'sport_poster': sport_poster,
         'mirror': mirror}
 
 

@@ -12,6 +12,7 @@ export const LABELS = {
   mediakit: 'Медиакит',
   webinar: 'Вебинар',
   resume: 'Резюме',
+  education: 'Образование',
   event: 'Мероприятие',
   customer: 'Продажа',
   board: 'Лучший продавец',

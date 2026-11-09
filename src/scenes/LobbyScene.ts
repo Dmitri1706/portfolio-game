@@ -13,7 +13,7 @@ import { track } from '../analytics';
 import { sfx } from '../audio';
 import { el, openModal } from '../ui/modal';
 import { openContacts } from '../ui/contacts';
-import { openResumeWindow } from '../ui/caseWindows';
+import { openEducationWindow, openResumeWindow } from '../ui/caseWindows';
 import { SETTINGS, asset } from '../content';
 
 /**
@@ -61,6 +61,35 @@ export class LobbyScene extends RoomScene {
         face: 'ne',
         onUse: () => this.descend(projects, it),
       });
+      this.toProject = async (id) => {
+        if (await this.walkTo(projects.approach, 'ne')) this.descend(projects, it, id);
+      };
+    }
+
+    // Стена с дипломами: персонаж подходит и разглядывает рамки, потом окно «Образование»
+    const diplomas = d.walls.get('diplomas');
+    if (diplomas) {
+      this.addInteractable({
+        id: 'education',
+        sprites: [diplomas.sprite],
+        label: LABELS.education,
+        // под рамками стоит консольный столик — подходим к нему спереди
+        approach: { x: diplomas.approach.x, y: diplomas.approach.y + 1 },
+        face: diplomas.face,
+        onUse: () => {
+          this.busy = true;
+          track('item_open', { id: 'education' });
+          this.time.delayedCall(700, () =>
+            openEducationWindow(
+              () => (this.busy = false),
+              (id) => {
+                this.busy = false;
+                this.toProject?.(id);
+              },
+            ),
+          );
+        },
+      });
     }
 
     // Папка с резюме на подставке: персонаж берёт её в руки
@@ -87,7 +116,10 @@ export class LobbyScene extends RoomScene {
    * Спуск в подвал: дверь открывается, персонаж шагает в проём и уходит вниз по ступеням —
    * виден только внутри проёма (маска), поэтому кажется, что он спускается под пол.
    */
-  private async descend(door: DioramaDoor, it: Interactable): Promise<void> {
+  /** Спуститься в подвал и сразу открыть проект (ссылка «Смотреть проект» из окна «Образование») */
+  private toProject?: (id: string) => void;
+
+  private async descend(door: DioramaDoor, it: Interactable, openProject?: string): Promise<void> {
     this.busy = true;
     track('door_enter', { from: 'lobby', to: 'projects' });
     door.open();
@@ -123,7 +155,7 @@ export class LobbyScene extends RoomScene {
         p.setLift(-95 * u);
         p.sprite.setAlpha(1 - 0.6 * u);
       },
-      onComplete: () => this.goTo('projects'),
+      onComplete: () => this.goTo('projects', openProject ? { openProject } : {}),
     });
   }
 

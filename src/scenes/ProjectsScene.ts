@@ -81,7 +81,7 @@ export class ProjectsScene extends RoomScene {
   }
 
   /** Вход — спуск по лестнице из проёма в стене. */
-  protected onEnter(_data: RoomData): void {
+  protected onEnter(data: RoomData): void {
     this.cameras.main.fadeIn(400, 1, 1, 3);
     const p = this.player;
     p.gx = STAIR_TOP + 0.1;
@@ -95,6 +95,9 @@ export class ProjectsScene extends RoomScene {
       p.setShadowVisible(true);
       p.idle();
       this.busy = false;
+      // пришли по ссылке «Смотреть проект» — сразу идём к нужной шторке
+      const it = data.openProject ? this.interactableById(data.openProject) : undefined;
+      if (it) this.use(it);
     });
   }
 

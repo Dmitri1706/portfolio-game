@@ -7,7 +7,7 @@ import './ui/fonts.css';
 import './ui/ui.css';
 import './quick.css';
 import './ui/theme.css';
-import { ABOUT, CASES, PROJECTS, RESUME, SETTINGS, asset, md, mdPages } from './content';
+import { ABOUT, CASES, EDUCATION, PROJECTS, RESUME, SETTINGS, asset, md, mdPages } from './content';
 import { el, makeButton, type ModalButton } from './ui/modal';
 import { contactsBlock } from './ui/contacts';
 import { videoEmbedUrl } from './ui/video';
@@ -72,6 +72,7 @@ section('Кейсы', cases);
 const projects = el('div', 'q-cases');
 for (const p of PROJECTS) {
   const card = el('article', 'q-card pixel-box');
+  card.id = `project-${p.id}`;
   card.appendChild(el('span', 'q-tag', p.tag));
   // из текста проекта берём только заголовок и жирную строку-итог
   const full = document.createElement('div');
@@ -91,6 +92,13 @@ for (const p of PROJECTS) {
   projects.appendChild(card);
 }
 section('Проекты', projects);
+
+// ---------- Образование ----------
+const edu = el('div', 'q-card pixel-box edu');
+edu.innerHTML = md(EDUCATION).replace(/^\s*<h1>[^<]*<\/h1>/, '');
+// «Смотреть проект» — прокрутка к карточке проекта на этой же странице
+edu.querySelectorAll('a[href^="#project-"]').forEach((a) => a.removeAttribute('target'));
+section('Образование', edu);
 
 // ---------- Резюме ----------
 const resume = el('div', 'q-resume pixel-box');

@@ -1,5 +1,5 @@
-import { CASES, RESUME, SETTINGS, asset, md, mdPages, type Project, type ProjectMaterial } from '../content';
-import { el, makeButton, openModal, type ModalButton } from './modal';
+import { CASES, EDUCATION, RESUME, SETTINGS, asset, md, mdPages, type Project, type ProjectMaterial } from '../content';
+import { el, makeButton, openModal, type ModalButton, type ModalHandle } from './modal';
 import { PdfViewer, onSwipe } from './pdfViewer';
 import { videoEmbedUrl } from './video';
 import { contactsBlock } from './contacts';
@@ -10,7 +10,7 @@ import { contactsBlock } from './contacts';
  * На телефоне панель с текстом уходит под контент.
  */
 interface CaseWindowOptions {
-  frame: 'monitor' | 'stage' | 'newspaper' | 'phone' | 'folder' | 'board' | 'event' | 'portal';
+  frame: 'monitor' | 'stage' | 'newspaper' | 'phone' | 'folder' | 'board' | 'event' | 'portal' | 'diploma';
   title: string;
   /** Содержимое рамки */
   content: HTMLElement;
@@ -23,7 +23,7 @@ interface CaseWindowOptions {
   onArrow?: (dir: -1 | 1) => void;
 }
 
-function openCaseWindow(o: CaseWindowOptions): void {
+function openCaseWindow(o: CaseWindowOptions): ModalHandle {
   const grid = el('div', 'case');
   const left = el('div', 'case__main');
   const frame = el('div', `frame frame--${o.frame}`);
@@ -55,6 +55,7 @@ function openCaseWindow(o: CaseWindowOptions): void {
       o.onClose();
     },
   });
+  return handle;
 }
 
 /** Навигация «◀ 2 / 6 ▶» */
@@ -375,6 +376,35 @@ export function openProjectWindow(p: Project, onClose: () => void): void {
     },
     onArrow: (d) => arrow?.(d),
   });
+}
+
+// ================= Холл: стена с дипломами — «Образование» =================
+
+/**
+ * Справка об образовании (короче, чем кейс). Есть сканы — слева галерея, справа список;
+ * нет сканов — только список, узкое окно по центру. Ссылка «Смотреть проект» (#project-<id>) ведёт в подвал.
+ */
+export function openEducationWindow(onClose: () => void, onProject: (id: string) => void): void {
+  const scans = ((SETTINGS.education?.scans ?? []) as Photo[]).filter((p) => p.src);
+  const list = el('div', 'edu');
+  list.innerHTML = md(EDUCATION).replace(/^\s*<h1>[^<]*<\/h1>/, '');
+  let handle: ModalHandle;
+  list.querySelectorAll<HTMLAnchorElement>('a[href^="#project-"]').forEach((a) => {
+    a.removeAttribute('target');
+    a.classList.add('edu__project');
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = a.getAttribute('href')!.slice('#project-'.length);
+      handle.close();
+      onProject(id);
+    });
+  });
+  if (scans.length) {
+    const g = gallery(scans);
+    handle = openCaseWindow({ frame: 'diploma', title: 'Образование', content: g.view, side: list, onClose, onArrow: g.go });
+  } else {
+    handle = openModal({ className: 'modal__panel--edu', title: 'Образование', content: list, backLabel: '← Назад', onClose });
+  }
 }
 
 // ================= Спортмастер: доска «Лучший продавец» =================

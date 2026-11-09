@@ -25,6 +25,8 @@ export interface RoomData {
   from?: RoomId;
   /** Первый запуск после экрана загрузки */
   intro?: boolean;
+  /** Сразу открыть проект в подвале (id шторки) — например, по ссылке из окна «Образование» */
+  openProject?: string;
 }
 
 const bg = Phaser.Display.Color.HexStringToColor(BG_COLOR);
@@ -163,7 +165,13 @@ export abstract class RoomScene extends Phaser.Scene {
     return true;
   }
 
-  private async use(i: Interactable): Promise<void> {
+  /** Предмет комнаты по id (например, чтобы сразу подойти к нему) */
+  protected interactableById(id: string): Interactable | undefined {
+    return this.interactables.find((i) => i.def.id === id);
+  }
+
+  /** Подойти к предмету и использовать его (как по клику) */
+  protected async use(i: Interactable): Promise<void> {
     if (!this.canControl || !i.enabled || !this.canUse(i)) return;
     // Если по дороге кликнуть в другое место, персонаж просто пойдёт туда — действие отменится
     const ok = await this.walkTo(i.def.approach, i.def.face);
@@ -333,11 +341,11 @@ export abstract class RoomScene extends Phaser.Scene {
   }
 
   /** Затемнить экран и перейти в другую комнату. */
-  protected goTo(target: RoomId): void {
+  protected goTo(target: RoomId, extra: Omit<RoomData, 'from'> = {}): void {
     this.cameras.main.fadeOut(300, bg.red, bg.green, bg.blue);
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       const from = this.scene.key.toLowerCase() as RoomId;
-      this.scene.start(SCENE_OF[target], { from } satisfies RoomData);
+      this.scene.start(SCENE_OF[target], { ...extra, from } satisfies RoomData);
     });
   }
 
